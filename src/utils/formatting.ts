@@ -33,22 +33,7 @@ export function formatTimeAgo(date: Date): string {
 }
 
 export function formatFullDate(date: Date): string {
-  return format(date, 'MMM d, yyyy');
-}
-
-export function getPostTypeIcon(type: string): string {
-  switch (type) {
-    case 'link': return '🔗';
-    case 'image': return '🖼️';
-    case 'video': return '📹';
-    case 'poll': return '📊';
-    default: return '📝';
-  }
-}
-
-export function truncateText(text: string, maxLength: number): string {
-  if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength) + '...';
+  return format(date, 'd. MMM yyyy', { locale: undefined });
 }
 
 export function getDomainFromUrl(url: string): string {
@@ -58,11 +43,4 @@ export function getDomainFromUrl(url: string): string {
   } catch {
     return '';
   }
-}
-
-export function generateAvatarUrl(username: string): string {
-  // Generate a consistent color based on username
-  const colors = ['FF4500', '0079D3', '46D160', 'FFB000', '7193FF', 'FF66AC', '4856A3'];
-  const index = username.charCodeAt(0) % colors.length;
-  return `https://www.redditstatic.com/avatars/defaults/v2/avatar_default_${index}.png`;
 }

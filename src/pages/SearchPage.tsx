@@ -7,9 +7,9 @@ export const SearchPage: React.FC = () => {
   
   return (
     <div className="reddit-card p-4">
-      <h1 className="text-xl font-bold mb-4">Search Results</h1>
+      <h1 className="text-xl font-bold mb-4">Søgeresultater</h1>
       <p className="text-reddit-gray">
-        Searching for: "{query}"
+        Søger efter: "{query}"
       </p>
     </div>
   );

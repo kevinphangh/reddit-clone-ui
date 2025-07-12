@@ -6,9 +6,9 @@ export const UserPage: React.FC = () => {
   
   return (
     <div className="reddit-card p-4">
-      <h1 className="text-xl font-bold mb-4">User Profile</h1>
+      <h1 className="text-xl font-bold mb-4">Brugerprofil</h1>
       <p className="text-reddit-gray">
-        Profile for u/{username}
+        Profil for u/{username}
       </p>
     </div>
   );

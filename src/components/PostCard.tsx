@@ -12,8 +12,8 @@ import {
   ExternalLink,
   Image as ImageIcon,
   Play,
-  FileText,
-  BarChart3
+  BarChart3,
+  FileText
 } from 'lucide-react';
 import { Post } from '../types';
 import { formatTimeAgo, formatScore, getDomainFromUrl } from '../utils/formatting';

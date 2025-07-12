@@ -27,8 +27,8 @@ export const PostPage: React.FC = () => {
   if (!post) {
     return (
       <div className="reddit-card p-8 text-center">
-        <h1 className="text-xl font-bold mb-2">Post not found</h1>
-        <p className="text-reddit-gray">The post you're looking for doesn't exist.</p>
+        <h1 className="text-xl font-bold mb-2">Indlæg ikke fundet</h1>
+        <p className="text-reddit-gray">Det indlæg du leder efter eksisterer ikke.</p>
       </div>
     );
   }
@@ -189,17 +189,17 @@ export const PostPage: React.FC = () => {
             <div className="flex items-center gap-3 text-sm">
               <button className="flex items-center gap-1 text-reddit-gray hover:bg-reddit-bg-hover px-2 py-1 rounded font-bold">
                 <MessageSquare size={20} />
-                {post.commentCount} Comments
+                {post.commentCount} kommentarer
               </button>
 
               <button className="flex items-center gap-1 text-reddit-gray hover:bg-reddit-bg-hover px-2 py-1 rounded font-bold">
                 <Gift size={20} />
-                Award
+                Belønning
               </button>
 
               <button className="flex items-center gap-1 text-reddit-gray hover:bg-reddit-bg-hover px-2 py-1 rounded font-bold">
                 <Share size={20} />
-                Share
+                Del
               </button>
 
               <button 
@@ -210,7 +210,7 @@ export const PostPage: React.FC = () => {
                 )}
               >
                 <Bookmark size={20} fill={saved ? 'currentColor' : 'none'} />
-                {saved ? 'Saved' : 'Save'}
+                {saved ? 'Gemt' : 'Gem'}
               </button>
 
               {/* More Options */}
@@ -226,15 +226,15 @@ export const PostPage: React.FC = () => {
                   <div className="dropdown-menu">
                     <button className="dropdown-item flex items-center gap-2">
                       <Eye size={16} />
-                      Show fewer posts like this
+                      Vis færre indlæg som dette
                     </button>
                     <button className="dropdown-item flex items-center gap-2">
                       <EyeOff size={16} />
-                      Hide
+                      Skjul
                     </button>
                     <button className="dropdown-item flex items-center gap-2">
                       <Flag size={16} />
-                      Report
+                      Anmeld
                     </button>
                   </div>
                 )}
@@ -242,7 +242,7 @@ export const PostPage: React.FC = () => {
 
               {/* Upvote Percentage */}
               <div className="ml-auto text-xs text-reddit-gray">
-                {Math.round(post.upvoteRatio * 100)}% Upvoted
+                {Math.round(post.upvoteRatio * 100)}% positive stemmer
               </div>
             </div>
           </div>

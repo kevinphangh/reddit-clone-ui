@@ -101,30 +101,3 @@ export interface Award {
   count: number;
 }
 
-export interface SearchFilters {
-  sort: 'relevance' | 'hot' | 'top' | 'new' | 'comments';
-  time: 'hour' | 'day' | 'week' | 'month' | 'year' | 'all';
-  type: 'link' | 'text' | 'sr' | 'user';
-}
-
-export interface UserPreferences {
-  theme: 'light' | 'dark';
-  layout: 'card' | 'classic' | 'compact';
-  thumbnails: boolean;
-  autoplayVideos: boolean;
-  showNSFW: boolean;
-  showSpoilers: boolean;
-  commentSort: 'best' | 'top' | 'new' | 'controversial' | 'old' | 'qa';
-  defaultHomeFeed: 'home' | 'popular' | 'all';
-}
-
-export interface NotificationItem {
-  id: string;
-  type: 'comment_reply' | 'post_reply' | 'mention' | 'follow' | 'upvote';
-  title: string;
-  body: string;
-  link: string;
-  read: boolean;
-  createdAt: Date;
-  from?: User;
-}
