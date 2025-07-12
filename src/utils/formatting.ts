@@ -35,12 +35,3 @@ export function formatTimeAgo(date: Date): string {
 export function formatFullDate(date: Date): string {
   return format(date, 'd. MMM yyyy', { locale: undefined });
 }
-
-export function getDomainFromUrl(url: string): string {
-  try {
-    const domain = new URL(url).hostname;
-    return domain.replace('www.', '');
-  } catch {
-    return '';
-  }
-}

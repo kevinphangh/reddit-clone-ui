@@ -3,21 +3,11 @@ import { Link } from 'react-router-dom';
 import { 
   ArrowUp, 
   ArrowDown, 
-  MessageSquare, 
-  MoreHorizontal,
-  Share,
-  Flag,
-  Bookmark,
-  Edit2,
-  Trash2,
-  Award,
-  Shield,
-  ChevronUp
+  MessageSquare 
 } from 'lucide-react';
 import { Comment as CommentType } from '../types';
 import { formatTimeAgo, formatScore } from '../utils/formatting';
 import { clsx } from 'clsx';
-import { useClickOutside } from '../hooks/useClickOutside';
 
 interface CommentProps {
   comment: CommentType;
@@ -33,11 +23,7 @@ export const Comment: React.FC<CommentProps> = ({
   onReply
 }) => {
   const [vote, setVote] = useState(comment.userVote || 0);
-  const [saved, setSaved] = useState(comment.saved || false);
-  const [collapsed, setCollapsed] = useState(comment.isCollapsed || false);
-  const [showActions, setShowActions] = useState(false);
   const [showReplyForm, setShowReplyForm] = useState(false);
-  const dropdownRef = useClickOutside<HTMLDivElement>(() => setShowActions(false), showActions);
 
   const handleVote = (direction: 1 | -1) => {
     if (vote === direction) {
@@ -78,236 +64,99 @@ export const Comment: React.FC<CommentProps> = ({
   return (
     <div className={clsx('relative', depth > 0 && 'ml-4')}>
       {/* Thread Line */}
-      {depth > 0 && depth < maxDepth && (
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="absolute left-0 top-0 bottom-0 w-px bg-gray-300 ml-2"
-          aria-label={collapsed ? 'Expand thread' : 'Collapse thread'}
-        />
+      {depth > 0 && (
+        <div className="absolute left-0 top-0 bottom-0 w-px bg-gray-200 ml-2" />
       )}
 
       {/* Comment Content */}
       <div className={clsx('pl-4', depth === 0 && 'border-l-2 border-transparent')}>
         {/* Header */}
-        <div className="flex items-center gap-2 text-xs mb-1">
-          {comment.isStickied && (
-            <span className="text-green-600 font-bold">FASTGJORT KOMMENTAR</span>
-          )}
-          
-          {/* Collapse Button */}
-          <button
-            onClick={() => setCollapsed(!collapsed)}
-            className="p-0.5 hover:bg-gray-100 rounded"
-          >
-            <ChevronUp 
-              size={12} 
-              className={clsx(
-                'transition-transform',
-                collapsed && 'rotate-180'
-              )}
-            />
-          </button>
-
-          {/* Author */}
+        <div className="flex items-center gap-2 text-xs mb-1 text-gray-500">
           <Link 
             to={`/user/${comment.author.username}`} 
-            className={clsx(
-              'font-medium hover:underline',
-              comment.author.username === '[deleted]' && 'text-gray-500'
-            )}
+            className="font-medium text-gray-900 hover:underline"
           >
             {comment.author.username}
           </Link>
-
-          {/* Author Badges */}
-          {comment.author.isPremium && (
-            <span className="text-orange-500" title="VIA Plus medlem">
-              <Award size={12} />
-            </span>
-          )}
-          {comment.author.isVerified && (
-            <span className="text-blue-600" title="Verificeret pædagog">
-              <Shield size={12} />
-            </span>
-          )}
-
-          {/* Score */}
-          <span className={clsx(
-            'font-bold',
-            vote === 1 ? 'text-blue-600' : vote === -1 ? 'text-red-500' : 'text-gray-600'
-          )}>
-            {formatScore(currentScore)} {currentScore === 1 ? 'point' : 'point'}
-          </span>
-
-          {/* Time */}
-          <span className="text-gray-500">
-            {formatTimeAgo(comment.createdAt)}
-          </span>
-          
-          {comment.editedAt && (
-            <span className="text-gray-500">(redigeret)</span>
-          )}
-
-          {/* Awards */}
-          {comment.awards && comment.awards.length > 0 && (
-            <div className="flex items-center gap-0.5">
-              {comment.awards.map((award, index) => (
-                <div key={index} className="flex items-center">
-                  <img 
-                    src={award.icon} 
-                    alt={award.name}
-                    className="w-3 h-3"
-                    title={award.description}
-                  />
-                  {award.count > 1 && (
-                    <span className="text-[10px] font-bold">{award.count}</span>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
+          <span>•</span>
+          <span>{formatTimeAgo(comment.createdAt)}</span>
         </div>
 
         {/* Comment Body */}
-        {!collapsed && (
-          <>
-            <div className="text-gray-700 text-sm mb-2 whitespace-pre-wrap break-words leading-relaxed">
-              {comment.body}
+        <div className="text-gray-700 text-sm mb-2">
+          {comment.body}
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center gap-3">
+          {/* Vote Buttons */}
+          <div className="flex items-center gap-1">
+            <button 
+              onClick={() => handleVote(1)}
+              className={clsx('p-1 rounded hover:bg-gray-100', vote === 1 ? 'text-blue-600' : 'text-gray-400')}
+            >
+              <ArrowUp size={16} />
+            </button>
+            <span className={clsx(
+              'text-xs font-medium',
+              vote === 1 ? 'text-blue-600' : vote === -1 ? 'text-red-500' : 'text-gray-600'
+            )}>
+              {formatScore(currentScore)}
+            </span>
+            <button 
+              onClick={() => handleVote(-1)}
+              className={clsx('p-1 rounded hover:bg-gray-100', vote === -1 ? 'text-red-500' : 'text-gray-400')}
+            >
+              <ArrowDown size={16} />
+            </button>
+          </div>
+
+          {/* Reply */}
+          {!comment.isLocked && depth < maxDepth && (
+            <button 
+              onClick={() => setShowReplyForm(!showReplyForm)}
+              className="text-xs text-gray-500 hover:text-gray-700"
+            >
+              <MessageSquare size={14} className="inline mr-1" />
+              Svar
+            </button>
+          )}
+        </div>
+
+        {/* Reply Form */}
+        {showReplyForm && (
+          <div className="mt-3">
+            <textarea 
+              className="w-full px-3 py-2 border border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 text-sm"
+              placeholder="Skriv et svar..."
+              rows={3}
+            />
+            <div className="flex gap-2 mt-2">
+              <button className="text-xs px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">
+                Send
+              </button>
+              <button 
+                onClick={() => setShowReplyForm(false)}
+                className="text-xs px-3 py-1 border border-gray-300 rounded hover:bg-gray-50"
+              >
+                Annuller
+              </button>
             </div>
-
-            {/* Actions */}
-            <div className="flex items-center gap-1 -ml-1">
-              {/* Vote Buttons */}
-              <button 
-                onClick={() => handleVote(1)}
-                className={clsx('p-1 rounded hover:bg-gray-100 transition-colors', vote === 1 ? 'text-blue-600' : 'text-gray-400')}
-                aria-label="Upvote"
-              >
-                <ArrowUp size={16} />
-              </button>
-              <button 
-                onClick={() => handleVote(-1)}
-                className={clsx('p-1 rounded hover:bg-gray-100 transition-colors', vote === -1 ? 'text-red-500' : 'text-gray-400')}
-                aria-label="Downvote"
-              >
-                <ArrowDown size={16} />
-              </button>
-
-              {/* Reply */}
-              {!comment.isLocked && depth < maxDepth && (
-                <button 
-                  onClick={() => {
-                    setShowReplyForm(!showReplyForm);
-                    onReply?.(comment.id);
-                  }}
-                  className="text-xs font-bold text-gray-500 hover:bg-gray-100 px-2 py-1 rounded"
-                >
-                  <MessageSquare size={14} className="inline mr-1" />
-                  Svar
-                </button>
-              )}
-
-              {/* Share */}
-              <button className="text-xs font-bold text-gray-500 hover:bg-gray-100 px-2 py-1 rounded">
-                <Share size={14} className="inline mr-1" />
-                Del
-              </button>
-
-              {/* Save */}
-              <button 
-                onClick={() => setSaved(!saved)}
-                className={clsx(
-                  'text-xs font-bold hover:bg-gray-100 px-2 py-1 rounded',
-                  saved ? 'text-green-600' : 'text-gray-500'
-                )}
-              >
-                <Bookmark size={14} className="inline mr-1" fill={saved ? 'currentColor' : 'none'} />
-                {saved ? 'Gemt' : 'Gem'}
-              </button>
-
-              {/* More Options */}
-              <div className="relative" ref={dropdownRef}>
-                <button 
-                  onClick={() => setShowActions(!showActions)}
-                  className="text-gray-500 hover:bg-gray-100 p-1 rounded"
-                >
-                  <MoreHorizontal size={16} />
-                </button>
-                
-                {showActions && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
-                    <button className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2">
-                      <Edit2 size={14} />
-                      Rediger
-                    </button>
-                    <button className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2">
-                      <Trash2 size={14} />
-                      Slet
-                    </button>
-                    <button className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2">
-                      <Flag size={14} />
-                      Anmeld
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Reply Form */}
-            {showReplyForm && (
-              <div className="mt-3 mb-3">
-                <textarea 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 text-sm"
-                  placeholder="Hvad tænker du?"
-                  rows={4}
-                />
-                <div className="flex gap-2 mt-2">
-                  <button className="bg-blue-600 text-white rounded hover:bg-blue-700 text-xs px-4 py-1.5">
-                    Svar
-                  </button>
-                  <button 
-                    onClick={() => setShowReplyForm(false)}
-                    className="border border-gray-300 rounded hover:bg-gray-50 text-xs px-4 py-1.5"
-                  >
-                    Annuller
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Nested Replies */}
-            {comment.replies && comment.replies.length > 0 && (
-              <div className="mt-3">
-                {comment.replies.map(reply => (
-                  <Comment 
-                    key={reply.id} 
-                    comment={reply} 
-                    depth={depth + 1}
-                    maxDepth={maxDepth}
-                    onReply={onReply}
-                  />
-                ))}
-              </div>
-            )}
-
-            {/* Continue Thread Link */}
-            {depth >= maxDepth && comment.replies && comment.replies.length > 0 && comment.post && comment.post.subreddit && (
-              <Link 
-                to={`/r/${comment.post.subreddit.name}/comments/${comment.post.id}?thread=${comment.id}`}
-                className="text-xs text-blue-600 hover:underline mt-2 inline-block"
-              >
-                Fortsæt denne tråd →
-              </Link>
-            )}
-          </>
+          </div>
         )}
 
-        {/* Collapsed State */}
-        {collapsed && (
-          <div className="text-xs text-gray-500">
-            {comment.replies && comment.replies.length > 0 && (
-              <span>{comment.replies.length} {comment.replies.length === 1 ? 'svar mere' : 'svar mere'}</span>
-            )}
+        {/* Nested Replies */}
+        {comment.replies && comment.replies.length > 0 && (
+          <div className="mt-3">
+            {comment.replies.map(reply => (
+              <Comment 
+                key={reply.id} 
+                comment={reply} 
+                depth={depth + 1}
+                maxDepth={maxDepth}
+                onReply={onReply}
+              />
+            ))}
           </div>
         )}
       </div>

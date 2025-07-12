@@ -3,21 +3,12 @@ import { useParams, Link } from 'react-router-dom';
 import { 
   ArrowUp, 
   ArrowDown, 
-  MessageSquare, 
-  Share, 
-  Bookmark, 
-  MoreHorizontal,
-  Flag,
-  Eye,
-  EyeOff,
-  Gift,
-  ExternalLink
+  MessageSquare
 } from 'lucide-react';
 import { CommentSection } from '../components/CommentSection';
 import { mockPosts, mockComments } from '../data/mockData';
-import { formatTimeAgo, formatScore, getDomainFromUrl } from '../utils/formatting';
+import { formatTimeAgo, formatScore } from '../utils/formatting';
 import { clsx } from 'clsx';
-import { useClickOutside } from '../hooks/useClickOutside';
 
 export const PostPage: React.FC = () => {
   const { postId } = useParams();
@@ -35,9 +26,6 @@ export const PostPage: React.FC = () => {
   }
 
   const [vote, setVote] = useState(post.userVote || 0);
-  const [saved, setSaved] = useState(post.saved || false);
-  const [showActions, setShowActions] = useState(false);
-  const dropdownRef = useClickOutside<HTMLDivElement>(() => setShowActions(false), showActions);
 
   const handleVote = (direction: 1 | -1) => {
     if (vote === direction) {
@@ -82,68 +70,19 @@ export const PostPage: React.FC = () => {
           <div className="flex-1 p-3">
             {/* Meta Info */}
             <div className="flex items-center gap-1 text-xs text-gray-500 mb-2">
-              <Link to={`/r/${post.subreddit.name}`} className="font-bold hover:underline text-gray-900">
-                {post.subreddit.name}
-              </Link>
-              <span>•</span>
               <span>af</span>
               <Link to={`/user/${post.author.username}`} className="hover:underline">
                 {post.author.username}
               </Link>
+              <span>•</span>
               <span>{formatTimeAgo(post.createdAt)}</span>
-              {post.editedAt && <span>(redigeret)</span>}
-              {post.isPinned && (
-                <>
-                  <span>•</span>
-                  <span className="text-green-600 font-bold">FASTGJORT</span>
-                </>
-              )}
             </div>
 
-            {/* Title and Flairs */}
+            {/* Title */}
             <h1 className="text-xl font-semibold text-gray-900 mb-3">
               {post.title}
-              {' '}
-              {post.flair && (
-                <span 
-                  className="text-sm px-2 py-0.5 rounded ml-2"
-                  style={{ 
-                    backgroundColor: post.flair.backgroundColor, 
-                    color: post.flair.textColor 
-                  }}
-                >
-                  {post.flair.text}
-                </span>
-              )}
-              {post.isNSFW && (
-                <span className="text-sm font-bold text-red-500 ml-2">18+</span>
-              )}
-              {post.isSpoiler && (
-                <span className="text-sm font-bold text-gray-500 ml-2">SPOILER</span>
-              )}
-              {post.isOC && (
-                <span className="text-sm font-bold text-blue-600 ml-2">OC</span>
-              )}
             </h1>
 
-            {/* Awards */}
-            {post.awards && post.awards.length > 0 && (
-              <div className="flex items-center gap-1 mb-3">
-                {post.awards.map((award, index) => (
-                  <div key={index} className="flex items-center">
-                    <img 
-                      src={award.icon} 
-                      alt={award.name}
-                      className="w-5 h-5"
-                      title={award.description}
-                    />
-                    {award.count > 1 && (
-                      <span className="text-xs font-bold ml-0.5">{award.count}</span>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
 
             {/* Post Content Based on Type */}
             {post.type === 'text' && post.content && (
@@ -158,10 +97,9 @@ export const PostPage: React.FC = () => {
                   href={post.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline inline-flex items-center gap-1"
+                  className="text-blue-600 hover:underline"
                 >
-                  {getDomainFromUrl(post.url)}
-                  <ExternalLink size={14} />
+                  {post.url}
                 </a>
               </div>
             )}
@@ -187,64 +125,9 @@ export const PostPage: React.FC = () => {
             )}
 
             {/* Actions */}
-            <div className="flex items-center gap-3 text-sm">
-              <button className="flex items-center gap-1 text-gray-500 hover:bg-gray-100 px-2 py-1 rounded font-bold">
-                <MessageSquare size={20} />
-                {post.commentCount} kommentarer
-              </button>
-
-              <button className="flex items-center gap-1 text-gray-500 hover:bg-gray-100 px-2 py-1 rounded font-bold">
-                <Gift size={20} />
-                Anerkend
-              </button>
-
-              <button className="flex items-center gap-1 text-gray-500 hover:bg-gray-100 px-2 py-1 rounded font-bold">
-                <Share size={20} />
-                Del
-              </button>
-
-              <button 
-                onClick={() => setSaved(!saved)}
-                className={clsx(
-                  'flex items-center gap-1 hover:bg-gray-100 px-2 py-1 rounded font-bold',
-                  saved ? 'text-green-600' : 'text-gray-500'
-                )}
-              >
-                <Bookmark size={20} fill={saved ? 'currentColor' : 'none'} />
-                {saved ? 'Gemt' : 'Gem'}
-              </button>
-
-              {/* More Options */}
-              <div className="relative" ref={dropdownRef}>
-                <button 
-                  onClick={() => setShowActions(!showActions)}
-                  className="text-gray-500 hover:bg-gray-100 p-1 rounded"
-                >
-                  <MoreHorizontal size={20} />
-                </button>
-                
-                {showActions && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
-                    <button className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2">
-                      <Eye size={16} />
-                      Vis færre indlæg som dette
-                    </button>
-                    <button className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2">
-                      <EyeOff size={16} />
-                      Skjul
-                    </button>
-                    <button className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2">
-                      <Flag size={16} />
-                      Anmeld
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {/* Upvote Percentage */}
-              <div className="ml-auto text-xs text-gray-500">
-                {Math.round(post.upvoteRatio * 100)}% positiv
-              </div>
+            <div className="flex items-center gap-1 text-sm text-gray-500">
+              <MessageSquare size={16} />
+              <span>{post.commentCount} kommentarer</span>
             </div>
           </div>
         </div>

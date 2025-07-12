@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { HomePage } from './pages/HomePage';
@@ -11,72 +10,74 @@ import { RegisterPage } from './pages/RegisterPage';
 import { PopularPage } from './pages/PopularPage';
 import { AllPage } from './pages/AllPage';
 import { StaticPage } from './pages/StaticPage';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 
-function App() {
-  const [isLoggedIn] = useState(true);
-  const [currentUser] = useState({
-    username: 'anne_pedagog',
-    points: {
-      post: 1245,
-      comment: 3421
-    }
-  });
+function AppContent() {
+  const { isLoggedIn, user } = useAuth();
 
   return (
     <Router>
       <Routes>
         <Route path="/" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username}>
+          <Layout isLoggedIn={isLoggedIn} username={user?.username}>
             <HomePage />
           </Layout>
         } />
         <Route path="/r/:subreddit" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username}>
+          <Layout isLoggedIn={isLoggedIn} username={user?.username}>
             <SubredditPage />
           </Layout>
         } />
         <Route path="/r/:subreddit/comments/:postId/:slug?" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username}>
+          <Layout isLoggedIn={isLoggedIn} username={user?.username}>
             <PostPage />
           </Layout>
         } />
         <Route path="/user/:username" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username}>
+          <Layout isLoggedIn={isLoggedIn} username={user?.username}>
             <UserPage />
           </Layout>
         } />
         <Route path="/submit" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username}>
+          <Layout isLoggedIn={isLoggedIn} username={user?.username}>
             <SubmitPage />
           </Layout>
         } />
         <Route path="/login" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username}>
+          <Layout isLoggedIn={isLoggedIn} username={user?.username}>
             <LoginPage />
           </Layout>
         } />
         <Route path="/register" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username}>
+          <Layout isLoggedIn={isLoggedIn} username={user?.username}>
             <RegisterPage />
           </Layout>
         } />
         <Route path="/r/popular" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username}>
+          <Layout isLoggedIn={isLoggedIn} username={user?.username}>
             <PopularPage />
           </Layout>
         } />
         <Route path="/r/all" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username}>
+          <Layout isLoggedIn={isLoggedIn} username={user?.username}>
             <AllPage />
           </Layout>
         } />
         <Route path="/:page" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username}>
+          <Layout isLoggedIn={isLoggedIn} username={user?.username}>
             <StaticPage />
           </Layout>
         } />
       </Routes>
     </Router>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 
