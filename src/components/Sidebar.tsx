@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { 
   TrendingUp, 
-  Shield,
   Calendar
 } from 'lucide-react';
 import { Subreddit } from '../types';
@@ -24,194 +23,68 @@ export const Sidebar: React.FC<SidebarProps> = ({
   trendingCommunities = [
     { name: 'Pædagogik', members: 41234 },
     { name: 'Børneudvikling', members: 37890 },
-    { name: 'Inklusion', members: 34567 },
-    { name: 'Forældresamarbejde', members: 32123 },
-    { name: 'Dokumentation', members: 31234 },
+    { name: 'Inklusion', members: 34567 }
   ]
 }) => {
   return (
-    <aside className="w-[312px] flex flex-col gap-4">
+    <aside className="w-full flex flex-col gap-4">
       {/* Subreddit Info Card */}
       {showSubredditInfo && subreddit && (
-        <div className="via-card overflow-hidden">
-          {/* Banner */}
-          <div className="h-[34px] bg-via-blue"></div>
-          
-          {/* Header */}
-          <div className="px-3 pb-3">
-            <div className="flex items-start -mt-3 mb-2">
-              <img 
-                src={subreddit.icon || `https://www.redditstatic.com/avatars/defaults/v2/avatar_default_${subreddit.name.charCodeAt(0) % 7}.png`}
-                alt={subreddit.name}
-                className="w-[54px] h-[54px] rounded-full border-4 border-white bg-white"
-              />
-            </div>
+        <div className="bg-white border border-gray-200 rounded-lg p-4">
+            <h1 className="text-lg font-semibold mb-2">{subreddit.displayName}</h1>
+            <div className="text-sm text-gray-600 mb-3">r/{subreddit.name}</div>
             
-            <h1 className="text-base font-bold mb-2">{subreddit.displayName}</h1>
-            <div className="text-xs text-via-gray mb-3">r/{subreddit.name}</div>
-            
-            <p className="text-sm mb-4">{subreddit.description}</p>
+            <p className="text-sm mb-4 text-gray-700">{subreddit.description}</p>
             
             {/* Stats */}
-            <div className="flex gap-4 mb-4">
+            <div className="flex gap-4 mb-4 text-sm">
               <div>
-                <div className="text-base font-medium">{formatNumber(subreddit.members)}</div>
-                <div className="text-xs text-via-gray">Medlemmer</div>
+                <div className="font-medium">{formatNumber(subreddit.members)}</div>
+                <div className="text-gray-500">Medlemmer</div>
               </div>
               <div>
-                <div className="text-base font-medium flex items-center gap-1">
-                  <span className="w-2 h-2 bg-via-green rounded-full"></span>
-                  {formatNumber(subreddit.activeUsers)}
-                </div>
-                <div className="text-xs text-via-gray">Online</div>
+                <div className="font-medium">{formatNumber(subreddit.activeUsers)}</div>
+                <div className="text-gray-500">Online</div>
               </div>
             </div>
             
-            {/* Created Date */}
-            <div className="flex items-center gap-2 text-xs text-via-gray mb-4">
-              <Calendar size={14} />
-              <span>Oprettet {formatFullDate(subreddit.createdAt)}</span>
-            </div>
-            
-            {/* Join/Create Post Buttons */}
-            <div className="space-y-2">
-              <button className="w-full btn-primary">Tilmeld</button>
-              <Link to="/submit" className="block w-full btn-secondary text-center">
-                Opret indlæg
-              </Link>
-            </div>
-          </div>
-          
-          {/* Community Options */}
-          <div className="border-t border-via-lightGray px-3 py-2">
-            <button className="text-xs font-bold text-via-gray hover:text-via-black">
-              FÆLLESSKABSINDSTILLINGER
-            </button>
-          </div>
+            <Link to="/submit" className="block w-full bg-blue-600 text-white text-center py-2 rounded hover:bg-blue-700">
+              Opret indlæg
+            </Link>
         </div>
       )}
 
-      {/* Community Rules */}
-      {subreddit && subreddit.rules.length > 0 && (
-        <div className="via-card">
-          <div className="p-3 border-b border-via-lightGray">
-            <h2 className="text-sm font-bold">r/{subreddit.name} Regler</h2>
-          </div>
-          <div className="p-3">
-            {subreddit.rules.slice(0, 5).map((rule, index) => (
-              <details key={rule.id} className="mb-2">
-                <summary className="cursor-pointer text-sm hover:text-via-black">
-                  <span className="font-medium">{index + 1}. {rule.title}</span>
-                </summary>
-                <p className="text-xs text-via-gray mt-1 ml-4">{rule.description}</p>
-              </details>
-            ))}
-            {subreddit.rules.length > 5 && (
-              <button className="text-xs font-bold text-via-blue">
-                Se alle {subreddit.rules.length} regler
-              </button>
-            )}
-          </div>
-        </div>
-      )}
 
-      {/* Trending Communities */}
+      {/* Popular Communities */}
       {!showSubredditInfo && (
-        <div className="via-card">
-          <div className="p-3 border-b border-via-lightGray">
-            <h2 className="text-sm font-bold flex items-center gap-2">
-              <TrendingUp size={16} className="text-via-orange" />
-              Dagens mest voksende fællesskaber
-            </h2>
-          </div>
-          <div className="py-2">
+        <div className="bg-white border border-gray-200 rounded-lg p-4">
+          <h2 className="text-sm font-semibold mb-3 flex items-center gap-2">
+            <TrendingUp size={16} className="text-blue-600" />
+            Populære fællesskaber
+          </h2>
+          <div className="space-y-2">
             {trendingCommunities.map((community, index) => (
               <Link 
                 key={community.name}
                 to={`/r/${community.name}`}
-                className="flex items-center gap-3 px-3 py-2 hover:bg-via-bg-hover"
+                className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded"
               >
-                <span className="text-sm font-medium w-4">{index + 1}</span>
-                <img 
-                  src={`https://www.redditstatic.com/avatars/defaults/v2/avatar_default_${community.name.charCodeAt(0) % 7}.png`}
-                  alt={community.name}
-                  className="w-8 h-8 rounded-full"
-                />
+                <span className="text-sm font-medium w-4 text-gray-500">{index + 1}</span>
+                <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                  <span className="text-xs font-medium text-blue-600">{community.name.charAt(0)}</span>
+                </div>
                 <div className="flex-1">
                   <div className="text-sm font-medium">r/{community.name}</div>
-                  <div className="text-xs text-via-gray">{formatNumber(community.members)} medlemmer</div>
+                  <div className="text-xs text-gray-500">{formatNumber(community.members)} medlemmer</div>
                 </div>
-                {community.isNew && (
-                  <span className="text-xs bg-via-green text-white px-2 py-0.5 rounded-full">NY</span>
-                )}
               </Link>
             ))}
           </div>
-          <div className="px-3 py-2 border-t border-via-lightGray">
-            <button className="text-xs font-bold text-via-blue">SE ALLE</button>
-          </div>
         </div>
       )}
 
-      {/* VIA Plus */}
-      <div className="via-card">
-        <div className="p-3">
-          <div className="flex items-center gap-2 mb-2">
-            <Shield size={20} className="text-via-orange" />
-            <h2 className="text-sm font-bold">VIA Plus</h2>
-          </div>
-          <p className="text-xs text-via-gray mb-3">
-            Udvidet adgang til eksklusivt pædagogisk indhold
-          </p>
-          <button className="w-full btn-primary text-sm">Læs mere</button>
-        </div>
-      </div>
 
-      {/* Home Create Post */}
-      {!showSubredditInfo && (
-        <div className="via-card p-3">
-          <div className="flex items-center gap-3 mb-3">
-            <img 
-              src="https://www.redditstatic.com/desktop2x/img/id-cards/snoo-home@2x.png"
-              alt="Snoo"
-              className="w-10 h-12"
-            />
-            <div>
-              <div className="text-sm font-medium">Hjem</div>
-              <div className="text-xs text-via-gray">
-                Din personlige forside. Kom her for at tjekke ind med dine foretrukne fællesskaber.
-              </div>
-            </div>
-          </div>
-          <Link to="/submit" className="block w-full btn-primary text-center">
-            Opret indlæg
-          </Link>
-          <Link to="/subreddits/create" className="block w-full btn-secondary text-center mt-2">
-            Opret fællesskab
-          </Link>
-        </div>
-      )}
 
-      {/* Footer Links */}
-      <div className="via-card p-3">
-        <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-xs">
-          <Link to="/help" className="hover:underline">Hjælp</Link>
-          <Link to="/coins" className="hover:underline">VIA Point</Link>
-          <Link to="/premium" className="hover:underline">VIA Plus</Link>
-          <Link to="/about" className="hover:underline">Om</Link>
-          <Link to="/careers" className="hover:underline">Karriere</Link>
-          <Link to="/press" className="hover:underline">Presse</Link>
-          <Link to="/advertise" className="hover:underline">Annoncer</Link>
-          <Link to="/blog" className="hover:underline">Blog</Link>
-          <Link to="/terms" className="hover:underline">Vilkår</Link>
-          <Link to="/content-policy" className="hover:underline">Indholdspolitik</Link>
-          <Link to="/privacy-policy" className="hover:underline">Privatlivspolitik</Link>
-          <Link to="/mod-policy" className="hover:underline">Moderatorpolitik</Link>
-        </div>
-        <div className="text-xs text-via-gray mt-4">
-          VIA Pædagoger Forum © 2024. Et uafhængigt fællesskab
-        </div>
-      </div>
     </aside>
   );
 };
