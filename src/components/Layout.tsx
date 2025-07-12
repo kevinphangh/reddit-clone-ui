@@ -21,7 +21,7 @@ export const Layout: React.FC<LayoutProps> = ({
   karma
 }) => {
   return (
-    <div className="min-h-screen bg-via-bg-light text-via-text-primary">
+    <div className="min-h-screen bg-via-bg-light text-via-darkest">
       <Header isLoggedIn={isLoggedIn} username={username} karma={karma} />
       
       <div className="pt-[64px]">

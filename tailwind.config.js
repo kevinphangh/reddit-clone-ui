@@ -1,5 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 /** @type {import('tailwindcss').Config} */
+// VIA University College Tailwind Configuration
+// Minimalist Danish design - White, Gray, Blue palette
 export default {
   content: [
     "./index.html",
@@ -9,58 +11,62 @@ export default {
     extend: {
       colors: {
         via: {
-          // VIA Brand Colors - Enhanced
-          orange: '#FF6B35',
-          orangered: '#FF5722',
-          darkOrange: '#E65100',
+          // Minimalist Danish Blue Palette
+          blue: '#2563EB',           // Clean modern blue
+          lightBlue: '#60A5FA',      // Light blue accent
+          darkBlue: '#1D4ED8',       // Dark blue emphasis
+          primary: '#2563EB',        // Primary blue
           
-          // VIA Blues - More sophisticated
-          blue: '#003F72',
-          lightBlue: '#4A90A4',
-          darkBlue: '#002B4F',
-          primary: '#003F72',
-          secondary: '#00A3E0',
+          // Secondary Blue Variations
+          secondary: '#3B82F6',      // Secondary blue tone
+          lightSecondary: '#93C5FD', // Very light blue
+          darkSecondary: '#1E40AF',  // Deep blue
           
-          // Neutrals - Better contrast and hierarchy
-          white: '#FFFFFF',
-          black: '#0F172A',
-          darkGray: '#1E293B',
-          gray: '#64748B',
-          lightGray: '#E2E8F0',
+          // Minimalist Gray Scale - Pure and Clean
+          white: '#FFFFFF',          // Pure white
+          lightest: '#FAFAFA',       // Almost white
+          lighter: '#F5F5F5',        // Very light gray
+          light: '#E5E5E5',          // Light gray borders
+          medium: '#737373',         // Medium gray text
+          dark: '#404040',           // Dark gray text
+          darker: '#262626',         // Darker gray
+          darkest: '#171717',        // Almost black
           
-          // Status colors - More vibrant
-          green: '#059669',
-          red: '#DC2626',
-          yellow: '#D97706',
-          purple: '#7C3AED',
+          // Minimal Status Colors - Very Subtle
+          green: '#10B981',          // Subtle success green
+          red: '#EF4444',            // Subtle error red
+          yellow: '#F59E0B',         // Subtle warning amber
+          teal: '#06B6D4',           // Subtle info cyan
           
-          // Accent colors
-          accent: '#FF6B35',
+          // Educational Blues - Monochromatic
+          pedagogy: '#6366F1',       // Indigo for pedagogy
+          practice: '#0891B2',       // Cyan for practice
+          theory: '#2563EB',         // Blue for theory
+          collaboration: '#3B82F6',  // Blue for collaboration
           
-          // Background system
+          // Background System - Minimal
           bg: {
-            light: '#F8FAFC',
-            dark: '#0F172A',
-            card: '#FFFFFF',
-            cardDark: '#1E293B',
-            hover: '#F1F5F9',
-            hoverDark: '#334155',
-            muted: '#F8FAFC'
+            light: '#FFFFFF',        // Pure white background
+            card: '#FFFFFF',         // Card background
+            hover: '#FAFAFA',        // Subtle hover
+            muted: '#F5F5F5',        // Muted background
+            dark: '#171717',         // Dark theme
+            cardDark: '#262626'      // Dark card
           },
           
-          // Text colors for better readability
+          // Text System - High Contrast
           text: {
-            primary: '#0F172A',
-            secondary: '#475569',
-            muted: '#64748B',
-            inverse: '#F8FAFC'
+            primary: '#171717',      // Almost black
+            secondary: '#404040',    // Dark gray
+            muted: '#737373',        // Medium gray
+            inverse: '#FFFFFF'       // White
           },
           
-          // Border colors
+          // Border System - Minimal
           border: {
-            light: '#E2E8F0',
-            DEFAULT: '#CBD5E1',
-            dark: '#475569'
+            light: '#E5E5E5',        // Light borders
+            DEFAULT: '#737373',      // Default borders
+            dark: '#404040'          // Dark borders
           }
         }
       },
@@ -148,7 +154,22 @@ export default {
     }
   },
   plugins: [
-    function({ addUtilities }) {
+    function({ addUtilities, addBase }) {
+      // CSS Custom Properties for minimalist theming
+      addBase({
+        ':root': {
+          '--via-primary': '#2563EB',
+          '--via-secondary': '#3B82F6',
+          '--via-background': '#FFFFFF',
+          '--via-surface': '#FFFFFF',
+          '--via-text-primary': '#171717',
+          '--via-text-secondary': '#404040',
+          '--via-text-muted': '#737373',
+          '--via-border-light': '#E5E5E5',
+          '--via-border-medium': '#737373'
+        }
+      })
+      
       const newUtilities = {
         '.text-balance': {
           'text-wrap': 'balance',
@@ -162,6 +183,21 @@ export default {
           'background': 'rgba(0, 0, 0, 0.1)',
           'backdrop-filter': 'blur(10px)',
           'border': '1px solid rgba(255, 255, 255, 0.1)',
+        },
+        // Minimalist VIA Theme Utilities
+        '.via-gradient-primary': {
+          'background': 'linear-gradient(135deg, var(--via-primary) 0%, #60A5FA 100%)',
+        },
+        '.via-gradient-secondary': {
+          'background': 'linear-gradient(135deg, var(--via-secondary) 0%, #93C5FD 100%)',
+        },
+        '.via-gradient-hero': {
+          'background': 'linear-gradient(135deg, var(--via-primary) 0%, var(--via-secondary) 100%)',
+        },
+        '.via-minimal-card': {
+          'background': 'rgba(255, 255, 255, 0.8)',
+          'backdrop-filter': 'blur(10px)',
+          'border': '1px solid rgba(229, 229, 229, 0.3)',
         }
       }
       addUtilities(newUtilities)

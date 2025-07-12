@@ -123,7 +123,7 @@ export const PostCard: React.FC<PostCardProps> = ({
 
   if (view === 'compact') {
     return (
-      <div className="bg-white rounded-xl border border-via-lightGray hover:border-via-blue/30 hover:shadow-md transition-all duration-300 group">
+      <div className="bg-white rounded-lg border border-via-light hover:border-via-primary/50 hover:shadow-sm transition-all duration-200 group">
         <div className="flex items-center p-4 gap-3">
           {/* Vote Buttons */}
           <div className="flex flex-col items-center gap-1 bg-gradient-to-b from-via-lightGray/30 to-via-lightGray/10 rounded-lg p-2">
@@ -139,8 +139,8 @@ export const PostCard: React.FC<PostCardProps> = ({
             </button>
             <span className={clsx(
               'text-sm font-bold min-w-[32px] text-center',
-              vote === 1 && 'text-via-orange',
-              vote === -1 && 'text-via-blue'
+              vote === 1 && 'text-via-secondary',
+              vote === -1 && 'text-via-primary'
             )}>
               {formatScore(currentScore)}
             </span>
@@ -232,7 +232,7 @@ export const PostCard: React.FC<PostCardProps> = ({
 
   return (
     <div className={clsx(
-      'bg-white rounded-xl border border-via-lightGray hover:border-via-blue/30 hover:shadow-lg transition-all duration-300 group overflow-hidden',
+      'bg-white rounded-lg border border-via-light hover:border-via-primary/50 hover:shadow-sm transition-all duration-200 group overflow-hidden',
       view === 'classic' && 'flex'
     )}>
       {/* Classic View Vote Section */}
@@ -250,9 +250,9 @@ export const PostCard: React.FC<PostCardProps> = ({
           </button>
           <span className={clsx(
             'text-sm font-bold my-2 px-2 py-1 rounded bg-white shadow-sm min-w-[40px] text-center',
-            vote === 1 && 'text-via-orange border border-via-orange/20',
-            vote === -1 && 'text-via-blue border border-via-blue/20',
-            vote === 0 && 'text-via-gray border border-via-lightGray'
+            vote === 1 && 'text-via-secondary border border-via-secondary/20',
+            vote === -1 && 'text-via-primary border border-via-primary/20',
+            vote === 0 && 'text-via-medium border border-via-light'
           )}>
             {formatScore(currentScore)}
           </span>
@@ -283,39 +283,39 @@ export const PostCard: React.FC<PostCardProps> = ({
                 <>
                   <Link 
                     to={`/r/${post.subreddit.name}`} 
-                    className="flex items-center gap-1.5 font-semibold text-via-blue hover:text-via-darkBlue transition-colors"
+                    className="flex items-center gap-1.5 font-semibold text-via-primary hover:text-via-darkBlue transition-colors"
                   >
-                    <div className="w-5 h-5 bg-gradient-to-br from-via-blue to-via-secondary rounded-full flex items-center justify-center">
+                    <div className="w-5 h-5 bg-gradient-to-br from-via-primary to-via-lightBlue rounded-full flex items-center justify-center">
                       <span className="text-white text-xs font-bold">{post.subreddit.name.charAt(0).toUpperCase()}</span>
                     </div>
                     {post.subreddit.name}
                   </Link>
-                  <span className="text-via-lightGray">•</span>
+                  <span className="text-via-light">•</span>
                 </>
               )}
               <div className="flex items-center gap-1.5">
                 <User size={14} className="text-via-gray" />
-                <Link to={`/user/${post.author.username}`} className="hover:text-via-blue transition-colors font-medium">
+                <Link to={`/user/${post.author.username}`} className="hover:text-via-primary transition-colors font-medium">
                   {post.author.username}
                 </Link>
                 {post.author.isVerified && (
                   <Shield size={12} className="text-via-green" />
                 )}
               </div>
-              <span className="text-via-lightGray">•</span>
+              <span className="text-via-light">•</span>
               <div className="flex items-center gap-1">
                 <Clock size={14} className="text-via-gray" />
                 <span>{formatTimeAgo(post.createdAt)}</span>
               </div>
               {post.editedAt && (
                 <>
-                  <span className="text-via-lightGray">•</span>
+                  <span className="text-via-light">•</span>
                   <span className="italic">(redigeret)</span>
                 </>
               )}
               {post.isPinned && (
                 <>
-                  <span className="text-via-lightGray">•</span>
+                  <span className="text-via-light">•</span>
                   <div className="flex items-center gap-1 px-2 py-1 bg-via-green/10 rounded-full">
                     <TrendingUp size={12} className="text-via-green" />
                     <span className="text-via-green font-semibold text-xs">FASTGJORT</span>
@@ -329,7 +329,7 @@ export const PostCard: React.FC<PostCardProps> = ({
               <h3 className="mb-2">
                 <Link 
                   to={`/r/${post.subreddit.name}/comments/${post.id}`}
-                  className="text-xl font-semibold text-via-black hover:text-via-blue transition-colors leading-tight group-hover:text-via-blue"
+                  className="text-xl font-semibold text-via-darkest hover:text-via-primary transition-colors leading-tight group-hover:text-via-primary"
                 >
                   {post.title}
                 </Link>
@@ -473,9 +473,9 @@ export const PostCard: React.FC<PostCardProps> = ({
                     </button>
                     <span className={clsx(
                       'text-sm font-bold min-w-[40px] text-center px-2 py-1 rounded bg-white shadow-sm',
-                      vote === 1 && 'text-via-orange border border-via-orange/20',
-                      vote === -1 && 'text-via-blue border border-via-blue/20',
-                      vote === 0 && 'text-via-gray border border-via-lightGray'
+                      vote === 1 && 'text-via-secondary border border-via-secondary/20',
+                      vote === -1 && 'text-via-primary border border-via-primary/20',
+                      vote === 0 && 'text-via-medium border border-via-light'
                     )}>
                       {formatScore(currentScore)}
                     </span>

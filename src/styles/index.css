@@ -13,7 +13,7 @@
   }
 
   body {
-    @apply bg-via-bg-light text-via-text-primary font-normal leading-relaxed;
+    @apply bg-via-bg-light text-via-darkest font-normal leading-relaxed;
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -21,7 +21,7 @@
   }
   
   p {
-    @apply text-via-text-secondary leading-relaxed;
+    @apply text-via-dark leading-relaxed;
   }
 
   /* Custom scrollbar styles to match Reddit */
@@ -35,26 +35,26 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-via-gray rounded;
+    @apply bg-via-medium rounded;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-via-darkGray;
+    @apply bg-via-dark;
   }
 }
 
 @layer components {
   /* VIA-style button variations */
   .btn-primary {
-    @apply bg-via-orange text-white font-semibold py-3 px-6 rounded-via-lg hover:bg-via-darkOrange active:scale-95 transition-all duration-200 shadow-via hover:shadow-via-hover;
+    @apply bg-via-primary text-white font-semibold py-3 px-6 rounded-via-lg hover:bg-via-darkBlue active:scale-95 transition-all duration-200 shadow-via hover:shadow-via-hover;
   }
 
   .btn-secondary {
-    @apply bg-transparent text-via-blue border-2 border-via-blue font-semibold py-3 px-6 rounded-via-lg hover:bg-via-blue hover:text-white transition-all duration-200 shadow-via hover:shadow-via-hover;
+    @apply bg-transparent text-via-primary border-2 border-via-primary font-semibold py-3 px-6 rounded-via-lg hover:bg-via-primary hover:text-white transition-all duration-200 shadow-via hover:shadow-via-hover;
   }
 
   .btn-ghost {
-    @apply bg-transparent text-via-text-secondary hover:bg-via-bg-hover hover:text-via-text-primary font-medium py-2 px-4 rounded-via transition-all duration-200;
+    @apply bg-transparent text-via-dark hover:bg-via-bg-hover hover:text-via-darkest font-medium py-2 px-4 rounded-via transition-all duration-200;
   }
 
   /* VIA-style card */
@@ -68,44 +68,44 @@
   }
 
   .vote-button.upvoted {
-    @apply text-via-orange bg-via-orange/10;
+    @apply text-via-secondary bg-via-secondary/10;
   }
 
   .vote-button.downvoted {
-    @apply text-via-blue bg-via-blue/10;
+    @apply text-via-primary bg-via-primary/10;
   }
 
   /* VIA-style input */
   .via-input {
-    @apply w-full px-4 py-3 bg-via-bg-muted rounded-via-lg border border-via-border-light focus:border-via-blue focus:outline-none focus:ring-2 focus:ring-via-blue/20 transition-all duration-200 placeholder:text-via-text-muted;
+    @apply w-full px-4 py-3 bg-via-bg-muted rounded-via-lg border border-via-light focus:border-via-primary focus:outline-none focus:ring-2 focus:ring-via-primary/20 transition-all duration-200 placeholder:text-via-medium;
   }
 
   /* VIA-style textarea */
   .via-textarea {
-    @apply w-full px-4 py-3 bg-via-bg-muted rounded-via-lg border border-via-border-light focus:border-via-blue focus:outline-none focus:ring-2 focus:ring-via-blue/20 resize-y min-h-[120px] transition-all duration-200 placeholder:text-via-text-muted;
+    @apply w-full px-4 py-3 bg-via-bg-muted rounded-via-lg border border-via-light focus:border-via-primary focus:outline-none focus:ring-2 focus:ring-via-primary/20 resize-y min-h-[120px] transition-all duration-200 placeholder:text-via-medium;
   }
 
   /* Dropdown menu */
   .dropdown-menu {
-    @apply absolute right-0 mt-2 py-2 bg-white rounded-via-lg shadow-via-lg border border-via-border-light z-50 min-w-[200px] animate-slide-up;
+    @apply absolute right-0 mt-2 py-2 bg-white rounded-via-lg shadow-via-lg border border-via-light z-50 min-w-[200px] animate-slide-up;
   }
 
   .dropdown-item {
-    @apply block w-full px-4 py-3 text-sm text-left text-via-text-secondary hover:bg-via-bg-hover hover:text-via-text-primary transition-all duration-200 font-medium;
+    @apply block w-full px-4 py-3 text-sm text-left text-via-dark hover:bg-via-bg-hover hover:text-via-darkest transition-all duration-200 font-medium;
   }
 
   /* Tab styles */
   .tab {
-    @apply px-4 py-3 font-medium text-via-text-muted hover:text-via-text-primary transition-all duration-200 rounded-via hover:bg-via-bg-hover;
+    @apply px-4 py-3 font-medium text-via-medium hover:text-via-darkest transition-all duration-200 rounded-via hover:bg-via-bg-hover;
   }
 
   .tab.active {
-    @apply text-via-blue bg-via-blue/10 border-b-2 border-via-blue;
+    @apply text-via-primary bg-via-primary/10 border-b-2 border-via-primary;
   }
 
   /* VIA comment threading lines */
   .comment-thread-line {
-    @apply absolute left-0 top-0 bottom-0 w-[2px] bg-via-border-light hover:bg-via-blue cursor-pointer transition-all duration-200 rounded-full;
+    @apply absolute left-0 top-0 bottom-0 w-[2px] bg-via-light hover:bg-via-primary cursor-pointer transition-all duration-200 rounded-full;
   }
 
   /* Navigation pills for header */
@@ -123,7 +123,7 @@
   }
   
   .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-via-blue/20 focus:border-via-blue;
+    @apply focus:outline-none focus:ring-2 focus:ring-via-primary/20 focus:border-via-primary;
   }
   
   .smooth-hover {
