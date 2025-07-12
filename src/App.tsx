@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { HomePage } from './pages/HomePage';
-import { SubredditPageWrapper } from './components/SubredditPageWrapper';
+import { SubredditPage } from './pages/SubredditPage';
 import { PostPage } from './pages/PostPage';
 import { UserPage } from './pages/UserPage';
 import { SubmitPage } from './pages/SubmitPage';
@@ -31,7 +31,9 @@ function App() {
           </Layout>
         } />
         <Route path="/r/:subreddit" element={
-          <SubredditPageWrapper isLoggedIn={isLoggedIn} username={currentUser.username} />
+          <Layout isLoggedIn={isLoggedIn} username={currentUser.username}>
+            <SubredditPage />
+          </Layout>
         } />
         <Route path="/r/:subreddit/comments/:postId/:slug?" element={
           <Layout isLoggedIn={isLoggedIn} username={currentUser.username}>
