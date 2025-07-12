@@ -61,7 +61,7 @@ export const SortBar: React.FC<SortBarProps> = ({
   };
 
   return (
-    <div className="via-card mb-4">
+    <div className="bg-white border border-gray-200 rounded-lg mb-4">
       <div className="flex items-center justify-between px-3 py-2">
         {/* Sort Options */}
         <div className="flex items-center">
@@ -72,8 +72,8 @@ export const SortBar: React.FC<SortBarProps> = ({
               className={clsx(
                 'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold transition-colors',
                 currentSort === value
-                  ? 'bg-via-bg-hover text-via-blue'
-                  : 'text-via-gray hover:bg-via-bg-hover'
+                  ? 'bg-gray-100 text-blue-600'
+                  : 'text-gray-500 hover:bg-gray-100'
               )}
             >
               {getSortIcon(value)}
@@ -86,22 +86,22 @@ export const SortBar: React.FC<SortBarProps> = ({
             <div className="relative ml-2">
               <button
                 onClick={() => setShowTimeFilter(!showTimeFilter)}
-                className="flex items-center gap-1 px-3 py-1.5 text-sm font-bold text-via-gray hover:bg-via-bg-hover rounded-full"
+                className="flex items-center gap-1 px-3 py-1.5 text-sm font-bold text-gray-500 hover:bg-gray-100 rounded-full"
               >
                 <span>{getTimeLabel(currentTime)}</span>
                 <ChevronDown size={16} />
               </button>
               
               {showTimeFilter && (
-                <div className="dropdown-menu">
+                <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
                   {Object.entries(TIME_FILTER_OPTIONS).map(([key, value]) => (
                     <Link
                       key={key}
                       to={buildSortUrl(currentSort, value)}
                       onClick={() => setShowTimeFilter(false)}
                       className={clsx(
-                        'dropdown-item',
-                        currentTime === value && 'text-via-blue font-bold'
+                        'w-full px-4 py-2 text-left text-sm hover:bg-gray-50',
+                        currentTime === value && 'text-blue-600 font-bold'
                       )}
                     >
                       {getTimeLabel(value)}
@@ -117,7 +117,7 @@ export const SortBar: React.FC<SortBarProps> = ({
         <div className="relative">
           <button
             onClick={() => setShowViewOptions(!showViewOptions)}
-            className="flex items-center gap-1 p-2 text-via-gray hover:bg-via-bg-hover rounded"
+            className="flex items-center gap-1 p-2 text-gray-500 hover:bg-gray-100 rounded"
           >
             {currentView === 'card' && <CreditCard size={20} />}
             {currentView === 'classic' && <List size={20} />}
@@ -126,15 +126,15 @@ export const SortBar: React.FC<SortBarProps> = ({
           </button>
           
           {showViewOptions && (
-            <div className="dropdown-menu">
+            <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
               <button
                 onClick={() => {
                   onViewChange?.('card');
                   setShowViewOptions(false);
                 }}
                 className={clsx(
-                  'dropdown-item flex items-center gap-2',
-                  currentView === 'card' && 'text-via-blue font-bold'
+                  'w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2',
+                  currentView === 'card' && 'text-blue-600 font-bold'
                 )}
               >
                 <CreditCard size={16} />
@@ -146,8 +146,8 @@ export const SortBar: React.FC<SortBarProps> = ({
                   setShowViewOptions(false);
                 }}
                 className={clsx(
-                  'dropdown-item flex items-center gap-2',
-                  currentView === 'classic' && 'text-via-blue font-bold'
+                  'w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2',
+                  currentView === 'classic' && 'text-blue-600 font-bold'
                 )}
               >
                 <List size={16} />
@@ -159,8 +159,8 @@ export const SortBar: React.FC<SortBarProps> = ({
                   setShowViewOptions(false);
                 }}
                 className={clsx(
-                  'dropdown-item flex items-center gap-2',
-                  currentView === 'compact' && 'text-via-blue font-bold'
+                  'w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2',
+                  currentView === 'compact' && 'text-blue-600 font-bold'
                 )}
               >
                 <Grid3X3 size={16} />

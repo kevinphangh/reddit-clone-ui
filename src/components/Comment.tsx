@@ -51,9 +51,9 @@ export const Comment: React.FC<CommentProps> = ({
     return (
       <div className={clsx('relative', depth > 0 && 'ml-4')}>
         {depth > 0 && depth < maxDepth && (
-          <div className="comment-thread-line ml-2"></div>
+          <div className="absolute left-0 top-0 bottom-0 w-px bg-gray-300 ml-2"></div>
         )}
-        <div className="pl-4 py-2 text-via-gray text-sm italic">
+        <div className="pl-4 py-2 text-gray-500 text-sm italic">
           [slettet]
         </div>
       </div>
@@ -64,9 +64,9 @@ export const Comment: React.FC<CommentProps> = ({
     return (
       <div className={clsx('relative', depth > 0 && 'ml-4')}>
         {depth > 0 && depth < maxDepth && (
-          <div className="comment-thread-line ml-2"></div>
+          <div className="absolute left-0 top-0 bottom-0 w-px bg-gray-300 ml-2"></div>
         )}
-        <div className="pl-4 py-2 text-via-gray text-sm italic">
+        <div className="pl-4 py-2 text-gray-500 text-sm italic">
           [fjernet]
         </div>
       </div>
@@ -79,7 +79,7 @@ export const Comment: React.FC<CommentProps> = ({
       {depth > 0 && depth < maxDepth && (
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="comment-thread-line ml-2"
+          className="absolute left-0 top-0 bottom-0 w-px bg-gray-300 ml-2"
           aria-label={collapsed ? 'Expand thread' : 'Collapse thread'}
         />
       )}
@@ -89,13 +89,13 @@ export const Comment: React.FC<CommentProps> = ({
         {/* Header */}
         <div className="flex items-center gap-2 text-xs mb-1">
           {comment.isStickied && (
-            <span className="text-via-green font-bold">FASTGJORT KOMMENTAR</span>
+            <span className="text-green-600 font-bold">FASTGJORT KOMMENTAR</span>
           )}
           
           {/* Collapse Button */}
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="p-0.5 hover:bg-via-bg-hover rounded"
+            className="p-0.5 hover:bg-gray-100 rounded"
           >
             <ChevronUp 
               size={12} 
@@ -111,7 +111,7 @@ export const Comment: React.FC<CommentProps> = ({
             to={`/user/${comment.author.username}`} 
             className={clsx(
               'font-medium hover:underline',
-              comment.author.username === '[deleted]' && 'text-via-gray'
+              comment.author.username === '[deleted]' && 'text-gray-500'
             )}
           >
             {comment.author.username}
@@ -119,12 +119,12 @@ export const Comment: React.FC<CommentProps> = ({
 
           {/* Author Badges */}
           {comment.author.isPremium && (
-            <span className="text-via-orange" title="VIA Plus medlem">
+            <span className="text-orange-500" title="VIA Plus medlem">
               <Award size={12} />
             </span>
           )}
           {comment.author.isVerified && (
-            <span className="text-via-blue" title="Verificeret pædagog">
+            <span className="text-blue-600" title="Verificeret pædagog">
               <Shield size={12} />
             </span>
           )}
@@ -132,19 +132,19 @@ export const Comment: React.FC<CommentProps> = ({
           {/* Score */}
           <span className={clsx(
             'font-bold',
-            vote === 1 && 'text-via-orange',
-            vote === -1 && 'text-via-blue'
+            vote === 1 && 'text-orange-500',
+            vote === -1 && 'text-blue-600'
           )}>
             {formatScore(currentScore)} {currentScore === 1 ? 'point' : 'point'}
           </span>
 
           {/* Time */}
-          <span className="text-via-gray">
+          <span className="text-gray-500">
             {formatTimeAgo(comment.createdAt)}
           </span>
           
           {comment.editedAt && (
-            <span className="text-via-gray">(redigeret)</span>
+            <span className="text-gray-500">(redigeret)</span>
           )}
 
           {/* Awards */}
@@ -179,14 +179,14 @@ export const Comment: React.FC<CommentProps> = ({
               {/* Vote Buttons */}
               <button 
                 onClick={() => handleVote(1)}
-                className={clsx('vote-button', vote === 1 && 'upvoted')}
+                className={clsx('p-1 rounded hover:bg-gray-100', vote === 1 && 'text-orange-500')}
                 aria-label="Upvote"
               >
                 <ArrowUp size={16} />
               </button>
               <button 
                 onClick={() => handleVote(-1)}
-                className={clsx('vote-button', vote === -1 && 'downvoted')}
+                className={clsx('p-1 rounded hover:bg-gray-100', vote === -1 && 'text-blue-600')}
                 aria-label="Downvote"
               >
                 <ArrowDown size={16} />
@@ -199,7 +199,7 @@ export const Comment: React.FC<CommentProps> = ({
                     setShowReplyForm(!showReplyForm);
                     onReply?.(comment.id);
                   }}
-                  className="text-xs font-bold text-via-gray hover:bg-via-bg-hover px-2 py-1 rounded"
+                  className="text-xs font-bold text-gray-500 hover:bg-gray-100 px-2 py-1 rounded"
                 >
                   <MessageSquare size={14} className="inline mr-1" />
                   Svar
@@ -207,7 +207,7 @@ export const Comment: React.FC<CommentProps> = ({
               )}
 
               {/* Share */}
-              <button className="text-xs font-bold text-via-gray hover:bg-via-bg-hover px-2 py-1 rounded">
+              <button className="text-xs font-bold text-gray-500 hover:bg-gray-100 px-2 py-1 rounded">
                 <Share size={14} className="inline mr-1" />
                 Del
               </button>
@@ -216,8 +216,8 @@ export const Comment: React.FC<CommentProps> = ({
               <button 
                 onClick={() => setSaved(!saved)}
                 className={clsx(
-                  'text-xs font-bold hover:bg-via-bg-hover px-2 py-1 rounded',
-                  saved ? 'text-via-green' : 'text-via-gray'
+                  'text-xs font-bold hover:bg-gray-100 px-2 py-1 rounded',
+                  saved ? 'text-green-600' : 'text-gray-500'
                 )}
               >
                 <Bookmark size={14} className="inline mr-1" fill={saved ? 'currentColor' : 'none'} />
@@ -228,22 +228,22 @@ export const Comment: React.FC<CommentProps> = ({
               <div className="relative">
                 <button 
                   onClick={() => setShowActions(!showActions)}
-                  className="text-via-gray hover:bg-via-bg-hover p-1 rounded"
+                  className="text-gray-500 hover:bg-gray-100 p-1 rounded"
                 >
                   <MoreHorizontal size={16} />
                 </button>
                 
                 {showActions && (
-                  <div className="dropdown-menu">
-                    <button className="dropdown-item flex items-center gap-2">
+                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+                    <button className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2">
                       <Edit2 size={14} />
                       Rediger
                     </button>
-                    <button className="dropdown-item flex items-center gap-2">
+                    <button className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2">
                       <Trash2 size={14} />
                       Slet
                     </button>
-                    <button className="dropdown-item flex items-center gap-2">
+                    <button className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2">
                       <Flag size={14} />
                       Anmeld
                     </button>
@@ -256,17 +256,17 @@ export const Comment: React.FC<CommentProps> = ({
             {showReplyForm && (
               <div className="mt-3 mb-3">
                 <textarea 
-                  className="via-textarea text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm resize-none focus:outline-none focus:border-blue-500 text-sm"
                   placeholder="Hvad tænker du?"
                   rows={4}
                 />
                 <div className="flex gap-2 mt-2">
-                  <button className="btn-primary text-xs px-4 py-1.5">
+                  <button className="bg-blue-600 text-white rounded hover:bg-blue-700 text-xs px-4 py-1.5">
                     Svar
                   </button>
                   <button 
                     onClick={() => setShowReplyForm(false)}
-                    className="btn-ghost text-xs px-4 py-1.5"
+                    className="border border-gray-300 rounded hover:bg-gray-50 text-xs px-4 py-1.5"
                   >
                     Annuller
                   </button>
@@ -293,7 +293,7 @@ export const Comment: React.FC<CommentProps> = ({
             {depth >= maxDepth && comment.replies.length > 0 && (
               <Link 
                 to={`/r/${comment.post.subreddit.name}/comments/${comment.post.id}?thread=${comment.id}`}
-                className="text-xs text-via-blue hover:underline mt-2 inline-block"
+                className="text-xs text-blue-600 hover:underline mt-2 inline-block"
               >
                 Fortsæt denne tråd →
               </Link>
@@ -303,7 +303,7 @@ export const Comment: React.FC<CommentProps> = ({
 
         {/* Collapsed State */}
         {collapsed && (
-          <div className="text-xs text-via-gray">
+          <div className="text-xs text-gray-500">
             {comment.replies.length > 0 && (
               <span>{comment.replies.length} {comment.replies.length === 1 ? 'svar mere' : 'svar mere'}</span>
             )}

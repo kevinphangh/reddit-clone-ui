@@ -26,9 +26,9 @@ export const PostPage: React.FC = () => {
   
   if (!post) {
     return (
-      <div className="via-card p-8 text-center">
+      <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
         <h1 className="text-xl font-bold mb-2">Indlæg ikke fundet</h1>
-        <p className="text-via-gray">Det indlæg du leder efter eksisterer ikke.</p>
+        <p className="text-gray-500">Det indlæg du leder efter eksisterer ikke.</p>
       </div>
     );
   }
@@ -50,27 +50,27 @@ export const PostPage: React.FC = () => {
   return (
     <div>
       {/* Post Content */}
-      <div className="via-card mb-4">
+      <div className="bg-white border border-gray-200 rounded-lg mb-4">
         <div className="flex">
           {/* Vote Section */}
-          <div className="flex flex-col items-center p-2 bg-via-bg-hover">
+          <div className="flex flex-col items-center p-2 bg-gray-100">
             <button 
               onClick={() => handleVote(1)}
-              className={clsx('vote-button', vote === 1 && 'upvoted')}
+              className={clsx('p-1 rounded hover:bg-gray-100', vote === 1 && 'text-orange-500')}
               aria-label="Upvote"
             >
               <ArrowUp size={24} />
             </button>
             <span className={clsx(
               'text-base font-bold my-1',
-              vote === 1 && 'text-via-orange',
-              vote === -1 && 'text-via-blue'
+              vote === 1 && 'text-orange-500',
+              vote === -1 && 'text-blue-600'
             )}>
               {formatScore(currentScore)}
             </span>
             <button 
               onClick={() => handleVote(-1)}
-              className={clsx('vote-button', vote === -1 && 'downvoted')}
+              className={clsx('p-1 rounded hover:bg-gray-100', vote === -1 && 'text-blue-600')}
               aria-label="Downvote"
             >
               <ArrowDown size={24} />
@@ -80,7 +80,7 @@ export const PostPage: React.FC = () => {
           {/* Content */}
           <div className="flex-1 p-3">
             {/* Meta Info */}
-            <div className="flex items-center gap-1 text-xs text-via-gray mb-2">
+            <div className="flex items-center gap-1 text-xs text-gray-500 mb-2">
               <Link to={`/r/${post.subreddit.name}`} className="font-bold hover:underline">
                 r/{post.subreddit.name}
               </Link>
@@ -94,7 +94,7 @@ export const PostPage: React.FC = () => {
               {post.isPinned && (
                 <>
                   <span>•</span>
-                  <span className="text-via-green font-bold">PINNED</span>
+                  <span className="text-green-600 font-bold">PINNED</span>
                 </>
               )}
             </div>
@@ -115,13 +115,13 @@ export const PostPage: React.FC = () => {
                 </span>
               )}
               {post.isNSFW && (
-                <span className="text-sm font-bold text-via-red ml-2">NSFW</span>
+                <span className="text-sm font-bold text-red-500 ml-2">NSFW</span>
               )}
               {post.isSpoiler && (
-                <span className="text-sm font-bold text-via-gray ml-2">SPOILER</span>
+                <span className="text-sm font-bold text-gray-500 ml-2">SPOILER</span>
               )}
               {post.isOC && (
-                <span className="text-sm font-bold text-via-blue ml-2">OC</span>
+                <span className="text-sm font-bold text-blue-600 ml-2">OC</span>
               )}
             </h1>
 
@@ -157,7 +157,7 @@ export const PostPage: React.FC = () => {
                   href={post.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-via-blue hover:underline inline-flex items-center gap-1"
+                  className="text-blue-600 hover:underline inline-flex items-center gap-1"
                 >
                   {getDomainFromUrl(post.url)}
                   <ExternalLink size={14} />
@@ -187,17 +187,17 @@ export const PostPage: React.FC = () => {
 
             {/* Actions */}
             <div className="flex items-center gap-3 text-sm">
-              <button className="flex items-center gap-1 text-via-gray hover:bg-via-bg-hover px-2 py-1 rounded font-bold">
+              <button className="flex items-center gap-1 text-gray-500 hover:bg-gray-100 px-2 py-1 rounded font-bold">
                 <MessageSquare size={20} />
                 {post.commentCount} kommentarer
               </button>
 
-              <button className="flex items-center gap-1 text-via-gray hover:bg-via-bg-hover px-2 py-1 rounded font-bold">
+              <button className="flex items-center gap-1 text-gray-500 hover:bg-gray-100 px-2 py-1 rounded font-bold">
                 <Gift size={20} />
                 Anerkend
               </button>
 
-              <button className="flex items-center gap-1 text-via-gray hover:bg-via-bg-hover px-2 py-1 rounded font-bold">
+              <button className="flex items-center gap-1 text-gray-500 hover:bg-gray-100 px-2 py-1 rounded font-bold">
                 <Share size={20} />
                 Del
               </button>
@@ -205,8 +205,8 @@ export const PostPage: React.FC = () => {
               <button 
                 onClick={() => setSaved(!saved)}
                 className={clsx(
-                  'flex items-center gap-1 hover:bg-via-bg-hover px-2 py-1 rounded font-bold',
-                  saved ? 'text-via-green' : 'text-via-gray'
+                  'flex items-center gap-1 hover:bg-gray-100 px-2 py-1 rounded font-bold',
+                  saved ? 'text-green-600' : 'text-gray-500'
                 )}
               >
                 <Bookmark size={20} fill={saved ? 'currentColor' : 'none'} />
@@ -217,22 +217,22 @@ export const PostPage: React.FC = () => {
               <div className="relative">
                 <button 
                   onClick={() => setShowActions(!showActions)}
-                  className="text-via-gray hover:bg-via-bg-hover p-1 rounded"
+                  className="text-gray-500 hover:bg-gray-100 p-1 rounded"
                 >
                   <MoreHorizontal size={20} />
                 </button>
                 
                 {showActions && (
-                  <div className="dropdown-menu">
-                    <button className="dropdown-item flex items-center gap-2">
+                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+                    <button className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2">
                       <Eye size={16} />
                       Vis færre indlæg som dette
                     </button>
-                    <button className="dropdown-item flex items-center gap-2">
+                    <button className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2">
                       <EyeOff size={16} />
                       Skjul
                     </button>
-                    <button className="dropdown-item flex items-center gap-2">
+                    <button className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2">
                       <Flag size={16} />
                       Anmeld
                     </button>
@@ -241,7 +241,7 @@ export const PostPage: React.FC = () => {
               </div>
 
               {/* Upvote Percentage */}
-              <div className="ml-auto text-xs text-via-gray">
+              <div className="ml-auto text-xs text-gray-500">
                 {Math.round(post.upvoteRatio * 100)}% positive stemmer
               </div>
             </div>

@@ -1,21 +1,16 @@
 import React from 'react';
 import { Header } from './Header';
-import { Sidebar } from './Sidebar';
-import { Subreddit } from '../types';
 
 interface LayoutProps {
   children: React.ReactNode;
   showSidebar?: boolean;
-  subreddit?: Subreddit;
   isLoggedIn?: boolean;
   username?: string;
-  karma?: number;
 }
 
 export const Layout: React.FC<LayoutProps> = ({ 
   children, 
   showSidebar = true,
-  subreddit,
   isLoggedIn = false,
   username
 }) => {

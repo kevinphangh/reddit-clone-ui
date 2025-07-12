@@ -51,14 +51,14 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
       {/* Comment Form */}
       {!isLocked && (
         <div className="mb-4">
-          <div className="text-xs text-via-gray mb-2">
-            Kommenter som <span className="text-via-blue">anne_pedagog</span>
+          <div className="text-xs text-gray-500 mb-2">
+            Kommenter som <span className="text-blue-600">anne_pedagog</span>
           </div>
           
           {!showCommentForm ? (
             <div 
               onClick={() => setShowCommentForm(true)}
-              className="via-input cursor-text text-sm text-via-gray"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md cursor-text text-sm text-gray-500 bg-white focus:outline-none focus:border-blue-500"
             >
               Hvad tænker du?
             </div>
@@ -67,13 +67,13 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
               <textarea
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
-                className="via-textarea text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm resize-none focus:outline-none focus:border-blue-500"
                 placeholder="Hvad tænker du?"
                 rows={6}
                 autoFocus
               />
               <div className="flex items-center justify-between mt-2">
-                <div className="text-xs text-via-gray">
+                <div className="text-xs text-gray-500">
                   <button className="hover:underline">Markdown</button>
                   {' • '}
                   <button className="hover:underline">Formateringshjælp</button>
@@ -84,12 +84,12 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
                       setShowCommentForm(false);
                       setCommentText('');
                     }}
-                    className="btn-ghost text-sm px-4 py-1.5"
+                    className="text-sm px-4 py-1.5 border border-gray-300 rounded hover:bg-gray-50"
                   >
                     Annuller
                   </button>
                   <button 
-                    className="btn-primary text-sm px-4 py-1.5"
+                    className="text-sm px-4 py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
                     disabled={!commentText.trim()}
                   >
                     Kommenter
@@ -112,7 +112,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
           <div className="relative">
             <button
               onClick={() => setShowSortMenu(!showSortMenu)}
-              className="flex items-center gap-1 text-xs font-bold text-via-gray hover:text-via-black"
+              className="flex items-center gap-1 text-xs font-bold text-gray-500 hover:text-gray-900"
             >
               {getSortIcon(sortBy)}
               <span>Sorter efter: {getSortLabel(sortBy)}</span>
@@ -120,7 +120,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
             </button>
             
             {showSortMenu && (
-              <div className="dropdown-menu">
+              <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
                 {Object.values(COMMENT_SORT_OPTIONS).map(option => (
                   <button
                     key={option}
@@ -129,8 +129,8 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
                       setShowSortMenu(false);
                     }}
                     className={clsx(
-                      'dropdown-item flex items-center gap-2',
-                      sortBy === option && 'text-via-blue font-bold'
+                      'w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2',
+                      sortBy === option && 'text-blue-600 font-bold'
                     )}
                   >
                     {getSortIcon(option)}
@@ -143,7 +143,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
         </div>
 
         {/* Discussion Settings */}
-        <button className="text-xs text-via-gray hover:text-via-black">
+        <button className="text-xs text-gray-500 hover:text-gray-900">
           <MessageCircle size={16} className="inline mr-1" />
           Diskussionsindstillinger
         </button>
@@ -151,19 +151,19 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
 
       {/* Comments List */}
       {isLocked && (
-        <div className="via-card p-4 mb-4 text-center">
-          <MessageSquare size={24} className="mx-auto mb-2 text-via-gray" />
+        <div className="bg-white border border-gray-200 rounded-lg p-4 mb-4 text-center">
+          <MessageSquare size={24} className="mx-auto mb-2 text-gray-400" />
           <p className="text-sm font-medium mb-1">Kommentarer er låst</p>
-          <p className="text-xs text-via-gray">Denne tråd er blevet låst af moderatorerne</p>
+          <p className="text-xs text-gray-500">Denne tråd er blevet låst af moderatorerne</p>
         </div>
       )}
 
       <div className="space-y-4">
         {comments.length === 0 && !isLocked ? (
-          <div className="via-card p-8 text-center">
-            <MessageSquare size={48} className="mx-auto mb-4 text-via-lightGray" />
+          <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
+            <MessageSquare size={48} className="mx-auto mb-4 text-gray-300" />
             <p className="text-lg font-medium mb-2">Ingen kommentarer endnu</p>
-            <p className="text-sm text-via-gray mb-4">Vær den første til at dele dine tanker!</p>
+            <p className="text-sm text-gray-500 mb-4">Vær den første til at dele dine tanker!</p>
           </div>
         ) : (
           comments.map(comment => (
@@ -179,7 +179,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
       {/* View More Comments */}
       {comments.length > 0 && comments.length < commentCount && (
         <div className="mt-4 text-center">
-          <button className="text-sm font-bold text-via-blue hover:underline">
+          <button className="text-sm font-bold text-blue-600 hover:underline">
             Se flere kommentarer ({commentCount - comments.length} svar)
           </button>
         </div>

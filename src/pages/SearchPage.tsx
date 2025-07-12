@@ -6,9 +6,9 @@ export const SearchPage: React.FC = () => {
   const query = searchParams.get('q');
   
   return (
-    <div className="via-card p-4">
+    <div className="bg-white border border-gray-200 rounded-lg p-4">
       <h1 className="text-xl font-bold mb-4">Søgeresultater</h1>
-      <p className="text-via-gray">
+      <p className="text-gray-500">
         Søger efter: "{query}"
       </p>
     </div>
