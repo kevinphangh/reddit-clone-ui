@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-reddit-bg-light text-reddit-black;
+  }
+
+  /* Custom scrollbar styles to match Reddit */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-reddit-gray rounded;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-reddit-darkGray;
+  }
+}
+
+@layer components {
+  /* Reddit-style button variations */
+  .btn-primary {
+    @apply bg-reddit-orange text-white font-bold py-2 px-4 rounded-full hover:bg-reddit-darkOrange transition-colors duration-200;
+  }
+
+  .btn-secondary {
+    @apply bg-transparent text-reddit-blue border border-reddit-blue font-bold py-2 px-4 rounded-full hover:bg-reddit-blue hover:text-white transition-colors duration-200;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-reddit-gray hover:bg-reddit-bg-hover font-medium py-2 px-4 rounded transition-colors duration-200;
+  }
+
+  /* Reddit-style card */
+  .reddit-card {
+    @apply bg-white rounded border border-reddit-lightGray hover:border-reddit-gray transition-colors duration-200;
+  }
+
+  /* Vote buttons */
+  .vote-button {
+    @apply p-1 rounded hover:bg-reddit-bg-hover transition-colors duration-200;
+  }
+
+  .vote-button.upvoted {
+    @apply text-reddit-orange;
+  }
+
+  .vote-button.downvoted {
+    @apply text-reddit-blue;
+  }
+
+  /* Reddit-style input */
+  .reddit-input {
+    @apply w-full px-4 py-2 bg-reddit-bg-hover rounded border border-reddit-lightGray focus:border-reddit-blue focus:outline-none focus:ring-1 focus:ring-reddit-blue transition-colors duration-200;
+  }
+
+  /* Reddit-style textarea */
+  .reddit-textarea {
+    @apply w-full px-4 py-2 bg-reddit-bg-hover rounded border border-reddit-lightGray focus:border-reddit-blue focus:outline-none focus:ring-1 focus:ring-reddit-blue resize-y min-h-[100px] transition-colors duration-200;
+  }
+
+  /* Dropdown menu */
+  .dropdown-menu {
+    @apply absolute right-0 mt-2 py-1 bg-white rounded shadow-reddit border border-reddit-lightGray z-50;
+  }
+
+  .dropdown-item {
+    @apply block w-full px-4 py-2 text-sm text-left hover:bg-reddit-bg-hover transition-colors duration-200;
+  }
+
+  /* Tab styles */
+  .tab {
+    @apply px-4 py-2 font-medium text-reddit-gray hover:text-reddit-black transition-colors duration-200;
+  }
+
+  .tab.active {
+    @apply text-reddit-black border-b-2 border-reddit-blue;
+  }
+
+  /* Reddit comment threading lines */
+  .comment-thread-line {
+    @apply absolute left-0 top-0 bottom-0 w-[2px] bg-reddit-lightGray hover:bg-reddit-blue cursor-pointer transition-colors duration-200;
+  }
+}
