@@ -26,9 +26,9 @@ export const PostPage: React.FC = () => {
   
   if (!post) {
     return (
-      <div className="reddit-card p-8 text-center">
+      <div className="via-card p-8 text-center">
         <h1 className="text-xl font-bold mb-2">Indlæg ikke fundet</h1>
-        <p className="text-reddit-gray">Det indlæg du leder efter eksisterer ikke.</p>
+        <p className="text-via-gray">Det indlæg du leder efter eksisterer ikke.</p>
       </div>
     );
   }
@@ -50,10 +50,10 @@ export const PostPage: React.FC = () => {
   return (
     <div>
       {/* Post Content */}
-      <div className="reddit-card mb-4">
+      <div className="via-card mb-4">
         <div className="flex">
           {/* Vote Section */}
-          <div className="flex flex-col items-center p-2 bg-reddit-bg-hover">
+          <div className="flex flex-col items-center p-2 bg-via-bg-hover">
             <button 
               onClick={() => handleVote(1)}
               className={clsx('vote-button', vote === 1 && 'upvoted')}
@@ -63,8 +63,8 @@ export const PostPage: React.FC = () => {
             </button>
             <span className={clsx(
               'text-base font-bold my-1',
-              vote === 1 && 'text-reddit-orange',
-              vote === -1 && 'text-reddit-blue'
+              vote === 1 && 'text-via-orange',
+              vote === -1 && 'text-via-blue'
             )}>
               {formatScore(currentScore)}
             </span>
@@ -80,7 +80,7 @@ export const PostPage: React.FC = () => {
           {/* Content */}
           <div className="flex-1 p-3">
             {/* Meta Info */}
-            <div className="flex items-center gap-1 text-xs text-reddit-gray mb-2">
+            <div className="flex items-center gap-1 text-xs text-via-gray mb-2">
               <Link to={`/r/${post.subreddit.name}`} className="font-bold hover:underline">
                 r/{post.subreddit.name}
               </Link>
@@ -94,7 +94,7 @@ export const PostPage: React.FC = () => {
               {post.isPinned && (
                 <>
                   <span>•</span>
-                  <span className="text-reddit-green font-bold">PINNED</span>
+                  <span className="text-via-green font-bold">PINNED</span>
                 </>
               )}
             </div>
@@ -115,13 +115,13 @@ export const PostPage: React.FC = () => {
                 </span>
               )}
               {post.isNSFW && (
-                <span className="text-sm font-bold text-reddit-red ml-2">NSFW</span>
+                <span className="text-sm font-bold text-via-red ml-2">NSFW</span>
               )}
               {post.isSpoiler && (
-                <span className="text-sm font-bold text-reddit-gray ml-2">SPOILER</span>
+                <span className="text-sm font-bold text-via-gray ml-2">SPOILER</span>
               )}
               {post.isOC && (
-                <span className="text-sm font-bold text-reddit-blue ml-2">OC</span>
+                <span className="text-sm font-bold text-via-blue ml-2">OC</span>
               )}
             </h1>
 
@@ -157,7 +157,7 @@ export const PostPage: React.FC = () => {
                   href={post.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-reddit-blue hover:underline inline-flex items-center gap-1"
+                  className="text-via-blue hover:underline inline-flex items-center gap-1"
                 >
                   {getDomainFromUrl(post.url)}
                   <ExternalLink size={14} />
@@ -187,17 +187,17 @@ export const PostPage: React.FC = () => {
 
             {/* Actions */}
             <div className="flex items-center gap-3 text-sm">
-              <button className="flex items-center gap-1 text-reddit-gray hover:bg-reddit-bg-hover px-2 py-1 rounded font-bold">
+              <button className="flex items-center gap-1 text-via-gray hover:bg-via-bg-hover px-2 py-1 rounded font-bold">
                 <MessageSquare size={20} />
                 {post.commentCount} kommentarer
               </button>
 
-              <button className="flex items-center gap-1 text-reddit-gray hover:bg-reddit-bg-hover px-2 py-1 rounded font-bold">
+              <button className="flex items-center gap-1 text-via-gray hover:bg-via-bg-hover px-2 py-1 rounded font-bold">
                 <Gift size={20} />
-                Belønning
+                Anerkend
               </button>
 
-              <button className="flex items-center gap-1 text-reddit-gray hover:bg-reddit-bg-hover px-2 py-1 rounded font-bold">
+              <button className="flex items-center gap-1 text-via-gray hover:bg-via-bg-hover px-2 py-1 rounded font-bold">
                 <Share size={20} />
                 Del
               </button>
@@ -205,8 +205,8 @@ export const PostPage: React.FC = () => {
               <button 
                 onClick={() => setSaved(!saved)}
                 className={clsx(
-                  'flex items-center gap-1 hover:bg-reddit-bg-hover px-2 py-1 rounded font-bold',
-                  saved ? 'text-reddit-green' : 'text-reddit-gray'
+                  'flex items-center gap-1 hover:bg-via-bg-hover px-2 py-1 rounded font-bold',
+                  saved ? 'text-via-green' : 'text-via-gray'
                 )}
               >
                 <Bookmark size={20} fill={saved ? 'currentColor' : 'none'} />
@@ -217,7 +217,7 @@ export const PostPage: React.FC = () => {
               <div className="relative">
                 <button 
                   onClick={() => setShowActions(!showActions)}
-                  className="text-reddit-gray hover:bg-reddit-bg-hover p-1 rounded"
+                  className="text-via-gray hover:bg-via-bg-hover p-1 rounded"
                 >
                   <MoreHorizontal size={20} />
                 </button>
@@ -241,7 +241,7 @@ export const PostPage: React.FC = () => {
               </div>
 
               {/* Upvote Percentage */}
-              <div className="ml-auto text-xs text-reddit-gray">
+              <div className="ml-auto text-xs text-via-gray">
                 {Math.round(post.upvoteRatio * 100)}% positive stemmer
               </div>
             </div>

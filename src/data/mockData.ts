@@ -5,7 +5,7 @@ export const mockUser: User = {
   username: 'anne_pedagog',
   displayName: 'Anne Pedersen',
   avatar: 'https://www.redditstatic.com/avatars/defaults/v2/avatar_default_1.png',
-  karma: {
+  point: {
     post: 1245,
     comment: 3421
   },

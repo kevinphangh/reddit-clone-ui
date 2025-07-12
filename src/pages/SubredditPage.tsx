@@ -35,8 +35,8 @@ export const SubredditPage: React.FC = () => {
             />
           ))
         ) : (
-          <div className="reddit-card p-8 text-center">
-            <p className="text-reddit-gray">No posts in r/{subreddit} yet</p>
+          <div className="via-card p-8 text-center">
+            <p className="text-via-gray">No posts in r/{subreddit} yet</p>
           </div>
         )}
       </div>

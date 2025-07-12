@@ -5,9 +5,9 @@ export const UserPage: React.FC = () => {
   const { username } = useParams();
   
   return (
-    <div className="reddit-card p-4">
+    <div className="via-card p-4">
       <h1 className="text-xl font-bold mb-4">Brugerprofil</h1>
-      <p className="text-reddit-gray">
+      <p className="text-via-gray">
         Profil for u/{username}
       </p>
     </div>

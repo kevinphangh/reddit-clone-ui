@@ -93,22 +93,22 @@ export const SubmitPage: React.FC = () => {
         <h1 className="text-lg font-medium">Opret et indlæg</h1>
         <Link 
           to="/" 
-          className="text-xs font-bold text-reddit-blue hover:underline"
+          className="text-xs font-bold text-via-blue hover:underline"
         >
           KLADDER
-          <span className="ml-1 text-reddit-gray">0</span>
+          <span className="ml-1 text-via-gray">0</span>
         </Link>
       </div>
 
       {/* Community Selector */}
-      <div className="reddit-card p-4 mb-4">
+      <div className="via-card p-4 mb-4">
         <div className="relative">
           <button
             onClick={() => setShowSubredditDropdown(!showSubredditDropdown)}
             className={clsx(
               'w-full flex items-center justify-between p-2 rounded border',
-              errors.subreddit ? 'border-reddit-red' : 'border-reddit-lightGray',
-              'hover:border-reddit-gray focus:border-reddit-blue focus:outline-none'
+              errors.subreddit ? 'border-via-red' : 'border-via-lightGray',
+              'hover:border-via-gray focus:border-via-blue focus:outline-none'
             )}
           >
             {selectedSubreddit ? (
@@ -119,9 +119,9 @@ export const SubmitPage: React.FC = () => {
                 <span className="font-medium">r/{selectedSubreddit}</span>
               </span>
             ) : (
-              <span className="text-reddit-gray">Vælg et fællesskab</span>
+              <span className="text-via-gray">Vælg et fællesskab</span>
             )}
-            <ChevronDown size={20} className="text-reddit-gray" />
+            <ChevronDown size={20} className="text-via-gray" />
           </button>
 
           {showSubredditDropdown && (
@@ -130,7 +130,7 @@ export const SubmitPage: React.FC = () => {
                 <input
                   type="text"
                   placeholder="Søg fællesskaber"
-                  className="w-full reddit-input text-sm"
+                  className="w-full via-input text-sm"
                 />
               </div>
               <div className="max-h-[300px] overflow-y-auto">
@@ -147,7 +147,7 @@ export const SubmitPage: React.FC = () => {
                     <span className="text-2xl">{sub.icon}</span>
                     <div className="text-left">
                       <div className="font-medium">r/{sub.name}</div>
-                      <div className="text-xs text-reddit-gray">
+                      <div className="text-xs text-via-gray">
                         {sub.members.toLocaleString('da-DK')} medlemmer
                       </div>
                     </div>
@@ -158,7 +158,7 @@ export const SubmitPage: React.FC = () => {
           )}
         </div>
         {errors.subreddit && (
-          <p className="text-xs text-reddit-red mt-1 flex items-center gap-1">
+          <p className="text-xs text-via-red mt-1 flex items-center gap-1">
             <AlertCircle size={12} />
             {errors.subreddit}
           </p>
@@ -166,15 +166,15 @@ export const SubmitPage: React.FC = () => {
       </div>
 
       {/* Post Type Tabs */}
-      <div className="reddit-card">
-        <div className="flex border-b border-reddit-lightGray">
+      <div className="via-card">
+        <div className="flex border-b border-via-lightGray">
           <button
             onClick={() => setPostType('text')}
             className={clsx(
               'flex-1 flex items-center justify-center gap-2 py-3 font-bold text-sm border-b-2 transition-colors',
               postType === 'text' 
-                ? 'text-reddit-blue border-reddit-blue' 
-                : 'text-reddit-gray border-transparent hover:text-reddit-black'
+                ? 'text-via-blue border-via-blue' 
+                : 'text-via-gray border-transparent hover:text-via-black'
             )}
           >
             <FileText size={20} />
@@ -185,8 +185,8 @@ export const SubmitPage: React.FC = () => {
             className={clsx(
               'flex-1 flex items-center justify-center gap-2 py-3 font-bold text-sm border-b-2 transition-colors',
               postType === 'image' 
-                ? 'text-reddit-blue border-reddit-blue' 
-                : 'text-reddit-gray border-transparent hover:text-reddit-black'
+                ? 'text-via-blue border-via-blue' 
+                : 'text-via-gray border-transparent hover:text-via-black'
             )}
           >
             <ImageIcon size={20} />
@@ -197,8 +197,8 @@ export const SubmitPage: React.FC = () => {
             className={clsx(
               'flex-1 flex items-center justify-center gap-2 py-3 font-bold text-sm border-b-2 transition-colors',
               postType === 'link' 
-                ? 'text-reddit-blue border-reddit-blue' 
-                : 'text-reddit-gray border-transparent hover:text-reddit-black'
+                ? 'text-via-blue border-via-blue' 
+                : 'text-via-gray border-transparent hover:text-via-black'
             )}
           >
             <LinkIcon size={20} />
@@ -209,8 +209,8 @@ export const SubmitPage: React.FC = () => {
             className={clsx(
               'flex-1 flex items-center justify-center gap-2 py-3 font-bold text-sm border-b-2 transition-colors',
               postType === 'poll' 
-                ? 'text-reddit-blue border-reddit-blue' 
-                : 'text-reddit-gray border-transparent hover:text-reddit-black'
+                ? 'text-via-blue border-via-blue' 
+                : 'text-via-gray border-transparent hover:text-via-black'
             )}
           >
             <BarChart3 size={20} />
@@ -231,20 +231,20 @@ export const SubmitPage: React.FC = () => {
                 }}
                 placeholder="Titel"
                 className={clsx(
-                  'reddit-input',
-                  errors.title && 'border-reddit-red'
+                  'via-input',
+                  errors.title && 'border-via-red'
                 )}
                 maxLength={300}
               />
               <span className={clsx(
                 'absolute right-3 top-1/2 -translate-y-1/2 text-xs',
-                remainingCharacters < 20 ? 'text-reddit-red' : 'text-reddit-gray'
+                remainingCharacters < 20 ? 'text-via-red' : 'text-via-gray'
               )}>
                 {remainingCharacters}
               </span>
             </div>
             {errors.title && (
-              <p className="text-xs text-reddit-red mt-1 flex items-center gap-1">
+              <p className="text-xs text-via-red mt-1 flex items-center gap-1">
                 <AlertCircle size={12} />
                 {errors.title}
               </p>
@@ -254,31 +254,31 @@ export const SubmitPage: React.FC = () => {
           {/* Content based on post type */}
           {postType === 'text' && (
             <div className="mb-4">
-              <div className="border border-reddit-lightGray rounded overflow-hidden">
+              <div className="border border-via-lightGray rounded overflow-hidden">
                 {/* Markdown toolbar */}
-                <div className="flex items-center gap-1 p-2 bg-reddit-bg-hover border-b border-reddit-lightGray">
-                  <button type="button" className="p-1 hover:bg-reddit-bg-hover rounded">
+                <div className="flex items-center gap-1 p-2 bg-via-bg-hover border-b border-via-lightGray">
+                  <button type="button" className="p-1 hover:bg-via-bg-hover rounded">
                     <Bold size={16} />
                   </button>
-                  <button type="button" className="p-1 hover:bg-reddit-bg-hover rounded">
+                  <button type="button" className="p-1 hover:bg-via-bg-hover rounded">
                     <Italic size={16} />
                   </button>
-                  <button type="button" className="p-1 hover:bg-reddit-bg-hover rounded">
+                  <button type="button" className="p-1 hover:bg-via-bg-hover rounded">
                     <Link2 size={16} />
                   </button>
-                  <button type="button" className="p-1 hover:bg-reddit-bg-hover rounded">
+                  <button type="button" className="p-1 hover:bg-via-bg-hover rounded">
                     <Quote size={16} />
                   </button>
-                  <button type="button" className="p-1 hover:bg-reddit-bg-hover rounded">
+                  <button type="button" className="p-1 hover:bg-via-bg-hover rounded">
                     <Code size={16} />
                   </button>
-                  <button type="button" className="p-1 hover:bg-reddit-bg-hover rounded">
+                  <button type="button" className="p-1 hover:bg-via-bg-hover rounded">
                     <List size={16} />
                   </button>
-                  <button type="button" className="p-1 hover:bg-reddit-bg-hover rounded">
+                  <button type="button" className="p-1 hover:bg-via-bg-hover rounded">
                     <ListOrdered size={16} />
                   </button>
-                  <button type="button" className="p-1 hover:bg-reddit-bg-hover rounded">
+                  <button type="button" className="p-1 hover:bg-via-bg-hover rounded">
                     <Heading size={16} />
                   </button>
                 </div>
@@ -291,12 +291,12 @@ export const SubmitPage: React.FC = () => {
                   placeholder="Tekst (valgfri)"
                   className={clsx(
                     'w-full p-4 min-h-[200px] resize-y focus:outline-none',
-                    errors.content && 'border-reddit-red'
+                    errors.content && 'border-via-red'
                   )}
                 />
               </div>
               {errors.content && (
-                <p className="text-xs text-reddit-red mt-1 flex items-center gap-1">
+                <p className="text-xs text-via-red mt-1 flex items-center gap-1">
                   <AlertCircle size={12} />
                   {errors.content}
                 </p>
@@ -315,12 +315,12 @@ export const SubmitPage: React.FC = () => {
                 }}
                 placeholder={postType === 'image' ? 'Billede/Video URL' : 'URL'}
                 className={clsx(
-                  'reddit-input',
-                  errors.url && 'border-reddit-red'
+                  'via-input',
+                  errors.url && 'border-via-red'
                 )}
               />
               {errors.url && (
-                <p className="text-xs text-reddit-red mt-1 flex items-center gap-1">
+                <p className="text-xs text-via-red mt-1 flex items-center gap-1">
                   <AlertCircle size={12} />
                   {errors.url}
                 </p>
@@ -329,9 +329,9 @@ export const SubmitPage: React.FC = () => {
           )}
 
           {postType === 'poll' && (
-            <div className="mb-4 p-4 bg-reddit-bg-hover rounded text-center">
-              <BarChart3 size={48} className="mx-auto mb-2 text-reddit-gray" />
-              <p className="text-sm text-reddit-gray">Afstemninger kommer snart!</p>
+            <div className="mb-4 p-4 bg-via-bg-hover rounded text-center">
+              <BarChart3 size={48} className="mx-auto mb-2 text-via-gray" />
+              <p className="text-sm text-via-gray">Afstemninger kommer snart!</p>
             </div>
           )}
 
@@ -341,7 +341,7 @@ export const SubmitPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowFlairDropdown(!showFlairDropdown)}
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-reddit-lightGray hover:border-reddit-gray"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-via-lightGray hover:border-via-gray"
               >
                 {flairId ? (
                   <>
@@ -357,7 +357,7 @@ export const SubmitPage: React.FC = () => {
                         e.stopPropagation();
                         setFlairId('');
                       }}
-                      className="hover:bg-reddit-bg-hover rounded p-0.5"
+                      className="hover:bg-via-bg-hover rounded p-0.5"
                     >
                       <X size={14} />
                     </button>
@@ -445,12 +445,12 @@ export const SubmitPage: React.FC = () => {
       </div>
 
       {/* Posting Guidelines */}
-      <div className="mt-4 text-xs text-reddit-gray">
+      <div className="mt-4 text-xs text-via-gray">
         <p>
           Ved at oprette indlæg accepterer du VIA Pædagogers{' '}
-          <Link to="/terms" className="text-reddit-blue hover:underline">Brugsbetingelser</Link>
+          <Link to="/terms" className="text-via-blue hover:underline">Brugsbetingelser</Link>
           {' '}og{' '}
-          <Link to="/content-policy" className="text-reddit-blue hover:underline">Indholdspolitik</Link>
+          <Link to="/content-policy" className="text-via-blue hover:underline">Indholdspolitik</Link>
         </p>
       </div>
     </div>

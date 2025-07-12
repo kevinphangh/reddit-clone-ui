@@ -19,72 +19,72 @@ function App() {
   const [isLoggedIn] = useState(true);
   const [currentUser] = useState({
     username: 'anne_pedagog',
-    karma: 4666
+    point: 4666
   });
 
   return (
     <Router>
       <Routes>
         <Route path="/" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.karma}>
+          <Layout isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.point}>
             <HomePage />
           </Layout>
         } />
         <Route path="/r/:subreddit" element={
-          <SubredditPageWrapper isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.karma} />
+          <SubredditPageWrapper isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.point} />
         } />
         <Route path="/r/:subreddit/comments/:postId/:slug?" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.karma}>
+          <Layout isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.point}>
             <PostPage />
           </Layout>
         } />
         <Route path="/user/:username" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.karma}>
+          <Layout isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.point}>
             <UserPage />
           </Layout>
         } />
         <Route path="/submit" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.karma}>
+          <Layout isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.point}>
             <SubmitPage />
           </Layout>
         } />
         <Route path="/search" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.karma}>
+          <Layout isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.point}>
             <SearchPage />
           </Layout>
         } />
         <Route path="/login" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.karma}>
+          <Layout isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.point}>
             <LoginPage />
           </Layout>
         } />
         <Route path="/register" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.karma}>
+          <Layout isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.point}>
             <RegisterPage />
           </Layout>
         } />
         <Route path="/settings" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.karma}>
+          <Layout isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.point}>
             <SettingsPage />
           </Layout>
         } />
         <Route path="/subreddits/create" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.karma}>
+          <Layout isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.point}>
             <CreateCommunityPage />
           </Layout>
         } />
         <Route path="/r/popular" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.karma}>
+          <Layout isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.point}>
             <PopularPage />
           </Layout>
         } />
         <Route path="/r/all" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.karma}>
+          <Layout isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.point}>
             <AllPage />
           </Layout>
         } />
         <Route path="/:page" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.karma}>
+          <Layout isLoggedIn={isLoggedIn} username={currentUser.username} karma={currentUser.point}>
             <StaticPage />
           </Layout>
         } />

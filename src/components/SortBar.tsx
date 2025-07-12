@@ -61,7 +61,7 @@ export const SortBar: React.FC<SortBarProps> = ({
   };
 
   return (
-    <div className="reddit-card mb-4">
+    <div className="via-card mb-4">
       <div className="flex items-center justify-between px-3 py-2">
         {/* Sort Options */}
         <div className="flex items-center">
@@ -72,8 +72,8 @@ export const SortBar: React.FC<SortBarProps> = ({
               className={clsx(
                 'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold transition-colors',
                 currentSort === value
-                  ? 'bg-reddit-bg-hover text-reddit-blue'
-                  : 'text-reddit-gray hover:bg-reddit-bg-hover'
+                  ? 'bg-via-bg-hover text-via-blue'
+                  : 'text-via-gray hover:bg-via-bg-hover'
               )}
             >
               {getSortIcon(value)}
@@ -86,7 +86,7 @@ export const SortBar: React.FC<SortBarProps> = ({
             <div className="relative ml-2">
               <button
                 onClick={() => setShowTimeFilter(!showTimeFilter)}
-                className="flex items-center gap-1 px-3 py-1.5 text-sm font-bold text-reddit-gray hover:bg-reddit-bg-hover rounded-full"
+                className="flex items-center gap-1 px-3 py-1.5 text-sm font-bold text-via-gray hover:bg-via-bg-hover rounded-full"
               >
                 <span>{getTimeLabel(currentTime)}</span>
                 <ChevronDown size={16} />
@@ -101,7 +101,7 @@ export const SortBar: React.FC<SortBarProps> = ({
                       onClick={() => setShowTimeFilter(false)}
                       className={clsx(
                         'dropdown-item',
-                        currentTime === value && 'text-reddit-blue font-bold'
+                        currentTime === value && 'text-via-blue font-bold'
                       )}
                     >
                       {getTimeLabel(value)}
@@ -117,7 +117,7 @@ export const SortBar: React.FC<SortBarProps> = ({
         <div className="relative">
           <button
             onClick={() => setShowViewOptions(!showViewOptions)}
-            className="flex items-center gap-1 p-2 text-reddit-gray hover:bg-reddit-bg-hover rounded"
+            className="flex items-center gap-1 p-2 text-via-gray hover:bg-via-bg-hover rounded"
           >
             {currentView === 'card' && <CreditCard size={20} />}
             {currentView === 'classic' && <List size={20} />}
@@ -134,7 +134,7 @@ export const SortBar: React.FC<SortBarProps> = ({
                 }}
                 className={clsx(
                   'dropdown-item flex items-center gap-2',
-                  currentView === 'card' && 'text-reddit-blue font-bold'
+                  currentView === 'card' && 'text-via-blue font-bold'
                 )}
               >
                 <CreditCard size={16} />
@@ -147,7 +147,7 @@ export const SortBar: React.FC<SortBarProps> = ({
                 }}
                 className={clsx(
                   'dropdown-item flex items-center gap-2',
-                  currentView === 'classic' && 'text-reddit-blue font-bold'
+                  currentView === 'classic' && 'text-via-blue font-bold'
                 )}
               >
                 <List size={16} />
@@ -160,7 +160,7 @@ export const SortBar: React.FC<SortBarProps> = ({
                 }}
                 className={clsx(
                   'dropdown-item flex items-center gap-2',
-                  currentView === 'compact' && 'text-reddit-blue font-bold'
+                  currentView === 'compact' && 'text-via-blue font-bold'
                 )}
               >
                 <Grid3X3 size={16} />

@@ -3,7 +3,7 @@ export interface User {
   username: string;
   displayName?: string;
   avatar?: string;
-  karma: {
+  point: {
     post: number;
     comment: number;
   };

@@ -15,7 +15,7 @@ export const PopularPage: React.FC = () => {
     <div>
       <div className="mb-4">
         <h1 className="text-xl font-bold">Populært</h1>
-        <p className="text-sm text-reddit-gray">De mest populære indlæg fra alle fællesskaber</p>
+        <p className="text-sm text-via-gray">De mest populære indlæg fra alle fællesskaber</p>
       </div>
       
       <SortBar 

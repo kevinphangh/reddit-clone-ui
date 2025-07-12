@@ -6,8 +6,8 @@ import {
   Clock,
   TrendingUp,
   MessageCircle,
-  HelpCircle,
-  Shuffle
+  Shuffle,
+  BookOpen
 } from 'lucide-react';
 import { Comment } from './Comment';
 import { Comment as CommentType } from '../types';
@@ -37,7 +37,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
       case COMMENT_SORT_OPTIONS.NEW: return <Clock size={16} />;
       case COMMENT_SORT_OPTIONS.CONTROVERSIAL: return <Shuffle size={16} />;
       case COMMENT_SORT_OPTIONS.OLD: return <Clock size={16} />;
-      case COMMENT_SORT_OPTIONS.QA: return <HelpCircle size={16} />;
+      case COMMENT_SORT_OPTIONS.QA: return <BookOpen size={16} />;
       default: return <MessageSquare size={16} />;
     }
   };
@@ -51,14 +51,14 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
       {/* Comment Form */}
       {!isLocked && (
         <div className="mb-4">
-          <div className="text-xs text-reddit-gray mb-2">
-            Kommenter som <span className="text-reddit-blue">anne_pedagog</span>
+          <div className="text-xs text-via-gray mb-2">
+            Kommenter som <span className="text-via-blue">anne_pedagog</span>
           </div>
           
           {!showCommentForm ? (
             <div 
               onClick={() => setShowCommentForm(true)}
-              className="reddit-input cursor-text text-sm text-reddit-gray"
+              className="via-input cursor-text text-sm text-via-gray"
             >
               Hvad tænker du?
             </div>
@@ -67,13 +67,13 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
               <textarea
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
-                className="reddit-textarea text-sm"
+                className="via-textarea text-sm"
                 placeholder="Hvad tænker du?"
                 rows={6}
                 autoFocus
               />
               <div className="flex items-center justify-between mt-2">
-                <div className="text-xs text-reddit-gray">
+                <div className="text-xs text-via-gray">
                   <button className="hover:underline">Markdown</button>
                   {' • '}
                   <button className="hover:underline">Formateringshjælp</button>
@@ -112,7 +112,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
           <div className="relative">
             <button
               onClick={() => setShowSortMenu(!showSortMenu)}
-              className="flex items-center gap-1 text-xs font-bold text-reddit-gray hover:text-reddit-black"
+              className="flex items-center gap-1 text-xs font-bold text-via-gray hover:text-via-black"
             >
               {getSortIcon(sortBy)}
               <span>Sorter efter: {getSortLabel(sortBy)}</span>
@@ -130,7 +130,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
                     }}
                     className={clsx(
                       'dropdown-item flex items-center gap-2',
-                      sortBy === option && 'text-reddit-blue font-bold'
+                      sortBy === option && 'text-via-blue font-bold'
                     )}
                   >
                     {getSortIcon(option)}
@@ -143,7 +143,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
         </div>
 
         {/* Discussion Settings */}
-        <button className="text-xs text-reddit-gray hover:text-reddit-black">
+        <button className="text-xs text-via-gray hover:text-via-black">
           <MessageCircle size={16} className="inline mr-1" />
           Diskussionsindstillinger
         </button>
@@ -151,19 +151,19 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
 
       {/* Comments List */}
       {isLocked && (
-        <div className="reddit-card p-4 mb-4 text-center">
-          <MessageSquare size={24} className="mx-auto mb-2 text-reddit-gray" />
+        <div className="via-card p-4 mb-4 text-center">
+          <MessageSquare size={24} className="mx-auto mb-2 text-via-gray" />
           <p className="text-sm font-medium mb-1">Kommentarer er låst</p>
-          <p className="text-xs text-reddit-gray">Denne tråd er blevet låst af moderatorerne</p>
+          <p className="text-xs text-via-gray">Denne tråd er blevet låst af moderatorerne</p>
         </div>
       )}
 
       <div className="space-y-4">
         {comments.length === 0 && !isLocked ? (
-          <div className="reddit-card p-8 text-center">
-            <MessageSquare size={48} className="mx-auto mb-4 text-reddit-lightGray" />
+          <div className="via-card p-8 text-center">
+            <MessageSquare size={48} className="mx-auto mb-4 text-via-lightGray" />
             <p className="text-lg font-medium mb-2">Ingen kommentarer endnu</p>
-            <p className="text-sm text-reddit-gray mb-4">Vær den første til at dele dine tanker!</p>
+            <p className="text-sm text-via-gray mb-4">Vær den første til at dele dine tanker!</p>
           </div>
         ) : (
           comments.map(comment => (
@@ -179,7 +179,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
       {/* View More Comments */}
       {comments.length > 0 && comments.length < commentCount && (
         <div className="mt-4 text-center">
-          <button className="text-sm font-bold text-reddit-blue hover:underline">
+          <button className="text-sm font-bold text-via-blue hover:underline">
             Se flere kommentarer ({commentCount - comments.length} svar)
           </button>
         </div>

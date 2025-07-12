@@ -11,6 +11,7 @@ import {
   Edit2,
   Trash2,
   Award,
+  Shield,
   ChevronUp
 } from 'lucide-react';
 import { Comment as CommentType } from '../types';
@@ -52,7 +53,7 @@ export const Comment: React.FC<CommentProps> = ({
         {depth > 0 && depth < maxDepth && (
           <div className="comment-thread-line ml-2"></div>
         )}
-        <div className="pl-4 py-2 text-reddit-gray text-sm italic">
+        <div className="pl-4 py-2 text-via-gray text-sm italic">
           [slettet]
         </div>
       </div>
@@ -65,7 +66,7 @@ export const Comment: React.FC<CommentProps> = ({
         {depth > 0 && depth < maxDepth && (
           <div className="comment-thread-line ml-2"></div>
         )}
-        <div className="pl-4 py-2 text-reddit-gray text-sm italic">
+        <div className="pl-4 py-2 text-via-gray text-sm italic">
           [fjernet]
         </div>
       </div>
@@ -88,13 +89,13 @@ export const Comment: React.FC<CommentProps> = ({
         {/* Header */}
         <div className="flex items-center gap-2 text-xs mb-1">
           {comment.isStickied && (
-            <span className="text-reddit-green font-bold">FASTGJORT KOMMENTAR</span>
+            <span className="text-via-green font-bold">FASTGJORT KOMMENTAR</span>
           )}
           
           {/* Collapse Button */}
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="p-0.5 hover:bg-reddit-bg-hover rounded"
+            className="p-0.5 hover:bg-via-bg-hover rounded"
           >
             <ChevronUp 
               size={12} 
@@ -110,7 +111,7 @@ export const Comment: React.FC<CommentProps> = ({
             to={`/user/${comment.author.username}`} 
             className={clsx(
               'font-medium hover:underline',
-              comment.author.username === '[deleted]' && 'text-reddit-gray'
+              comment.author.username === '[deleted]' && 'text-via-gray'
             )}
           >
             {comment.author.username}
@@ -118,27 +119,32 @@ export const Comment: React.FC<CommentProps> = ({
 
           {/* Author Badges */}
           {comment.author.isPremium && (
-            <span className="text-reddit-orange" title="Reddit Premium">
+            <span className="text-via-orange" title="VIA Plus medlem">
               <Award size={12} />
+            </span>
+          )}
+          {comment.author.isVerified && (
+            <span className="text-via-blue" title="Verificeret pædagog">
+              <Shield size={12} />
             </span>
           )}
 
           {/* Score */}
           <span className={clsx(
             'font-bold',
-            vote === 1 && 'text-reddit-orange',
-            vote === -1 && 'text-reddit-blue'
+            vote === 1 && 'text-via-orange',
+            vote === -1 && 'text-via-blue'
           )}>
             {formatScore(currentScore)} {currentScore === 1 ? 'point' : 'point'}
           </span>
 
           {/* Time */}
-          <span className="text-reddit-gray">
+          <span className="text-via-gray">
             {formatTimeAgo(comment.createdAt)}
           </span>
           
           {comment.editedAt && (
-            <span className="text-reddit-gray">(redigeret)</span>
+            <span className="text-via-gray">(redigeret)</span>
           )}
 
           {/* Awards */}
@@ -193,7 +199,7 @@ export const Comment: React.FC<CommentProps> = ({
                     setShowReplyForm(!showReplyForm);
                     onReply?.(comment.id);
                   }}
-                  className="text-xs font-bold text-reddit-gray hover:bg-reddit-bg-hover px-2 py-1 rounded"
+                  className="text-xs font-bold text-via-gray hover:bg-via-bg-hover px-2 py-1 rounded"
                 >
                   <MessageSquare size={14} className="inline mr-1" />
                   Svar
@@ -201,7 +207,7 @@ export const Comment: React.FC<CommentProps> = ({
               )}
 
               {/* Share */}
-              <button className="text-xs font-bold text-reddit-gray hover:bg-reddit-bg-hover px-2 py-1 rounded">
+              <button className="text-xs font-bold text-via-gray hover:bg-via-bg-hover px-2 py-1 rounded">
                 <Share size={14} className="inline mr-1" />
                 Del
               </button>
@@ -210,8 +216,8 @@ export const Comment: React.FC<CommentProps> = ({
               <button 
                 onClick={() => setSaved(!saved)}
                 className={clsx(
-                  'text-xs font-bold hover:bg-reddit-bg-hover px-2 py-1 rounded',
-                  saved ? 'text-reddit-green' : 'text-reddit-gray'
+                  'text-xs font-bold hover:bg-via-bg-hover px-2 py-1 rounded',
+                  saved ? 'text-via-green' : 'text-via-gray'
                 )}
               >
                 <Bookmark size={14} className="inline mr-1" fill={saved ? 'currentColor' : 'none'} />
@@ -222,7 +228,7 @@ export const Comment: React.FC<CommentProps> = ({
               <div className="relative">
                 <button 
                   onClick={() => setShowActions(!showActions)}
-                  className="text-reddit-gray hover:bg-reddit-bg-hover p-1 rounded"
+                  className="text-via-gray hover:bg-via-bg-hover p-1 rounded"
                 >
                   <MoreHorizontal size={16} />
                 </button>
@@ -250,7 +256,7 @@ export const Comment: React.FC<CommentProps> = ({
             {showReplyForm && (
               <div className="mt-3 mb-3">
                 <textarea 
-                  className="reddit-textarea text-sm"
+                  className="via-textarea text-sm"
                   placeholder="Hvad tænker du?"
                   rows={4}
                 />
@@ -287,7 +293,7 @@ export const Comment: React.FC<CommentProps> = ({
             {depth >= maxDepth && comment.replies.length > 0 && (
               <Link 
                 to={`/r/${comment.post.subreddit.name}/comments/${comment.post.id}?thread=${comment.id}`}
-                className="text-xs text-reddit-blue hover:underline mt-2 inline-block"
+                className="text-xs text-via-blue hover:underline mt-2 inline-block"
               >
                 Fortsæt denne tråd →
               </Link>
@@ -297,7 +303,7 @@ export const Comment: React.FC<CommentProps> = ({
 
         {/* Collapsed State */}
         {collapsed && (
-          <div className="text-xs text-reddit-gray">
+          <div className="text-xs text-via-gray">
             {comment.replies.length > 0 && (
               <span>{comment.replies.length} {comment.replies.length === 1 ? 'svar mere' : 'svar mere'}</span>
             )}

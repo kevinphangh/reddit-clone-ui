@@ -7,20 +7,23 @@ export default {
   theme: {
     extend: {
       colors: {
-        reddit: {
-          orange: '#00A3E0',
-          orangered: '#0089BC',
-          darkOrange: '#006F99',
+        via: {
+          orange: '#FF6B35',
+          orangered: '#FF5722',
+          darkOrange: '#E65100',
           lightGray: '#F5F5F5',
           gray: '#666666',
           darkGray: '#333333',
-          black: '#000000',
+          black: '#1A1A1A',
           white: '#FFFFFF',
           blue: '#003F72',
           lightBlue: '#5CB3CC',
           darkBlue: '#002B4F',
-          green: '#8CC63F',
-          red: '#E31937',
+          green: '#4CAF50',
+          red: '#F44336',
+          primary: '#003F72',
+          secondary: '#00A3E0',
+          accent: '#FF6B35',
           bg: {
             light: '#DAE0E6',
             dark: '#030303',
@@ -32,7 +35,7 @@ export default {
         }
       },
       fontFamily: {
-        'reddit': ['IBM Plex Sans', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+        'via': ['IBM Plex Sans', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
         'mono': ['Noto Mono', 'Monaco', 'Consolas', 'Courier New', 'monospace']
       },
       fontSize: {
@@ -46,16 +49,16 @@ export default {
         '3xl': '24px'
       },
       spacing: {
-        'reddit-header': '48px',
-        'reddit-sidebar': '312px',
-        'reddit-content': '640px'
+        'via-header': '48px',
+        'via-sidebar': '312px',
+        'via-content': '640px'
       },
       borderRadius: {
-        'reddit': '4px'
+        'via': '4px'
       },
       boxShadow: {
-        'reddit': '0 1px 2px rgba(0,0,0,0.1)',
-        'reddit-hover': '0 2px 4px rgba(0,0,0,0.1)'
+        'via': '0 1px 2px rgba(0,0,0,0.1)',
+        'via-hover': '0 2px 4px rgba(0,0,0,0.1)'
       }
     },
   },

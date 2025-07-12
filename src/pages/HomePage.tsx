@@ -10,6 +10,16 @@ export const HomePage: React.FC = () => {
 
   return (
     <div>
+      {/* Velkomstbesked */}
+      <div className="via-card p-4 mb-4 bg-gradient-to-r from-via-blue to-via-secondary">
+        <div className="text-white">
+          <h1 className="text-xl font-bold mb-2">Velkommen til VIA Pædagoger Forum! 🎓</h1>
+          <p className="text-sm opacity-90">
+            Et fællesskab for pædagogstuderende og erfarne pædagoger. Del dine erfaringer, få hjælp til studiet, og netværk med kolleger.
+          </p>
+        </div>
+      </div>
+      
       <SortBar 
         currentSort={currentSort}
         currentView={currentView}

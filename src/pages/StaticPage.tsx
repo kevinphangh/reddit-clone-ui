@@ -59,18 +59,18 @@ export const StaticPage: React.FC = () => {
   
   if (!pageData) {
     return (
-      <div className="reddit-card p-8 text-center">
+      <div className="via-card p-8 text-center">
         <h1 className="text-xl font-bold mb-2">Side ikke fundet</h1>
-        <p className="text-reddit-gray">Den side du leder efter eksisterer ikke.</p>
+        <p className="text-via-gray">Den side du leder efter eksisterer ikke.</p>
       </div>
     );
   }
 
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="reddit-card p-6">
+      <div className="via-card p-6">
         <h1 className="text-2xl font-bold mb-4">{pageData.title}</h1>
-        <p className="text-reddit-gray">{pageData.content}</p>
+        <p className="text-via-gray">{pageData.content}</p>
       </div>
     </div>
   );

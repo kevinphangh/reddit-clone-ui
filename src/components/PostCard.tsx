@@ -50,13 +50,13 @@ export const PostCard: React.FC<PostCardProps> = ({
   const PostTypeIcon = () => {
     switch (post.type) {
       case 'link':
-        return <ExternalLink size={16} className="text-reddit-gray" />;
+        return <ExternalLink size={16} className="text-via-gray" />;
       case 'image':
-        return <ImageIcon size={16} className="text-reddit-gray" />;
+        return <ImageIcon size={16} className="text-via-gray" />;
       case 'video':
-        return <Play size={16} className="text-reddit-gray" />;
+        return <Play size={16} className="text-via-gray" />;
       case 'poll':
-        return <BarChart3 size={16} className="text-reddit-gray" />;
+        return <BarChart3 size={16} className="text-via-gray" />;
       default:
         return null;
     }
@@ -74,12 +74,12 @@ export const PostCard: React.FC<PostCardProps> = ({
             className="w-full h-full object-cover"
           />
           {post.isNSFW && (
-            <div className="absolute inset-0 bg-reddit-red bg-opacity-90 flex items-center justify-center">
+            <div className="absolute inset-0 bg-via-red bg-opacity-90 flex items-center justify-center">
               <span className="text-white font-bold">NSFW</span>
             </div>
           )}
           {post.isSpoiler && (
-            <div className="absolute inset-0 bg-reddit-darkGray bg-opacity-90 flex items-center justify-center">
+            <div className="absolute inset-0 bg-via-darkGray bg-opacity-90 flex items-center justify-center">
               <span className="text-white font-bold">SPOILER</span>
             </div>
           )}
@@ -89,9 +89,9 @@ export const PostCard: React.FC<PostCardProps> = ({
     
     if (post.type === 'link' && post.url) {
       return (
-        <div className="w-[70px] h-[70px] flex-shrink-0 border border-reddit-lightGray rounded overflow-hidden">
-          <div className="w-full h-full bg-reddit-bg-hover flex items-center justify-center">
-            <ExternalLink size={24} className="text-reddit-gray" />
+        <div className="w-[70px] h-[70px] flex-shrink-0 border border-via-lightGray rounded overflow-hidden">
+          <div className="w-full h-full bg-via-bg-hover flex items-center justify-center">
+            <ExternalLink size={24} className="text-via-gray" />
           </div>
         </div>
       );
@@ -102,7 +102,7 @@ export const PostCard: React.FC<PostCardProps> = ({
 
   if (view === 'compact') {
     return (
-      <div className="reddit-card hover:border-reddit-gray">
+      <div className="via-card hover:border-via-gray">
         <div className="flex items-center p-2 gap-2">
           {/* Vote Buttons */}
           <div className="flex items-center gap-1">
@@ -115,8 +115,8 @@ export const PostCard: React.FC<PostCardProps> = ({
             </button>
             <span className={clsx(
               'text-xs font-bold min-w-[40px] text-center',
-              vote === 1 && 'text-reddit-orange',
-              vote === -1 && 'text-reddit-blue'
+              vote === 1 && 'text-via-orange',
+              vote === -1 && 'text-via-blue'
             )}>
               {formatScore(currentScore)}
             </span>
@@ -156,19 +156,19 @@ export const PostCard: React.FC<PostCardProps> = ({
                   </span>
                 )}
                 {post.isNSFW && (
-                  <span className="text-xs font-bold text-reddit-red">NSFW</span>
+                  <span className="text-xs font-bold text-via-red">NSFW</span>
                 )}
                 {post.isSpoiler && (
-                  <span className="text-xs font-bold text-reddit-gray">SPOILER</span>
+                  <span className="text-xs font-bold text-via-gray">SPOILER</span>
                 )}
                 {post.isOC && (
-                  <span className="text-xs font-bold text-reddit-blue">OC</span>
+                  <span className="text-xs font-bold text-via-blue">OC</span>
                 )}
               </div>
             </div>
             
             {/* Meta */}
-            <div className="flex items-center gap-1 text-xs text-reddit-gray">
+            <div className="flex items-center gap-1 text-xs text-via-gray">
               {!hideSubreddit && (
                 <>
                   <Link to={`/r/${post.subreddit.name}`} className="font-bold hover:underline">
@@ -190,7 +190,7 @@ export const PostCard: React.FC<PostCardProps> = ({
           <div className="flex items-center gap-2">
             <Link 
               to={`/r/${post.subreddit.name}/comments/${post.id}`}
-              className="flex items-center gap-1 text-xs text-reddit-gray hover:bg-reddit-bg-hover p-1 rounded"
+              className="flex items-center gap-1 text-xs text-via-gray hover:bg-via-bg-hover p-1 rounded"
             >
               <MessageSquare size={16} />
               <span>{post.commentCount}</span>
@@ -203,12 +203,12 @@ export const PostCard: React.FC<PostCardProps> = ({
 
   return (
     <div className={clsx(
-      'reddit-card hover:border-reddit-gray',
+      'via-card hover:border-via-gray',
       view === 'classic' && 'flex'
     )}>
       {/* Classic View Vote Section */}
       {view === 'classic' && (
-        <div className="flex flex-col items-center p-2 bg-reddit-bg-hover">
+        <div className="flex flex-col items-center p-2 bg-via-bg-hover">
           <button 
             onClick={() => handleVote(1)}
             className={clsx('vote-button', vote === 1 && 'upvoted')}
@@ -218,8 +218,8 @@ export const PostCard: React.FC<PostCardProps> = ({
           </button>
           <span className={clsx(
             'text-xs font-bold my-1',
-            vote === 1 && 'text-reddit-orange',
-            vote === -1 && 'text-reddit-blue'
+            vote === 1 && 'text-via-orange',
+            vote === -1 && 'text-via-blue'
           )}>
             {formatScore(currentScore)}
           </span>
@@ -242,7 +242,7 @@ export const PostCard: React.FC<PostCardProps> = ({
           {/* Content */}
           <div className="flex-1 min-w-0">
             {/* Meta Info */}
-            <div className="flex items-center gap-1 text-xs text-reddit-gray mb-1">
+            <div className="flex items-center gap-1 text-xs text-via-gray mb-1">
               {!hideSubreddit && (
                 <>
                   <Link to={`/r/${post.subreddit.name}`} className="font-bold hover:underline">
@@ -260,7 +260,7 @@ export const PostCard: React.FC<PostCardProps> = ({
               {post.isPinned && (
                 <>
                   <span>•</span>
-                  <span className="text-reddit-green font-bold">FASTGJORT</span>
+                  <span className="text-via-green font-bold">FASTGJORT</span>
                 </>
               )}
             </div>
@@ -287,13 +287,13 @@ export const PostCard: React.FC<PostCardProps> = ({
                 </span>
               )}
               {post.isNSFW && (
-                <span className="text-xs font-bold text-reddit-red ml-2">NSFW</span>
+                <span className="text-xs font-bold text-via-red ml-2">NSFW</span>
               )}
               {post.isSpoiler && (
-                <span className="text-xs font-bold text-reddit-gray ml-2">SPOILER</span>
+                <span className="text-xs font-bold text-via-gray ml-2">SPOILER</span>
               )}
               {post.isOC && (
-                <span className="text-xs font-bold text-reddit-blue ml-2">OC</span>
+                <span className="text-xs font-bold text-via-blue ml-2">OC</span>
               )}
             </h3>
 
@@ -303,7 +303,7 @@ export const PostCard: React.FC<PostCardProps> = ({
                 href={post.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs text-reddit-blue hover:underline inline-flex items-center gap-1 mb-2"
+                className="text-xs text-via-blue hover:underline inline-flex items-center gap-1 mb-2"
               >
                 {getDomainFromUrl(post.url)}
                 <ExternalLink size={12} />
@@ -334,7 +334,7 @@ export const PostCard: React.FC<PostCardProps> = ({
               <>
                 {/* Text Preview */}
                 {post.type === 'text' && post.content && (
-                  <div className="text-sm text-reddit-gray mb-2 max-h-[250px] overflow-hidden">
+                  <div className="text-sm text-via-gray mb-2 max-h-[250px] overflow-hidden">
                     {post.content.substring(0, 500)}
                     {post.content.length > 500 && '...'}
                   </div>
@@ -378,8 +378,8 @@ export const PostCard: React.FC<PostCardProps> = ({
                   </button>
                   <span className={clsx(
                     'text-xs font-bold',
-                    vote === 1 && 'text-reddit-orange',
-                    vote === -1 && 'text-reddit-blue'
+                    vote === 1 && 'text-via-orange',
+                    vote === -1 && 'text-via-blue'
                   )}>
                     {formatScore(currentScore)}
                   </span>
@@ -396,14 +396,14 @@ export const PostCard: React.FC<PostCardProps> = ({
               {/* Comments */}
               <Link 
                 to={`/r/${post.subreddit.name}/comments/${post.id}`}
-                className="flex items-center gap-1 text-xs text-reddit-gray hover:bg-reddit-bg-hover px-2 py-1 rounded"
+                className="flex items-center gap-1 text-xs text-via-gray hover:bg-via-bg-hover px-2 py-1 rounded"
               >
                 <MessageSquare size={20} />
                 <span className="font-bold">{post.commentCount} kommentarer</span>
               </Link>
 
               {/* Share */}
-              <button className="flex items-center gap-1 text-xs text-reddit-gray hover:bg-reddit-bg-hover px-2 py-1 rounded">
+              <button className="flex items-center gap-1 text-xs text-via-gray hover:bg-via-bg-hover px-2 py-1 rounded">
                 <Share size={20} />
                 <span className="font-bold">Del</span>
               </button>
@@ -412,8 +412,8 @@ export const PostCard: React.FC<PostCardProps> = ({
               <button 
                 onClick={() => setSaved(!saved)}
                 className={clsx(
-                  'flex items-center gap-1 text-xs hover:bg-reddit-bg-hover px-2 py-1 rounded',
-                  saved ? 'text-reddit-green' : 'text-reddit-gray'
+                  'flex items-center gap-1 text-xs hover:bg-via-bg-hover px-2 py-1 rounded',
+                  saved ? 'text-via-green' : 'text-via-gray'
                 )}
               >
                 <Bookmark size={20} fill={saved ? 'currentColor' : 'none'} />
@@ -424,7 +424,7 @@ export const PostCard: React.FC<PostCardProps> = ({
               <div className="relative">
                 <button 
                   onClick={() => setShowActions(!showActions)}
-                  className="text-reddit-gray hover:bg-reddit-bg-hover p-1 rounded"
+                  className="text-via-gray hover:bg-via-bg-hover p-1 rounded"
                 >
                   <MoreHorizontal size={20} />
                 </button>
