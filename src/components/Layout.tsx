@@ -34,12 +34,12 @@ export const Layout: React.FC<LayoutProps> = ({
             {/* Info Panel - Positioned absolute to right */}
             <aside className="fixed right-4 top-20 w-80 hidden xl:block">
               <div className="bg-white border border-gray-200 rounded-lg p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Pædagogstuderende</h2>
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">VIA Pædagoger</h2>
                 <p className="text-gray-700 text-sm leading-relaxed mb-4">
-                  Et fællesskab for nuværende pædagogstuderende, hvor vi kan spare og lære fra hinanden om de udfordringer, der møder os i studiet.
+                  Fællesskab for pædagogstuderende og erfarne pædagoger
                 </p>
                 <p className="text-gray-700 text-sm leading-relaxed mb-4">
-                  Del dine erfaringer, stil spørgsmål, og hjælp andre studerende med at navigere i hverdagens udfordringer.
+                  Del dine erfaringer, stil spørgsmål, og hjælp hinanden med at navigere i hverdagens udfordringer.
                 </p>
                 <p className="text-gray-600 text-xs">
                   Sammen er vi stærkere 💙
