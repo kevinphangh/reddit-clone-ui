@@ -11,8 +11,8 @@ import { SearchPage } from './pages/SearchPage';
 function App() {
   const [isLoggedIn] = useState(true);
   const [currentUser] = useState({
-    username: 'reddit_user',
-    karma: 67890
+    username: 'anne_pedagog',
+    karma: 4666
   });
 
   return (

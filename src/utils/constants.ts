@@ -1,9 +1,9 @@
 export const SORT_OPTIONS = {
-  HOT: 'hot',
-  NEW: 'new',
+  HOT: 'populært',
+  NEW: 'nyeste',
   TOP: 'top',
-  RISING: 'rising',
-  CONTROVERSIAL: 'controversial',
+  RISING: 'stigende',
+  CONTROVERSIAL: 'debatteret',
 } as const;
 
 export const TIME_FILTER_OPTIONS = {
@@ -16,12 +16,12 @@ export const TIME_FILTER_OPTIONS = {
 } as const;
 
 export const COMMENT_SORT_OPTIONS = {
-  BEST: 'best',
+  BEST: 'bedste',
   TOP: 'top',
-  NEW: 'new',
-  CONTROVERSIAL: 'controversial',
-  OLD: 'old',
-  QA: 'qa',
+  NEW: 'nyeste',
+  CONTROVERSIAL: 'debatteret',
+  OLD: 'ældste',
+  QA: 'spørgsmål',
 } as const;
 
 export const POST_TYPES = {

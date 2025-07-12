@@ -52,7 +52,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
       {!isLocked && (
         <div className="mb-4">
           <div className="text-xs text-reddit-gray mb-2">
-            Comment as <span className="text-reddit-blue">reddit_user</span>
+            Kommenter som <span className="text-reddit-blue">anne_pedagog</span>
           </div>
           
           {!showCommentForm ? (
@@ -60,7 +60,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
               onClick={() => setShowCommentForm(true)}
               className="reddit-input cursor-text text-sm text-reddit-gray"
             >
-              What are your thoughts?
+              Hvad tænker du?
             </div>
           ) : (
             <div>
@@ -68,7 +68,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
                 className="reddit-textarea text-sm"
-                placeholder="What are your thoughts?"
+                placeholder="Hvad tænker du?"
                 rows={6}
                 autoFocus
               />
@@ -76,7 +76,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
                 <div className="text-xs text-reddit-gray">
                   <button className="hover:underline">Markdown</button>
                   {' • '}
-                  <button className="hover:underline">Formatting help</button>
+                  <button className="hover:underline">Formateringshjælp</button>
                 </div>
                 <div className="flex gap-2">
                   <button 
@@ -86,13 +86,13 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
                     }}
                     className="btn-ghost text-sm px-4 py-1.5"
                   >
-                    Cancel
+                    Annuller
                   </button>
                   <button 
                     className="btn-primary text-sm px-4 py-1.5"
                     disabled={!commentText.trim()}
                   >
-                    Comment
+                    Kommenter
                   </button>
                 </div>
               </div>
@@ -105,7 +105,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-4">
           <span className="text-sm">
-            {commentCount === 0 ? 'No comments yet' : `${commentCount.toLocaleString()} ${commentCount === 1 ? 'comment' : 'comments'}`}
+            {commentCount === 0 ? 'Ingen kommentarer endnu' : `${commentCount.toLocaleString()} ${commentCount === 1 ? 'kommentar' : 'kommentarer'}`}
           </span>
           
           {/* Sort Dropdown */}
@@ -115,7 +115,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
               className="flex items-center gap-1 text-xs font-bold text-reddit-gray hover:text-reddit-black"
             >
               {getSortIcon(sortBy)}
-              <span>Sort by: {getSortLabel(sortBy)}</span>
+              <span>Sorter efter: {getSortLabel(sortBy)}</span>
               <ChevronDown size={14} />
             </button>
             
@@ -145,7 +145,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
         {/* Discussion Settings */}
         <button className="text-xs text-reddit-gray hover:text-reddit-black">
           <MessageCircle size={16} className="inline mr-1" />
-          Discussion settings
+          Diskussionsindstillinger
         </button>
       </div>
 
@@ -153,8 +153,8 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
       {isLocked && (
         <div className="reddit-card p-4 mb-4 text-center">
           <MessageSquare size={24} className="mx-auto mb-2 text-reddit-gray" />
-          <p className="text-sm font-medium mb-1">Comments are locked</p>
-          <p className="text-xs text-reddit-gray">This thread has been locked by the moderators</p>
+          <p className="text-sm font-medium mb-1">Kommentarer er låst</p>
+          <p className="text-xs text-reddit-gray">Denne tråd er blevet låst af moderatorerne</p>
         </div>
       )}
 
@@ -162,8 +162,8 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
         {comments.length === 0 && !isLocked ? (
           <div className="reddit-card p-8 text-center">
             <MessageSquare size={48} className="mx-auto mb-4 text-reddit-lightGray" />
-            <p className="text-lg font-medium mb-2">No Comments Yet</p>
-            <p className="text-sm text-reddit-gray mb-4">Be the first to share what you think!</p>
+            <p className="text-lg font-medium mb-2">Ingen kommentarer endnu</p>
+            <p className="text-sm text-reddit-gray mb-4">Vær den første til at dele dine tanker!</p>
           </div>
         ) : (
           comments.map(comment => (
@@ -180,7 +180,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
       {comments.length > 0 && comments.length < commentCount && (
         <div className="mt-4 text-center">
           <button className="text-sm font-bold text-reddit-blue hover:underline">
-            View more comments ({commentCount - comments.length} replies)
+            Se flere kommentarer ({commentCount - comments.length} svar)
           </button>
         </div>
       )}

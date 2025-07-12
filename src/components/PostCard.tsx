@@ -177,12 +177,12 @@ export const PostCard: React.FC<PostCardProps> = ({
                   <span>•</span>
                 </>
               )}
-              <span>Posted by</span>
+              <span>Skrevet af</span>
               <Link to={`/user/${post.author.username}`} className="hover:underline">
                 u/{post.author.username}
               </Link>
               <span>{formatTimeAgo(post.createdAt)}</span>
-              {post.editedAt && <span>(edited)</span>}
+              {post.editedAt && <span>(redigeret)</span>}
             </div>
           </div>
 
@@ -251,16 +251,16 @@ export const PostCard: React.FC<PostCardProps> = ({
                   <span>•</span>
                 </>
               )}
-              <span>Posted by</span>
+              <span>Skrevet af</span>
               <Link to={`/user/${post.author.username}`} className="hover:underline">
                 u/{post.author.username}
               </Link>
               <span>{formatTimeAgo(post.createdAt)}</span>
-              {post.editedAt && <span>(edited)</span>}
+              {post.editedAt && <span>(redigeret)</span>}
               {post.isPinned && (
                 <>
                   <span>•</span>
-                  <span className="text-reddit-green font-bold">PINNED</span>
+                  <span className="text-reddit-green font-bold">FASTGJORT</span>
                 </>
               )}
             </div>
@@ -399,13 +399,13 @@ export const PostCard: React.FC<PostCardProps> = ({
                 className="flex items-center gap-1 text-xs text-reddit-gray hover:bg-reddit-bg-hover px-2 py-1 rounded"
               >
                 <MessageSquare size={20} />
-                <span className="font-bold">{post.commentCount} Comments</span>
+                <span className="font-bold">{post.commentCount} kommentarer</span>
               </Link>
 
               {/* Share */}
               <button className="flex items-center gap-1 text-xs text-reddit-gray hover:bg-reddit-bg-hover px-2 py-1 rounded">
                 <Share size={20} />
-                <span className="font-bold">Share</span>
+                <span className="font-bold">Del</span>
               </button>
 
               {/* Save */}
@@ -417,7 +417,7 @@ export const PostCard: React.FC<PostCardProps> = ({
                 )}
               >
                 <Bookmark size={20} fill={saved ? 'currentColor' : 'none'} />
-                <span className="font-bold">{saved ? 'Saved' : 'Save'}</span>
+                <span className="font-bold">{saved ? 'Gemt' : 'Gem'}</span>
               </button>
 
               {/* More Options */}
@@ -436,16 +436,16 @@ export const PostCard: React.FC<PostCardProps> = ({
                       className="dropdown-item flex items-center gap-2"
                     >
                       <EyeOff size={16} />
-                      Hide
+                      Skjul
                     </button>
                     <button className="dropdown-item flex items-center gap-2">
                       <Flag size={16} />
-                      Report
+                      Anmeld
                     </button>
                     {post.isCrosspost && (
                       <button className="dropdown-item flex items-center gap-2">
                         <FileText size={16} />
-                        View Original
+                        Se original
                       </button>
                     )}
                   </div>

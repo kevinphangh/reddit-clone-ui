@@ -17,16 +17,16 @@ export function formatScore(score: number): string {
 export function formatTimeAgo(date: Date): string {
   const distance = formatDistanceToNow(date, { addSuffix: false });
   
-  // Match Reddit's time formatting
+  // Match Reddit's time formatting with Danish abbreviations
   const parts = distance.split(' ');
   if (parts.length >= 2) {
     const [num, unit] = parts;
-    if (unit.startsWith('second')) return 'just now';
-    if (unit.startsWith('minute')) return `${num}m`;
-    if (unit.startsWith('hour')) return `${num}h`;
-    if (unit.startsWith('day')) return `${num}d`;
-    if (unit.startsWith('month')) return `${num}mo`;
-    if (unit.startsWith('year')) return `${num}y`;
+    if (unit.startsWith('second')) return 'lige nu';
+    if (unit.startsWith('minute')) return `${num} min`;
+    if (unit.startsWith('hour')) return `${num} t`;
+    if (unit.startsWith('day')) return `${num} d`;
+    if (unit.startsWith('month')) return `${num} mdr`;
+    if (unit.startsWith('year')) return `${num} år`;
   }
   
   return distance;

@@ -43,13 +43,13 @@ export const SortBar: React.FC<SortBarProps> = ({
 
   const getTimeLabel = (time: string) => {
     switch (time) {
-      case TIME_FILTER_OPTIONS.HOUR: return 'Past Hour';
-      case TIME_FILTER_OPTIONS.DAY: return 'Today';
-      case TIME_FILTER_OPTIONS.WEEK: return 'This Week';
-      case TIME_FILTER_OPTIONS.MONTH: return 'This Month';
-      case TIME_FILTER_OPTIONS.YEAR: return 'This Year';
-      case TIME_FILTER_OPTIONS.ALL: return 'All Time';
-      default: return 'Today';
+      case TIME_FILTER_OPTIONS.HOUR: return 'Seneste time';
+      case TIME_FILTER_OPTIONS.DAY: return 'I dag';
+      case TIME_FILTER_OPTIONS.WEEK: return 'Denne uge';
+      case TIME_FILTER_OPTIONS.MONTH: return 'Denne måned';
+      case TIME_FILTER_OPTIONS.YEAR: return 'Dette år';
+      case TIME_FILTER_OPTIONS.ALL: return 'Altid';
+      default: return 'I dag';
     }
   };
 
@@ -77,7 +77,7 @@ export const SortBar: React.FC<SortBarProps> = ({
               )}
             >
               {getSortIcon(value)}
-              <span className="capitalize">{value}</span>
+              <span className="capitalize">{key === 'HOT' ? 'Populært' : key === 'NEW' ? 'Nyeste' : key === 'RISING' ? 'Stigende' : key === 'CONTROVERSIAL' ? 'Debatteret' : 'Top'}</span>
             </Link>
           ))}
           
@@ -138,7 +138,7 @@ export const SortBar: React.FC<SortBarProps> = ({
                 )}
               >
                 <CreditCard size={16} />
-                Card
+                Kort
               </button>
               <button
                 onClick={() => {
@@ -151,7 +151,7 @@ export const SortBar: React.FC<SortBarProps> = ({
                 )}
               >
                 <List size={16} />
-                Classic
+                Klassisk
               </button>
               <button
                 onClick={() => {
@@ -164,7 +164,7 @@ export const SortBar: React.FC<SortBarProps> = ({
                 )}
               >
                 <Grid3X3 size={16} />
-                Compact
+                Kompakt
               </button>
             </div>
           )}

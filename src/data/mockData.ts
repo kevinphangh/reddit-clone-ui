@@ -2,56 +2,72 @@ import { Post, User, Subreddit, Comment } from '../types';
 
 export const mockUser: User = {
   id: '1',
-  username: 'reddit_user',
-  displayName: 'Reddit User',
+  username: 'anne_pedagog',
+  displayName: 'Anne Pedersen',
   avatar: 'https://www.redditstatic.com/avatars/defaults/v2/avatar_default_1.png',
   karma: {
-    post: 12345,
-    comment: 54321
+    post: 1245,
+    comment: 3421
   },
-  cakeDay: new Date('2020-06-15'),
-  isPremium: true,
-  isVerified: false
+  cakeDay: new Date('2021-08-15'),
+  isPremium: false,
+  isVerified: true
 };
 
 export const mockSubreddits: Subreddit[] = [
   {
     id: '1',
-    name: 'AskReddit',
-    displayName: 'Ask Reddit',
-    description: 'r/AskReddit is the place to ask and answer thought-provoking questions.',
-    icon: 'https://styles.redditmedia.com/t5_2qh1i/styles/communityIcon_tijjpyw1qe201.png',
-    banner: 'https://styles.redditmedia.com/t5_2qh1i/styles/bannerBackgroundImage_x7t1on9yqr851.jpg',
-    members: 41234567,
-    activeUsers: 123456,
-    createdAt: new Date('2008-01-25'),
+    name: 'Praktik',
+    displayName: 'Praktik og erfaringer',
+    description: 'Del dine praktikoplevelser, få råd og sparring fra andre pædagogstuderende og erfarne pædagoger.',
+    icon: '👶',
+    members: 3456,
+    activeUsers: 234,
+    createdAt: new Date('2022-01-15'),
     rules: [
       {
         id: '1',
-        title: 'Rule 1 - Questions must be clear and direct',
-        description: 'Questions must be clear, written in English, and conclude with a question mark',
+        title: 'Respekter tavshedspligten',
+        description: 'Del aldrig navne eller identificerbare oplysninger om børn, forældre eller kolleger',
         order: 1
       },
       {
         id: '2',
-        title: 'Rule 2 - No personal or professional advice requests',
-        description: 'Questions asking for professional advice are not allowed',
+        title: 'Konstruktiv feedback',
+        description: 'Vær konstruktiv og professionel i din feedback til andre',
         order: 2
       }
     ],
     flairs: [
-      { id: '1', text: 'Serious', backgroundColor: '#ff4500', textColor: '#ffffff' },
-      { id: '2', text: 'Discussion', backgroundColor: '#0079d3', textColor: '#ffffff' }
+      { id: '1', text: 'Vuggestue', backgroundColor: '#8CC63F', textColor: '#ffffff' },
+      { id: '2', text: 'Børnehave', backgroundColor: '#00A3E0', textColor: '#ffffff' },
+      { id: '3', text: 'SFO', backgroundColor: '#003F72', textColor: '#ffffff' }
     ]
   },
   {
     id: '2',
-    name: 'funny',
-    displayName: 'Funny',
-    description: 'Welcome to r/Funny, Reddit\'s largest humour depository.',
-    members: 42123456,
-    activeUsers: 89012,
-    createdAt: new Date('2008-01-25'),
+    name: 'Studiehjaelp',
+    displayName: 'Studiehjælp',
+    description: 'Få hjælp til opgaver, eksamen og generelle studiespørgsmål på VIA pædagoguddannelsen.',
+    icon: '📚',
+    members: 2890,
+    activeUsers: 156,
+    createdAt: new Date('2022-03-20'),
+    rules: [],
+    flairs: [
+      { id: '4', text: 'Opgavehjælp', backgroundColor: '#E31937', textColor: '#ffffff' },
+      { id: '5', text: 'Eksamen', backgroundColor: '#666666', textColor: '#ffffff' }
+    ]
+  },
+  {
+    id: '3',
+    name: 'Jobogkarriere',
+    displayName: 'Job og karriere',
+    description: 'Diskuter karrieremuligheder, del jobopslag og få tips til jobsøgning som pædagog.',
+    icon: '💼',
+    members: 1567,
+    activeUsers: 89,
+    createdAt: new Date('2022-06-10'),
     rules: [],
     flairs: []
   }
@@ -60,116 +76,109 @@ export const mockSubreddits: Subreddit[] = [
 export const mockPosts: Post[] = [
   {
     id: '1',
-    title: 'What\'s the most interesting fact you know that sounds completely made up?',
+    title: 'Tips til motorisk udvikling i vuggestuen - hvad virker for jer?',
     type: 'text',
-    content: 'I\'ll start: Wombat poop is cube-shaped. They evolved this way to mark their territory on rocks without the poop rolling away.',
+    content: 'Hej alle sammen!\n\nJeg er i praktik i en vuggestue og skal planlægge aktiviteter der fremmer børnenes motoriske udvikling. Jeg har tænkt på at lave en forhindringsbane, men vil gerne høre hvilke aktiviteter I har haft succes med?\n\nBørnene er mellem 1-3 år. Tak på forhånd! 🌟',
     author: mockUser,
     subreddit: mockSubreddits[0],
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 3),
-    score: 28453,
-    upvoteRatio: 0.96,
-    commentCount: 8234,
-    flair: { id: '1', text: 'Serious', backgroundColor: '#ff4500', textColor: '#ffffff' },
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2),
+    score: 45,
+    upvoteRatio: 0.98,
+    commentCount: 23,
+    flair: { id: '1', text: 'Vuggestue', backgroundColor: '#8CC63F', textColor: '#ffffff' },
     awards: [
-      { id: '1', name: 'Gold', icon: '🏅', description: 'Reddit Gold', coinPrice: 500, count: 3 },
-      { id: '2', name: 'Helpful', icon: '🤝', description: 'Helpful Award', coinPrice: 100, count: 12 }
+      { id: '1', name: 'Hjælpsom', icon: '🤝', description: 'Hjælpsom post', coinPrice: 100, count: 3 }
     ],
     userVote: 1,
-    saved: false,
-    hidden: false
-  },
-  {
-    id: '2',
-    title: 'My cat thinks he\'s invisible when he covers his eyes',
-    type: 'image',
-    url: 'https://i.redd.it/1234567890.jpg',
-    author: { ...mockUser, username: 'CatLover123' },
-    subreddit: mockSubreddits[1],
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 6),
-    score: 45678,
-    upvoteRatio: 0.98,
-    commentCount: 1234,
-    awards: [
-      { id: '3', name: 'Wholesome', icon: '🤗', description: 'Wholesome Award', coinPrice: 50, count: 24 }
-    ],
-    userVote: 0,
     saved: true,
     hidden: false
   },
   {
-    id: '3',
-    title: 'Scientists discover new species of deep-sea fish that glows in the dark',
-    type: 'link',
-    url: 'https://www.sciencenews.org/article/new-glowing-fish-species',
-    author: { ...mockUser, username: 'ScienceDaily' },
-    subreddit: { ...mockSubreddits[0], name: 'science', displayName: 'Science' },
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 12),
-    score: 12345,
-    upvoteRatio: 0.91,
-    commentCount: 567,
+    id: '2',
+    title: 'Bachelor opgave om inklusion - nogen der har gode kilder?',
+    type: 'text',
+    content: 'Hej medstuderende!\n\nJeg er lige gået i gang med min bachelor om inklusion i børnehaven. Mit fokus er på børn med særlige behov og hvordan vi som pædagoger kan skabe det bedste inkluderende miljø.\n\nHar I nogle gode anbefalinger til:\n- Teoretikere jeg skal kigge på?\n- Forskningsartikler?\n- Praktiske metoder der er evidensbaserede?\n\nPå forhånd tak!',
+    author: { ...mockUser, username: 'studerende2024' },
+    subreddit: mockSubreddits[1],
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 5),
+    score: 67,
+    upvoteRatio: 0.95,
+    commentCount: 34,
+    flair: { id: '4', text: 'Opgavehjælp', backgroundColor: '#E31937', textColor: '#ffffff' },
     awards: [],
-    isOC: false,
-    userVote: -1,
+    userVote: 0,
     saved: false,
     hidden: false
   },
   {
-    id: '4',
-    title: '[Spoiler] The ending of the new movie completely shocked me',
+    id: '3',
+    title: 'Nyuddannet pædagog søger råd til første jobsamtale',
     type: 'text',
-    content: 'I can\'t believe they actually went through with it. The main character...',
-    author: { ...mockUser, username: 'MovieBuff2023' },
-    subreddit: { ...mockSubreddits[0], name: 'movies', displayName: 'Movies' },
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24),
-    score: 8901,
-    upvoteRatio: 0.87,
-    commentCount: 2345,
-    isSpoiler: true,
+    content: 'Hej alle!\n\nJeg blev færdig i juni og har nu fået min første jobsamtale til en stilling i en integreret institution. Jeg er super nervøs!\n\nHvad slags spørgsmål kan jeg forvente?\nHvordan forbereder jeg mig bedst?\nHvilke spørgsmål er gode at stille dem?\n\nAlle tips modtages med kyshånd! 🙏',
+    author: { ...mockUser, username: 'nypaedagog' },
+    subreddit: mockSubreddits[2],
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 8),
+    score: 89,
+    upvoteRatio: 0.97,
+    commentCount: 45,
+    awards: [
+      { id: '2', name: 'Held og lykke', icon: '🍀', description: 'Held og lykke!', coinPrice: 50, count: 5 }
+    ],
+    userVote: 1,
+    saved: true,
+    hidden: false
+  },
+  {
+    id: '4',
+    title: 'Konflikthåndtering mellem børn - del jeres bedste strategier',
+    type: 'text',
+    content: 'Jeg oplever ofte konflikter mellem børnene i børnehaven (3-6 år), især omkring legetøj og inklusion i lege.\n\nHvilke strategier bruger I til:\n- At forebygge konflikter?\n- At guide børnene gennem konflikter?\n- At lære dem selv at løse konflikter?\n\nJeg bruger selv meget "børnemøder" og konflikttrappen, men søger flere redskaber.',
+    author: { ...mockUser, username: 'erfaren_paedagog' },
+    subreddit: mockSubreddits[0],
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 12),
+    score: 123,
+    upvoteRatio: 0.99,
+    commentCount: 67,
+    flair: { id: '2', text: 'Børnehave', backgroundColor: '#00A3E0', textColor: '#ffffff' },
     awards: [],
+    isOC: true,
     userVote: 0,
     saved: false,
     hidden: false
   },
   {
     id: '5',
-    title: 'NSFW: Medical gore - My surgery recovery progress',
-    type: 'image',
-    url: 'https://i.redd.it/medical123.jpg',
-    author: { ...mockUser, username: 'RecoveringPatient' },
-    subreddit: { ...mockSubreddits[0], name: 'medical', displayName: 'Medical' },
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 48),
-    editedAt: new Date(Date.now() - 1000 * 60 * 60 * 36),
-    score: 3456,
-    upvoteRatio: 0.89,
-    commentCount: 789,
-    isNSFW: true,
-    awards: [
-      { id: '4', name: 'Take My Energy', icon: '⚡', description: 'Sending support', coinPrice: 30, count: 8 }
-    ],
+    title: 'Gode ideer til forældresamarbejde?',
+    type: 'text',
+    content: 'Hej forum!\n\nVi har udfordringer med at få forældrene engageret i vores institution. De afleverer og henter, men deltager sjældent i arrangementer eller viser interesse for børnenes hverdag.\n\nHvordan får I skabt et godt forældresamarbejde?\nHvilke arrangementer fungerer godt hos jer?\nHvordan kommunikerer I med forældrene?\n\nDel gerne jeres erfaringer!',
+    author: { ...mockUser, username: 'teamleder_pia' },
+    subreddit: mockSubreddits[0],
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24),
+    score: 78,
+    upvoteRatio: 0.94,
+    commentCount: 89,
+    awards: [],
     userVote: 0,
     saved: false,
     hidden: false
   },
   {
     id: '6',
-    title: 'I made this website that lets you explore space in 3D [OC]',
-    type: 'link',
-    url: 'https://myspaceexplorer.com',
-    author: { ...mockUser, username: 'WebDev3000' },
-    subreddit: { ...mockSubreddits[0], name: 'programming', displayName: 'Programming' },
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 72),
-    score: 67890,
-    upvoteRatio: 0.99,
-    commentCount: 4567,
-    isOC: true,
-    flair: { id: '2', text: 'Show & Tell', backgroundColor: '#46d160', textColor: '#ffffff' },
+    title: 'Eksamenangst - hvordan håndterer I det?',
+    type: 'text',
+    content: 'Jeg skal op til eksamen i "Pædagogens praksis" om 2 uger og er ved at gå i panik!\n\nJeg har læst og læst, men føler ikke jeg kan huske noget. Har I nogle gode råd til:\n- Hvordan jeg strukturerer min læsning?\n- Hvordan jeg håndterer nerverne?\n- Gode måder at øve sig på?\n\nHjælp! 😰',
+    author: { ...mockUser, username: 'nervoes_studerende' },
+    subreddit: mockSubreddits[1],
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 36),
+    score: 56,
+    upvoteRatio: 1.0,
+    commentCount: 42,
+    flair: { id: '5', text: 'Eksamen', backgroundColor: '#666666', textColor: '#ffffff' },
     awards: [
-      { id: '5', name: 'Platinum', icon: '💎', description: 'Reddit Platinum', coinPrice: 1800, count: 2 },
-      { id: '1', name: 'Gold', icon: '🏅', description: 'Reddit Gold', coinPrice: 500, count: 15 }
+      { id: '1', name: 'Hjælpsom', icon: '🤝', description: 'Hjælpsom post', coinPrice: 100, count: 2 }
     ],
-    isPinned: true,
     userVote: 1,
-    saved: true,
+    saved: false,
     hidden: false
   }
 ];
@@ -177,11 +186,11 @@ export const mockPosts: Post[] = [
 export const mockComments: Comment[] = [
   {
     id: 'c1',
-    body: 'This is absolutely fascinating! I had no idea wombats had cube-shaped poop. Nature is truly amazing.',
-    author: { ...mockUser, username: 'NatureLover22' },
+    body: 'Forhindringsbaner er super gode! Vi har haft stor succes med at bruge puder, tunneler og små trampoliner. Husk at variere sværhedsgraden så alle børn kan være med 😊',
+    author: { ...mockUser, username: 'vuggestuepædagog' },
     post: mockPosts[0],
     createdAt: new Date(Date.now() - 1000 * 60 * 30),
-    score: 1234,
+    score: 23,
     replies: [],
     awards: [],
     userVote: 1,
@@ -190,16 +199,29 @@ export const mockComments: Comment[] = [
   },
   {
     id: 'c2',
-    body: 'Here\'s another one: Oxford University is older than the Aztec Empire. Oxford was founded in 1096, while the Aztec Empire began in 1428.',
-    author: { ...mockUser, username: 'HistoryBuff' },
+    body: 'Prøv også sanglege med bevægelse! "Bjørnen sover" og "Boogie Woogie" er hits hos os. Det træner både grov- og finmotorik på en sjov måde.',
+    author: { ...mockUser, username: 'musikpædagog' },
     post: mockPosts[0],
     createdAt: new Date(Date.now() - 1000 * 60 * 45),
-    score: 5678,
+    score: 18,
+    replies: [],
+    awards: [],
+    userVote: 0,
+    saved: false,
+    depth: 0
+  },
+  {
+    id: 'c3',
+    body: 'Til din bachelor kan jeg varmt anbefale:\n\n- Susan Hart om neuroaffektiv udvikling\n- Bent Madsen om inklusion\n- Lotte Hedegaard-Sørensen har skrevet meget godt om inklusion i praksis\n\nCheck også EVAs publikationer om inklusion - de har meget evidensbaseret materiale!',
+    author: { ...mockUser, username: 'akademiker' },
+    post: mockPosts[1],
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2),
+    score: 45,
     replies: [],
     awards: [
-      { id: '1', name: 'Gold', icon: '🏅', description: 'Reddit Gold', coinPrice: 500, count: 1 }
+      { id: '1', name: 'Hjælpsom', icon: '🤝', description: 'Hjælpsom kommentar', coinPrice: 100, count: 1 }
     ],
-    userVote: 0,
+    userVote: 1,
     saved: true,
     depth: 0
   }

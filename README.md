@@ -1,124 +1,119 @@
-# Reddit Clone UI
+# VIA Pædagoger Forum
 
-A pixel-perfect Reddit clone built with React, TypeScript, and Tailwind CSS. This project recreates Reddit's user interface with exact styling and interactive features.
+Et online forum til VIA pædagogstuderende og færdiguddannede pædagoger, hvor de kan dele erfaringer, få hjælp og sparre med hinanden. Bygget med React, TypeScript og Tailwind CSS.
 
-![Reddit Clone Screenshot](https://via.placeholder.com/800x400?text=Reddit+Clone+UI)
+![VIA Pædagoger Forum Screenshot](https://via.placeholder.com/800x400?text=VIA+Pædagoger+Forum)
 
-## 🚀 Features
+## 🎯 Formål
 
-- **Exact Reddit Styling**: Matches Reddit's design system including colors, typography, and spacing
-- **Multiple View Modes**: Card, Classic, and Compact post layouts
-- **Interactive Components**:
-  - Voting system (upvote/downvote)
-  - Collapsible comment threads
-  - Dropdown menus
-  - Post creation form
-  - Search functionality
-- **Post Types**: Support for text, link, image, video, and poll posts
-- **Comment System**: Nested comments with reply functionality
-- **Responsive Design**: Works on desktop and mobile devices
-- **Type Safety**: Full TypeScript implementation
+VIA Pædagoger Forum er designet til at:
+- Skabe et fællesskab for pædagogstuderende og pædagoger
+- Dele praktiske erfaringer og viden
+- Få hjælp til studieopgaver og eksamen
+- Diskutere pædagogiske metoder og teori
+- Netværke og finde jobmuligheder
 
-## 🛠️ Tech Stack
+## 🚀 Funktioner
+
+- **Fællesskaber**: Organiseret i relevante kategorier som Praktik, Studiehjælp, Job og karriere
+- **Diskussionstråde**: Del spørgsmål, erfaringer og viden
+- **Kommentarsystem**: Indlejrede kommentarer med svar-funktionalitet
+- **Afstemningssystem**: Stem indlæg og kommentarer op eller ned
+- **Dansk interface**: Fuldt oversat til dansk
+- **Brugervenlig**: Intuitivt design baseret på velkendte forum-principper
+
+## 🛠️ Teknisk Stack
 
 - **Frontend Framework**: React 19
 - **Type System**: TypeScript 5
 - **Styling**: Tailwind CSS 3
 - **Routing**: React Router 7
 - **Build Tool**: Vite 7
-- **Icons**: Lucide React
-- **Date Formatting**: date-fns
+- **Ikoner**: Lucide React
+- **Dato formatering**: date-fns
 
 ## 📦 Installation
 
-1. Clone the repository:
+1. Klon repositoriet:
 ```bash
-git clone https://github.com/yourusername/reddit-clone-ui.git
+git clone https://github.com/kevinphangh/reddit-clone-ui.git
 cd reddit-clone-ui
+git checkout sandbox
 ```
 
-2. Install dependencies:
+2. Installer afhængigheder:
 ```bash
 npm install
 ```
 
-3. Start the development server:
+3. Start udviklingsserveren:
 ```bash
 npm run dev
 ```
 
-4. Open your browser and visit `http://localhost:3000`
+4. Åbn din browser på `http://localhost:3000`
 
-## 🏗️ Project Structure
+## 🏗️ Projektstruktur
 
 ```
 src/
-├── components/          # Reusable UI components
-│   ├── Header.tsx      # Main navigation header
-│   ├── Sidebar.tsx     # Right sidebar with subreddit info
-│   ├── PostCard.tsx    # Post display component
-│   ├── Comment.tsx     # Comment component with threading
+├── components/          # Genbrugelige UI komponenter
+│   ├── Header.tsx      # Hovednavigation
+│   ├── Sidebar.tsx     # Sidepanel med fællesskabsinfo
+│   ├── PostCard.tsx    # Indlægsvisning
+│   ├── Comment.tsx     # Kommentarkomponent
 │   └── ...
-├── pages/              # Route pages
-│   ├── HomePage.tsx    # Main feed
-│   ├── PostPage.tsx    # Individual post view
-│   ├── SubmitPage.tsx  # Create post form
+├── pages/              # Sidekomponenter
+│   ├── HomePage.tsx    # Forside
+│   ├── PostPage.tsx    # Enkelt indlæg
+│   ├── SubmitPage.tsx  # Opret indlæg
 │   └── ...
-├── types/              # TypeScript type definitions
-├── utils/              # Utility functions and constants
-├── data/               # Mock data for demo
-└── styles/             # Global styles and Tailwind config
+├── types/              # TypeScript type definitioner
+├── utils/              # Hjælpefunktioner
+├── data/               # Mock data med pædagogisk indhold
+└── styles/             # Globale styles
 ```
 
-## 🎨 Features Breakdown
+## 🎨 Funktioner
 
-### Post Feed
-- Hot, New, Top, Rising, and Controversial sorting
-- Time filters for Top and Controversial
-- Card, Classic, and Compact view modes
+### Fællesskaber
+- **Praktik og erfaringer**: Del praktikoplevelser og få sparring
+- **Studiehjælp**: Få hjælp til opgaver og eksamen
+- **Job og karriere**: Diskuter karrieremuligheder og find job
+- **Specialpædagogik**: Fokus på særlige behov
+- **Børnehave/Vuggestue/SFO**: Aldersspecifikke diskussioner
 
-### Post Cards
-- Support for different post types (text, link, image, video)
-- Vote counts and voting functionality
-- Awards display
-- Flair system
-- NSFW/Spoiler/OC tags
-- Save and hide functionality
+### Indlægstyper
+- Tekstindlæg med formatering
+- Billeder og videoer
+- Links til eksterne ressourcer
+- Afstemninger (kommer snart)
 
-### Comment System
-- Threaded comments with indentation
-- Collapse/expand functionality
-- Vote on comments
-- Reply to comments
-- Comment sorting options
-- "Continue this thread" for deep nesting
+### Interaktion
+- Stem på indlæg og kommentarer
+- Gem indlæg til senere
+- Kommenter og svar på kommentarer
+- Marker indhold som spoiler/NSFW
+- Filtrer og sorter indhold
 
-### Create Post
-- Multiple post types (text, image/video, link, poll)
-- Community selector
-- Flair selection
-- Markdown editor toolbar
-- NSFW/Spoiler/OC toggles
-- Form validation
-
-## 🔧 Available Scripts
+## 🔧 Tilgængelige Scripts
 
 ```bash
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run preview      # Preview production build
-npm run typecheck    # Run TypeScript type checking
-npm run lint         # Run linting
+npm run dev          # Start udviklingsserver
+npm run build        # Byg til produktion
+npm run preview      # Preview produktionsbuild
+npm run typecheck    # Kør TypeScript type-tjek
+npm run lint         # Kør linting
 ```
 
-## 🤝 Contributing
+## 🤝 Bidrag
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Bidrag er velkomne! Fork projektet og opret en Pull Request med dine ændringer.
 
-## 📄 License
+## 📄 Licens
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+Dette projekt er licenseret under MIT License - se LICENSE filen for detaljer.
 
-## ⚠️ Disclaimer
+## ⚠️ Ansvarsfraskrivelse
 
-This is a UI clone for educational purposes only. Reddit and the Reddit logo are registered trademarks of Reddit Inc. This project is not affiliated with or endorsed by Reddit Inc.
+Dette er et uafhængigt projekt skabt til VIA pædagogstuderende og er ikke officielt tilknyttet VIA University College.

@@ -22,11 +22,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
   subreddit, 
   showSubredditInfo = true,
   trendingCommunities = [
-    { name: 'AskReddit', members: 41234567 },
-    { name: 'gaming', members: 37890123 },
-    { name: 'aww', members: 34567890 },
-    { name: 'Music', members: 32123456 },
-    { name: 'worldnews', members: 31234567 },
+    { name: 'Pædagogik', members: 41234 },
+    { name: 'Børneudvikling', members: 37890 },
+    { name: 'Inklusion', members: 34567 },
+    { name: 'Forældresamarbejde', members: 32123 },
+    { name: 'Dokumentation', members: 31234 },
   ]
 }) => {
   return (
@@ -56,7 +56,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div className="flex gap-4 mb-4">
               <div>
                 <div className="text-base font-medium">{formatNumber(subreddit.members)}</div>
-                <div className="text-xs text-reddit-gray">Members</div>
+                <div className="text-xs text-reddit-gray">Medlemmer</div>
               </div>
               <div>
                 <div className="text-base font-medium flex items-center gap-1">
@@ -70,14 +70,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
             {/* Created Date */}
             <div className="flex items-center gap-2 text-xs text-reddit-gray mb-4">
               <Calendar size={14} />
-              <span>Created {formatFullDate(subreddit.createdAt)}</span>
+              <span>Oprettet {formatFullDate(subreddit.createdAt)}</span>
             </div>
             
             {/* Join/Create Post Buttons */}
             <div className="space-y-2">
-              <button className="w-full btn-primary">Join</button>
+              <button className="w-full btn-primary">Tilmeld</button>
               <Link to="/submit" className="block w-full btn-secondary text-center">
-                Create Post
+                Opret indlæg
               </Link>
             </div>
           </div>
@@ -85,7 +85,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {/* Community Options */}
           <div className="border-t border-reddit-lightGray px-3 py-2">
             <button className="text-xs font-bold text-reddit-gray hover:text-reddit-black">
-              COMMUNITY OPTIONS
+              FÆLLESSKABSINDSTILLINGER
             </button>
           </div>
         </div>
@@ -95,7 +95,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {subreddit && subreddit.rules.length > 0 && (
         <div className="reddit-card">
           <div className="p-3 border-b border-reddit-lightGray">
-            <h2 className="text-sm font-bold">r/{subreddit.name} Rules</h2>
+            <h2 className="text-sm font-bold">r/{subreddit.name} Regler</h2>
           </div>
           <div className="p-3">
             {subreddit.rules.slice(0, 5).map((rule, index) => (
@@ -108,7 +108,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             ))}
             {subreddit.rules.length > 5 && (
               <button className="text-xs font-bold text-reddit-blue">
-                View all {subreddit.rules.length} rules
+                Se alle {subreddit.rules.length} regler
               </button>
             )}
           </div>
@@ -121,7 +121,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div className="p-3 border-b border-reddit-lightGray">
             <h2 className="text-sm font-bold flex items-center gap-2">
               <TrendingUp size={16} className="text-reddit-orange" />
-              Today's Top Growing Communities
+              Dagens mest voksende fællesskaber
             </h2>
           </div>
           <div className="py-2">
@@ -139,16 +139,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 />
                 <div className="flex-1">
                   <div className="text-sm font-medium">r/{community.name}</div>
-                  <div className="text-xs text-reddit-gray">{formatNumber(community.members)} members</div>
+                  <div className="text-xs text-reddit-gray">{formatNumber(community.members)} medlemmer</div>
                 </div>
                 {community.isNew && (
-                  <span className="text-xs bg-reddit-green text-white px-2 py-0.5 rounded-full">NEW</span>
+                  <span className="text-xs bg-reddit-green text-white px-2 py-0.5 rounded-full">NY</span>
                 )}
               </Link>
             ))}
           </div>
           <div className="px-3 py-2 border-t border-reddit-lightGray">
-            <button className="text-xs font-bold text-reddit-blue">VIEW ALL</button>
+            <button className="text-xs font-bold text-reddit-blue">SE ALLE</button>
           </div>
         </div>
       )}
@@ -158,12 +158,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="p-3">
           <div className="flex items-center gap-2 mb-2">
             <Shield size={20} className="text-reddit-orange" />
-            <h2 className="text-sm font-bold">Reddit Premium</h2>
+            <h2 className="text-sm font-bold">VIA Premium</h2>
           </div>
           <p className="text-xs text-reddit-gray mb-3">
-            The best Reddit experience, with monthly Coins
+            Den bedste forum oplevelse
           </p>
-          <button className="w-full btn-primary text-sm">Try Now</button>
+          <button className="w-full btn-primary text-sm">Prøv nu</button>
         </div>
       </div>
 
@@ -177,17 +177,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
               className="w-10 h-12"
             />
             <div>
-              <div className="text-sm font-medium">Home</div>
+              <div className="text-sm font-medium">Hjem</div>
               <div className="text-xs text-reddit-gray">
-                Your personal Reddit frontpage. Come here to check in with your favorite communities.
+                Din personlige forside. Kom her for at tjekke ind med dine foretrukne fællesskaber.
               </div>
             </div>
           </div>
           <Link to="/submit" className="block w-full btn-primary text-center">
-            Create Post
+            Opret indlæg
           </Link>
           <Link to="/subreddits/create" className="block w-full btn-secondary text-center mt-2">
-            Create Community
+            Opret fællesskab
           </Link>
         </div>
       )}
@@ -195,21 +195,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Footer Links */}
       <div className="reddit-card p-3">
         <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-xs">
-          <Link to="/help" className="hover:underline">Help</Link>
-          <Link to="/coins" className="hover:underline">Reddit Coins</Link>
-          <Link to="/premium" className="hover:underline">Reddit Premium</Link>
-          <Link to="/about" className="hover:underline">About</Link>
-          <Link to="/careers" className="hover:underline">Careers</Link>
-          <Link to="/press" className="hover:underline">Press</Link>
-          <Link to="/advertise" className="hover:underline">Advertise</Link>
+          <Link to="/help" className="hover:underline">Hjælp</Link>
+          <Link to="/coins" className="hover:underline">VIA Coins</Link>
+          <Link to="/premium" className="hover:underline">VIA Premium</Link>
+          <Link to="/about" className="hover:underline">Om</Link>
+          <Link to="/careers" className="hover:underline">Karriere</Link>
+          <Link to="/press" className="hover:underline">Presse</Link>
+          <Link to="/advertise" className="hover:underline">Annoncer</Link>
           <Link to="/blog" className="hover:underline">Blog</Link>
-          <Link to="/terms" className="hover:underline">Terms</Link>
-          <Link to="/content-policy" className="hover:underline">Content Policy</Link>
-          <Link to="/privacy-policy" className="hover:underline">Privacy Policy</Link>
-          <Link to="/mod-policy" className="hover:underline">Mod Policy</Link>
+          <Link to="/terms" className="hover:underline">Vilkår</Link>
+          <Link to="/content-policy" className="hover:underline">Indholdspolitik</Link>
+          <Link to="/privacy-policy" className="hover:underline">Privatlivspolitik</Link>
+          <Link to="/mod-policy" className="hover:underline">Moderatorpolitik</Link>
         </div>
         <div className="text-xs text-reddit-gray mt-4">
-          Reddit Inc © 2024. All rights reserved
+          VIA Pædagoger © 2024. Alle rettigheder forbeholdes
         </div>
       </div>
     </aside>

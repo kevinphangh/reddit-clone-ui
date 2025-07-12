@@ -36,40 +36,40 @@ export const SubmitPage: React.FC = () => {
 
   // Mock subreddits for dropdown
   const mockSubreddits = [
-    { name: 'AskReddit', icon: '🤔', members: 41234567 },
-    { name: 'funny', icon: '😄', members: 42123456 },
-    { name: 'gaming', icon: '🎮', members: 37890123 },
-    { name: 'science', icon: '🔬', members: 28901234 },
-    { name: 'technology', icon: '💻', members: 14567890 }
+    { name: 'VIAPaedagoger', icon: '🎓', members: 1523 },
+    { name: 'Specialpaedagogik', icon: '🧩', members: 987 },
+    { name: 'Boernehave', icon: '🏫', members: 2341 },
+    { name: 'Fritidshjem', icon: '🎨', members: 1876 },
+    { name: 'Studerende', icon: '📚', members: 3452 }
   ];
 
   // Mock flairs
   const mockFlairs = [
-    { id: '1', text: 'Discussion', backgroundColor: '#0079d3', textColor: '#ffffff' },
-    { id: '2', text: 'Question', backgroundColor: '#ff4500', textColor: '#ffffff' },
-    { id: '3', text: 'News', backgroundColor: '#46d160', textColor: '#ffffff' },
-    { id: '4', text: 'Guide', backgroundColor: '#ffd635', textColor: '#000000' }
+    { id: '1', text: 'Diskussion', backgroundColor: '#0079d3', textColor: '#ffffff' },
+    { id: '2', text: 'Spørgsmål', backgroundColor: '#ff4500', textColor: '#ffffff' },
+    { id: '3', text: 'Nyheder', backgroundColor: '#46d160', textColor: '#ffffff' },
+    { id: '4', text: 'Vejledning', backgroundColor: '#ffd635', textColor: '#000000' }
   ];
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
     
     if (!selectedSubreddit) {
-      newErrors.subreddit = 'Please select a community';
+      newErrors.subreddit = 'Vælg venligst et fællesskab';
     }
     
     if (!title.trim()) {
-      newErrors.title = 'Please enter a title';
+      newErrors.title = 'Indtast venligst en titel';
     } else if (title.length > 300) {
-      newErrors.title = 'Title must be 300 characters or less';
+      newErrors.title = 'Titlen må maksimalt være 300 tegn';
     }
     
     if (postType === 'text' && !content.trim()) {
-      newErrors.content = 'Please enter some text';
+      newErrors.content = 'Indtast venligst noget tekst';
     }
     
     if ((postType === 'link' || postType === 'image') && !url.trim()) {
-      newErrors.url = 'Please enter a URL';
+      newErrors.url = 'Indtast venligst en URL';
     }
     
     setErrors(newErrors);
@@ -90,12 +90,12 @@ export const SubmitPage: React.FC = () => {
   return (
     <div className="max-w-[740px]">
       <div className="flex items-center justify-between mb-4">
-        <h1 className="text-lg font-medium">Create a post</h1>
+        <h1 className="text-lg font-medium">Opret et indlæg</h1>
         <Link 
           to="/" 
           className="text-xs font-bold text-reddit-blue hover:underline"
         >
-          DRAFTS
+          KLADDER
           <span className="ml-1 text-reddit-gray">0</span>
         </Link>
       </div>
@@ -119,7 +119,7 @@ export const SubmitPage: React.FC = () => {
                 <span className="font-medium">r/{selectedSubreddit}</span>
               </span>
             ) : (
-              <span className="text-reddit-gray">Choose a community</span>
+              <span className="text-reddit-gray">Vælg et fællesskab</span>
             )}
             <ChevronDown size={20} className="text-reddit-gray" />
           </button>
@@ -129,7 +129,7 @@ export const SubmitPage: React.FC = () => {
               <div className="p-2">
                 <input
                   type="text"
-                  placeholder="Search communities"
+                  placeholder="Søg fællesskaber"
                   className="w-full reddit-input text-sm"
                 />
               </div>
@@ -148,7 +148,7 @@ export const SubmitPage: React.FC = () => {
                     <div className="text-left">
                       <div className="font-medium">r/{sub.name}</div>
                       <div className="text-xs text-reddit-gray">
-                        {sub.members.toLocaleString()} members
+                        {sub.members.toLocaleString('da-DK')} medlemmer
                       </div>
                     </div>
                   </button>
@@ -178,7 +178,7 @@ export const SubmitPage: React.FC = () => {
             )}
           >
             <FileText size={20} />
-            Post
+            Indlæg
           </button>
           <button
             onClick={() => setPostType('image')}
@@ -190,7 +190,7 @@ export const SubmitPage: React.FC = () => {
             )}
           >
             <ImageIcon size={20} />
-            Images & Video
+            Billeder & Video
           </button>
           <button
             onClick={() => setPostType('link')}
@@ -214,7 +214,7 @@ export const SubmitPage: React.FC = () => {
             )}
           >
             <BarChart3 size={20} />
-            Poll
+            Afstemning
           </button>
         </div>
 
@@ -229,7 +229,7 @@ export const SubmitPage: React.FC = () => {
                   setTitle(e.target.value);
                   setErrors({ ...errors, title: '' });
                 }}
-                placeholder="Title"
+                placeholder="Titel"
                 className={clsx(
                   'reddit-input',
                   errors.title && 'border-reddit-red'
@@ -288,7 +288,7 @@ export const SubmitPage: React.FC = () => {
                     setContent(e.target.value);
                     setErrors({ ...errors, content: '' });
                   }}
-                  placeholder="Text (optional)"
+                  placeholder="Tekst (valgfri)"
                   className={clsx(
                     'w-full p-4 min-h-[200px] resize-y focus:outline-none',
                     errors.content && 'border-reddit-red'
@@ -313,7 +313,7 @@ export const SubmitPage: React.FC = () => {
                   setUrl(e.target.value);
                   setErrors({ ...errors, url: '' });
                 }}
-                placeholder={postType === 'image' ? 'Image/Video URL' : 'URL'}
+                placeholder={postType === 'image' ? 'Billede/Video URL' : 'URL'}
                 className={clsx(
                   'reddit-input',
                   errors.url && 'border-reddit-red'
@@ -331,7 +331,7 @@ export const SubmitPage: React.FC = () => {
           {postType === 'poll' && (
             <div className="mb-4 p-4 bg-reddit-bg-hover rounded text-center">
               <BarChart3 size={48} className="mx-auto mb-2 text-reddit-gray" />
-              <p className="text-sm text-reddit-gray">Poll posts are coming soon!</p>
+              <p className="text-sm text-reddit-gray">Afstemninger kommer snart!</p>
             </div>
           )}
 
@@ -403,7 +403,7 @@ export const SubmitPage: React.FC = () => {
                 onChange={(e) => setIsOC(e.target.checked)}
                 className="w-4 h-4"
               />
-              <span className="text-sm font-medium">Original Content (OC)</span>
+              <span className="text-sm font-medium">Originalt indhold (OI)</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -412,7 +412,7 @@ export const SubmitPage: React.FC = () => {
                 onChange={(e) => setIsSpoiler(e.target.checked)}
                 className="w-4 h-4"
               />
-              <span className="text-sm font-medium">Mark as Spoiler</span>
+              <span className="text-sm font-medium">Marker som spoiler</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -421,7 +421,7 @@ export const SubmitPage: React.FC = () => {
                 onChange={(e) => setIsNSFW(e.target.checked)}
                 className="w-4 h-4"
               />
-              <span className="text-sm font-medium">Mark as NSFW</span>
+              <span className="text-sm font-medium">Marker som NSFW</span>
             </label>
           </div>
 
@@ -432,13 +432,13 @@ export const SubmitPage: React.FC = () => {
               onClick={() => navigate(-1)}
               className="btn-ghost"
             >
-              Cancel
+              Annuller
             </button>
             <button
               type="submit"
               className="btn-primary"
             >
-              Post
+              Opret
             </button>
           </div>
         </form>
@@ -447,10 +447,10 @@ export const SubmitPage: React.FC = () => {
       {/* Posting Guidelines */}
       <div className="mt-4 text-xs text-reddit-gray">
         <p>
-          By posting, you agree to Reddit's{' '}
-          <Link to="/terms" className="text-reddit-blue hover:underline">Terms of Service</Link>
-          {' '}and{' '}
-          <Link to="/content-policy" className="text-reddit-blue hover:underline">Content Policy</Link>
+          Ved at oprette indlæg accepterer du VIA Pædagogers{' '}
+          <Link to="/terms" className="text-reddit-blue hover:underline">Brugsbetingelser</Link>
+          {' '}og{' '}
+          <Link to="/content-policy" className="text-reddit-blue hover:underline">Indholdspolitik</Link>
         </p>
       </div>
     </div>

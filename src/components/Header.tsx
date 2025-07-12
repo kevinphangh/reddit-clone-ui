@@ -51,14 +51,14 @@ export const Header: React.FC<HeaderProps> = ({
             <circle cx="16" cy="16" r="16" fill="#FF4500"/>
             <path d="M22 16c0-1.1-.9-2-2-2-.6 0-1.1.3-1.5.7-1.3-.9-3.1-1.5-5.1-1.6l.9-4.2 2.8.6c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5-.7-1.5-1.5-1.5c-.6 0-1.1.4-1.3.9l-3.1-.7c-.1 0-.2 0-.3 0-.1.1-.1.2-.2.3l-.9 4.5c-2 .1-3.7.7-5.1 1.6-.4-.4-.9-.7-1.5-.7-1.1 0-2 .9-2 2 0 .8.5 1.5 1.1 1.8 0 .2-.1.4-.1.7 0 3.3 3.9 6 8.6 6s8.6-2.7 8.6-6c0-.2 0-.5-.1-.7.7-.3 1.1-1 1.1-1.8zM11 17.5c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5-.7 1.5-1.5 1.5-1.5-.7-1.5-1.5zm8.1 4.1c-1 1-3 1.1-3.6 1.1s-2.5-.1-3.6-1.1c-.1-.1-.1-.3 0-.5.1-.1.3-.1.5 0 .7.7 2.2.9 3.1.9s2.4-.2 3.1-.9c.1-.1.3-.1.5 0 .1.2.1.4 0 .5zm-.6-2.6c-.8 0-1.5-.7-1.5-1.5s.7-1.5 1.5-1.5 1.5.7 1.5 1.5-.7 1.5-1.5 1.5z" fill="white"/>
           </svg>
-          <span className="hidden md:block text-xl font-bold text-reddit-orange">reddit</span>
+          <span className="hidden md:block text-xl font-bold text-reddit-orange">VIA Pædagoger</span>
         </Link>
 
         {/* Home Dropdown */}
         <div className="relative hidden lg:block">
           <button className="flex items-center gap-2 px-3 py-1.5 hover:bg-reddit-bg-hover rounded">
             <Home size={20} />
-            <span className="font-medium">Home</span>
+            <span className="font-medium">Hjem</span>
             <ChevronDown size={16} />
           </button>
         </div>
@@ -71,7 +71,7 @@ export const Header: React.FC<HeaderProps> = ({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search Reddit"
+              placeholder="Søg i forum"
               className="w-full h-[36px] pl-10 pr-4 bg-reddit-bg-hover hover:bg-white hover:border-reddit-blue focus:bg-white rounded-full border border-transparent focus:border-reddit-blue focus:outline-none transition-all"
             />
           </div>
@@ -94,7 +94,7 @@ export const Header: React.FC<HeaderProps> = ({
               {/* Get Coins */}
               <button className="hidden lg:flex items-center gap-1 px-3 py-1.5 hover:bg-reddit-bg-hover rounded">
                 <Coins size={20} className="text-reddit-gray" />
-                <span className="text-sm font-medium">Get Coins</span>
+                <span className="text-sm font-medium">Få point</span>
               </button>
 
               {/* Chat */}
@@ -122,15 +122,15 @@ export const Header: React.FC<HeaderProps> = ({
                     <Link to="/submit" className="dropdown-item flex items-center gap-3">
                       <FileText size={20} />
                       <div>
-                        <div className="font-medium">Create Post</div>
-                        <div className="text-xs text-reddit-gray">Share your thoughts with the community</div>
+                        <div className="font-medium">Opret indlæg</div>
+                        <div className="text-xs text-reddit-gray">Del dine tanker med fællesskabet</div>
                       </div>
                     </Link>
                     <Link to="/subreddits/create" className="dropdown-item flex items-center gap-3">
                       <Users size={20} />
                       <div>
-                        <div className="font-medium">Create Community</div>
-                        <div className="text-xs text-reddit-gray">Build and grow a community</div>
+                        <div className="font-medium">Opret fællesskab</div>
+                        <div className="text-xs text-reddit-gray">Byg og udvid et fællesskab</div>
                       </div>
                     </Link>
                   </div>
@@ -163,24 +163,24 @@ export const Header: React.FC<HeaderProps> = ({
                 {showUserMenu && (
                   <div className="dropdown-menu w-[250px]">
                     <div className="px-4 py-2 border-b border-reddit-lightGray">
-                      <div className="text-xs text-reddit-gray mb-1">MY STUFF</div>
+                      <div className="text-xs text-reddit-gray mb-1">MINE TING</div>
                     </div>
                     <Link to={`/user/${username}`} className="dropdown-item flex items-center gap-3">
                       <User size={16} />
-                      <span>Profile</span>
+                      <span>Profil</span>
                     </Link>
                     <Link to="/settings" className="dropdown-item flex items-center gap-3">
                       <Settings size={16} />
-                      <span>User Settings</span>
+                      <span>Brugerindstillinger</span>
                     </Link>
                     <button className="dropdown-item flex items-center gap-3 w-full">
                       <Moon size={16} />
-                      <span>Dark Mode</span>
+                      <span>Mørk tilstand</span>
                     </button>
                     <div className="border-t border-reddit-lightGray my-1"></div>
                     <button className="dropdown-item flex items-center gap-3 w-full text-reddit-gray">
                       <LogOut size={16} />
-                      <span>Log Out</span>
+                      <span>Log ud</span>
                     </button>
                   </div>
                 )}
@@ -189,10 +189,10 @@ export const Header: React.FC<HeaderProps> = ({
           ) : (
             <>
               <Link to="/register" className="hidden sm:flex items-center gap-2 px-8 py-1.5 bg-reddit-orange hover:bg-reddit-darkOrange text-white font-bold rounded-full transition-colors">
-                Sign Up
+                Tilmeld
               </Link>
               <Link to="/login" className="px-8 py-1.5 border border-reddit-blue text-reddit-blue hover:bg-reddit-blue hover:text-white font-bold rounded-full transition-colors">
-                Log In
+                Log ind
               </Link>
               <button className="p-2 hover:bg-reddit-bg-hover rounded lg:hidden">
                 <User size={20} className="text-reddit-gray" />

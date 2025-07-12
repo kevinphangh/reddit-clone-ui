@@ -53,7 +53,7 @@ export const Comment: React.FC<CommentProps> = ({
           <div className="comment-thread-line ml-2"></div>
         )}
         <div className="pl-4 py-2 text-reddit-gray text-sm italic">
-          [deleted]
+          [slettet]
         </div>
       </div>
     );
@@ -66,7 +66,7 @@ export const Comment: React.FC<CommentProps> = ({
           <div className="comment-thread-line ml-2"></div>
         )}
         <div className="pl-4 py-2 text-reddit-gray text-sm italic">
-          [removed]
+          [fjernet]
         </div>
       </div>
     );
@@ -88,7 +88,7 @@ export const Comment: React.FC<CommentProps> = ({
         {/* Header */}
         <div className="flex items-center gap-2 text-xs mb-1">
           {comment.isStickied && (
-            <span className="text-reddit-green font-bold">STICKIED COMMENT</span>
+            <span className="text-reddit-green font-bold">FASTGJORT KOMMENTAR</span>
           )}
           
           {/* Collapse Button */}
@@ -129,7 +129,7 @@ export const Comment: React.FC<CommentProps> = ({
             vote === 1 && 'text-reddit-orange',
             vote === -1 && 'text-reddit-blue'
           )}>
-            {formatScore(currentScore)} {currentScore === 1 ? 'point' : 'points'}
+            {formatScore(currentScore)} {currentScore === 1 ? 'point' : 'point'}
           </span>
 
           {/* Time */}
@@ -138,7 +138,7 @@ export const Comment: React.FC<CommentProps> = ({
           </span>
           
           {comment.editedAt && (
-            <span className="text-reddit-gray">(edited)</span>
+            <span className="text-reddit-gray">(redigeret)</span>
           )}
 
           {/* Awards */}
@@ -196,14 +196,14 @@ export const Comment: React.FC<CommentProps> = ({
                   className="text-xs font-bold text-reddit-gray hover:bg-reddit-bg-hover px-2 py-1 rounded"
                 >
                   <MessageSquare size={14} className="inline mr-1" />
-                  Reply
+                  Svar
                 </button>
               )}
 
               {/* Share */}
               <button className="text-xs font-bold text-reddit-gray hover:bg-reddit-bg-hover px-2 py-1 rounded">
                 <Share size={14} className="inline mr-1" />
-                Share
+                Del
               </button>
 
               {/* Save */}
@@ -215,7 +215,7 @@ export const Comment: React.FC<CommentProps> = ({
                 )}
               >
                 <Bookmark size={14} className="inline mr-1" fill={saved ? 'currentColor' : 'none'} />
-                {saved ? 'Saved' : 'Save'}
+                {saved ? 'Gemt' : 'Gem'}
               </button>
 
               {/* More Options */}
@@ -231,15 +231,15 @@ export const Comment: React.FC<CommentProps> = ({
                   <div className="dropdown-menu">
                     <button className="dropdown-item flex items-center gap-2">
                       <Edit2 size={14} />
-                      Edit
+                      Rediger
                     </button>
                     <button className="dropdown-item flex items-center gap-2">
                       <Trash2 size={14} />
-                      Delete
+                      Slet
                     </button>
                     <button className="dropdown-item flex items-center gap-2">
                       <Flag size={14} />
-                      Report
+                      Anmeld
                     </button>
                   </div>
                 )}
@@ -251,18 +251,18 @@ export const Comment: React.FC<CommentProps> = ({
               <div className="mt-3 mb-3">
                 <textarea 
                   className="reddit-textarea text-sm"
-                  placeholder="What are your thoughts?"
+                  placeholder="Hvad tænker du?"
                   rows={4}
                 />
                 <div className="flex gap-2 mt-2">
                   <button className="btn-primary text-xs px-4 py-1.5">
-                    Reply
+                    Svar
                   </button>
                   <button 
                     onClick={() => setShowReplyForm(false)}
                     className="btn-ghost text-xs px-4 py-1.5"
                   >
-                    Cancel
+                    Annuller
                   </button>
                 </div>
               </div>
@@ -289,7 +289,7 @@ export const Comment: React.FC<CommentProps> = ({
                 to={`/r/${comment.post.subreddit.name}/comments/${comment.post.id}?thread=${comment.id}`}
                 className="text-xs text-reddit-blue hover:underline mt-2 inline-block"
               >
-                Continue this thread →
+                Fortsæt denne tråd →
               </Link>
             )}
           </>
@@ -299,7 +299,7 @@ export const Comment: React.FC<CommentProps> = ({
         {collapsed && (
           <div className="text-xs text-reddit-gray">
             {comment.replies.length > 0 && (
-              <span>{comment.replies.length} more {comment.replies.length === 1 ? 'reply' : 'replies'}</span>
+              <span>{comment.replies.length} {comment.replies.length === 1 ? 'svar mere' : 'svar mere'}</span>
             )}
           </div>
         )}
