@@ -21,10 +21,10 @@ export const Layout: React.FC<LayoutProps> = ({
   karma
 }) => {
   return (
-    <div className="min-h-screen bg-via-bg-light">
+    <div className="min-h-screen bg-via-bg-light text-via-text-primary">
       <Header isLoggedIn={isLoggedIn} username={username} karma={karma} />
       
-      <div className="pt-[48px]">
+      <div className="pt-[64px]">
         <div className="max-w-[1280px] mx-auto px-4 py-5">
           <div className="flex gap-6">
             {/* Main Content */}
