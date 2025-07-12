@@ -1,36 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { PostCard } from '../components/PostCard';
-import { SortBar } from '../components/SortBar';
 import { mockPosts } from '../data/mockData';
-import { SORT_OPTIONS } from '../utils/constants';
 
 export const PopularPage: React.FC = () => {
-  const [currentSort] = useState(SORT_OPTIONS.HOT);
-  const [currentView, setCurrentView] = useState<'card' | 'classic' | 'compact'>('card');
-
   // Show most popular posts (sorted by score)
   const popularPosts = [...mockPosts].sort((a, b) => b.score - a.score);
 
   return (
-    <div>
-      <div className="mb-4">
-        <h1 className="text-xl font-bold">Populært</h1>
-        <p className="text-sm text-via-gray">De mest populære indlæg fra alle fællesskaber</p>
+    <div className="space-y-4">
+      <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <h1 className="text-xl font-bold text-gray-900">Populære indlæg</h1>
+        <p className="text-gray-600">De mest populære fra alle fællesskaber</p>
       </div>
       
-      <SortBar 
-        currentSort={currentSort}
-        currentView={currentView}
-        onViewChange={setCurrentView}
-      />
-      
-      <div className="space-y-3">
+      <div className="space-y-4">
         {popularPosts.map(post => (
-          <PostCard 
-            key={post.id} 
-            post={post} 
-            view={currentView}
-          />
+          <PostCard key={post.id} post={post} />
         ))}
       </div>
     </div>

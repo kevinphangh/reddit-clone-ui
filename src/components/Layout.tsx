@@ -17,29 +17,28 @@ export const Layout: React.FC<LayoutProps> = ({
   showSidebar = true,
   subreddit,
   isLoggedIn = false,
-  username,
-  karma
+  username
 }) => {
   return (
-    <div className="min-h-screen bg-via-bg-light text-via-darkest">
-      <Header isLoggedIn={isLoggedIn} username={username} karma={karma} />
+    <div className="min-h-screen bg-gray-50">
+      <Header isLoggedIn={isLoggedIn} username={username} />
       
-      <div className="pt-[64px]">
-        <div className="max-w-[1280px] mx-auto px-4 py-5">
-          <div className="flex gap-6">
-            {/* Main Content */}
-            <main className="flex-1 min-w-0">
-              {children}
-            </main>
-            
-            {/* Sidebar */}
-            {showSidebar && (
+      <div className="max-w-6xl mx-auto px-4 py-6">
+        <div className="flex gap-6">
+          {/* Main Content */}
+          <main className="flex-1">
+            {children}
+          </main>
+          
+          {/* Sidebar */}
+          {showSidebar && (
+            <aside className="w-80 hidden lg:block">
               <Sidebar 
                 subreddit={subreddit} 
                 showSubredditInfo={!!subreddit}
               />
-            )}
-          </div>
+            </aside>
+          )}
         </div>
       </div>
     </div>

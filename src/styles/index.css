@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,127 +6,19 @@
 
 @layer base {
   html {
-    font-family: 'Inter', 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    scroll-behavior: smooth;
+    font-family: 'Inter', system-ui, sans-serif;
   }
 
   body {
-    @apply bg-via-bg-light text-via-darkest font-normal leading-relaxed;
-  }
-  
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-display font-semibold text-balance;
-  }
-  
-  p {
-    @apply text-via-dark leading-relaxed;
-  }
-
-  /* Custom scrollbar styles to match Reddit */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    @apply bg-transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    @apply bg-via-medium rounded;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-via-dark;
+    @apply bg-gray-50 text-gray-900;
   }
 }
 
-@layer components {
-  /* VIA-style button variations */
-  .btn-primary {
-    @apply bg-via-primary text-white font-semibold py-3 px-6 rounded-via-lg hover:bg-via-darkBlue active:scale-95 transition-all duration-200 shadow-via hover:shadow-via-hover;
-  }
-
-  .btn-secondary {
-    @apply bg-transparent text-via-primary border-2 border-via-primary font-semibold py-3 px-6 rounded-via-lg hover:bg-via-primary hover:text-white transition-all duration-200 shadow-via hover:shadow-via-hover;
-  }
-
-  .btn-ghost {
-    @apply bg-transparent text-via-dark hover:bg-via-bg-hover hover:text-via-darkest font-medium py-2 px-4 rounded-via transition-all duration-200;
-  }
-
-  /* VIA-style card */
-  .via-card {
-    @apply bg-white rounded-via-lg border border-via-border-light hover:border-via-border hover:shadow-via-hover transition-all duration-300;
-  }
-
-  /* Vote buttons */
-  .vote-button {
-    @apply p-2 rounded-via hover:bg-via-bg-hover transition-all duration-200 hover:scale-105 active:scale-95;
-  }
-
-  .vote-button.upvoted {
-    @apply text-via-secondary bg-via-secondary/10;
-  }
-
-  .vote-button.downvoted {
-    @apply text-via-primary bg-via-primary/10;
-  }
-
-  /* VIA-style input */
-  .via-input {
-    @apply w-full px-4 py-3 bg-via-bg-muted rounded-via-lg border border-via-light focus:border-via-primary focus:outline-none focus:ring-2 focus:ring-via-primary/20 transition-all duration-200 placeholder:text-via-medium;
-  }
-
-  /* VIA-style textarea */
-  .via-textarea {
-    @apply w-full px-4 py-3 bg-via-bg-muted rounded-via-lg border border-via-light focus:border-via-primary focus:outline-none focus:ring-2 focus:ring-via-primary/20 resize-y min-h-[120px] transition-all duration-200 placeholder:text-via-medium;
-  }
-
-  /* Dropdown menu */
-  .dropdown-menu {
-    @apply absolute right-0 mt-2 py-2 bg-white rounded-via-lg shadow-via-lg border border-via-light z-50 min-w-[200px] animate-slide-up;
-  }
-
-  .dropdown-item {
-    @apply block w-full px-4 py-3 text-sm text-left text-via-dark hover:bg-via-bg-hover hover:text-via-darkest transition-all duration-200 font-medium;
-  }
-
-  /* Tab styles */
-  .tab {
-    @apply px-4 py-3 font-medium text-via-medium hover:text-via-darkest transition-all duration-200 rounded-via hover:bg-via-bg-hover;
-  }
-
-  .tab.active {
-    @apply text-via-primary bg-via-primary/10 border-b-2 border-via-primary;
-  }
-
-  /* VIA comment threading lines */
-  .comment-thread-line {
-    @apply absolute left-0 top-0 bottom-0 w-[2px] bg-via-light hover:bg-via-primary cursor-pointer transition-all duration-200 rounded-full;
-  }
-
-  /* Navigation pills for header */
-  .nav-pill {
-    @apply flex items-center gap-2 px-4 py-2 text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 rounded-via-lg transition-all duration-200 hover:scale-105 active:scale-95;
-  }
-
-  .nav-pill-active {
-    @apply text-white bg-white/20 shadow-sm ring-1 ring-white/30;
-  }
-  
-  /* Utility classes for enhanced UX */
-  .hover-lift {
-    @apply transition-transform duration-200 hover:-translate-y-1 hover:shadow-via-lg;
-  }
-  
-  .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-via-primary/20 focus:border-via-primary;
-  }
-  
-  .smooth-hover {
-    @apply transition-all duration-300 ease-out;
+@layer utilities {
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 }

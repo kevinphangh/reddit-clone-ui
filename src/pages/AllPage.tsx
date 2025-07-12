@@ -1,38 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { PostCard } from '../components/PostCard';
-import { SortBar } from '../components/SortBar';
 import { mockPosts } from '../data/mockData';
-import { SORT_OPTIONS } from '../utils/constants';
 
 export const AllPage: React.FC = () => {
-  const [currentSort] = useState(SORT_OPTIONS.NEW);
-  const [currentView, setCurrentView] = useState<'card' | 'classic' | 'compact'>('card');
-
   // Show all posts chronologically
   const allPosts = [...mockPosts].sort((a, b) => 
     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 
   return (
-    <div>
-      <div className="mb-4">
-        <h1 className="text-xl font-bold">Alle</h1>
-        <p className="text-sm text-via-gray">Alle indlæg fra alle fællesskaber</p>
+    <div className="space-y-4">
+      <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <h1 className="text-xl font-bold text-gray-900">Alle indlæg</h1>
+        <p className="text-gray-600">Fra alle fællesskaber</p>
       </div>
       
-      <SortBar 
-        currentSort={currentSort}
-        currentView={currentView}
-        onViewChange={setCurrentView}
-      />
-      
-      <div className="space-y-3">
+      <div className="space-y-4">
         {allPosts.map(post => (
-          <PostCard 
-            key={post.id} 
-            post={post} 
-            view={currentView}
-          />
+          <PostCard key={post.id} post={post} />
         ))}
       </div>
     </div>

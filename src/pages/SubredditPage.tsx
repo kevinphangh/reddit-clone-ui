@@ -1,15 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import { PostCard } from '../components/PostCard';
-import { SortBar } from '../components/SortBar';
 import { mockPosts } from '../data/mockData';
-import { SORT_OPTIONS } from '../utils/constants';
 
 export const SubredditPage: React.FC = () => {
   const { subreddit } = useParams();
-  const [currentSort] = useState(SORT_OPTIONS.HOT);
-  const [currentView, setCurrentView] = useState<'card' | 'classic' | 'compact'>('card');
-
   
   // Filter posts for this subreddit
   const subredditPosts = mockPosts.filter(post => 
@@ -17,26 +12,20 @@ export const SubredditPage: React.FC = () => {
   );
 
   return (
-    <div>
-      <SortBar 
-        currentSort={currentSort}
-        currentView={currentView}
-        onViewChange={setCurrentView}
-      />
+    <div className="space-y-4">
+      <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <h1 className="text-2xl font-bold text-gray-900">{subreddit}</h1>
+        <p className="text-gray-600">Fællesskab</p>
+      </div>
       
-      <div className="space-y-3">
+      <div className="space-y-4">
         {subredditPosts.length > 0 ? (
           subredditPosts.map(post => (
-            <PostCard 
-              key={post.id} 
-              post={post} 
-              view={currentView}
-              hideSubreddit={true}
-            />
+            <PostCard key={post.id} post={post} />
           ))
         ) : (
-          <div className="via-card p-8 text-center">
-            <p className="text-via-gray">No posts in r/{subreddit} yet</p>
+          <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
+            <p className="text-gray-500">Ingen indlæg i {subreddit} endnu</p>
           </div>
         )}
       </div>
