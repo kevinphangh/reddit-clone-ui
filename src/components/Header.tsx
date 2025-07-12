@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { Search, Plus } from 'lucide-react';
+import { SearchDropdown } from './SearchDropdown';
+import { mockPosts } from '../data/mockData';
+import { useClickOutside } from '../hooks/useClickOutside';
 
 interface HeaderProps {
   isLoggedIn?: boolean;
@@ -12,13 +15,24 @@ export const Header: React.FC<HeaderProps> = ({
   username = 'bruger'
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const navigate = useNavigate();
+  const [showResults, setShowResults] = useState(false);
+  const searchRef = useClickOutside<HTMLDivElement>(() => setShowResults(false), showResults);
+
+  // Live search results
+  const searchResults = useMemo(() => {
+    if (!searchQuery.trim()) return [];
+    
+    const query = searchQuery.toLowerCase();
+    return mockPosts
+      .filter(post => 
+        post.title.toLowerCase().includes(query) ||
+        post.content?.toLowerCase().includes(query)
+      )
+      .slice(0, 5); // Max 5 results
+  }, [searchQuery]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
-    }
   };
 
   return (
@@ -31,15 +45,28 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Search */}
         <form onSubmit={handleSearch} className="flex-1 max-w-md mx-8">
-          <div className="relative">
+          <div className="relative" ref={searchRef}>
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
             <input
               type="text"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setShowResults(true);
+              }}
+              onFocus={() => setShowResults(true)}
               placeholder="Søg..."
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
             />
+            {showResults && searchResults.length > 0 && (
+              <SearchDropdown 
+                results={searchResults} 
+                onClose={() => {
+                  setSearchQuery('');
+                  setShowResults(false);
+                }}
+              />
+            )}
           </div>
         </form>
 

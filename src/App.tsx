@@ -6,11 +6,8 @@ import { SubredditPage } from './pages/SubredditPage';
 import { PostPage } from './pages/PostPage';
 import { UserPage } from './pages/UserPage';
 import { SubmitPage } from './pages/SubmitPage';
-import { SearchPage } from './pages/SearchPage';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
-import { SettingsPage } from './pages/SettingsPage';
-import { CreateCommunityPage } from './pages/CreateCommunityPage';
 import { PopularPage } from './pages/PopularPage';
 import { AllPage } from './pages/AllPage';
 import { StaticPage } from './pages/StaticPage';
@@ -53,11 +50,6 @@ function App() {
             <SubmitPage />
           </Layout>
         } />
-        <Route path="/search" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username}>
-            <SearchPage />
-          </Layout>
-        } />
         <Route path="/login" element={
           <Layout isLoggedIn={isLoggedIn} username={currentUser.username}>
             <LoginPage />
@@ -66,16 +58,6 @@ function App() {
         <Route path="/register" element={
           <Layout isLoggedIn={isLoggedIn} username={currentUser.username}>
             <RegisterPage />
-          </Layout>
-        } />
-        <Route path="/settings" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username}>
-            <SettingsPage />
-          </Layout>
-        } />
-        <Route path="/subreddits/create" element={
-          <Layout isLoggedIn={isLoggedIn} username={currentUser.username}>
-            <CreateCommunityPage />
           </Layout>
         } />
         <Route path="/r/popular" element={
