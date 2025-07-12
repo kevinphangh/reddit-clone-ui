@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowUp, ArrowDown, MessageSquare } from 'lucide-react';
 import { Post } from '../types';
 import { formatTimeAgo, formatScore } from '../utils/formatting';
@@ -10,8 +10,10 @@ interface PostCardProps {
 
 export const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const [vote, setVote] = useState(post.userVote || 0);
+  const navigate = useNavigate();
 
-  const handleVote = (direction: 1 | -1) => {
+  const handleVote = (direction: 1 | -1, e: React.MouseEvent) => {
+    e.stopPropagation();
     if (vote === direction) {
       setVote(0);
     } else {
@@ -19,16 +21,28 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
     }
   };
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Only navigate if clicking on the card itself, not on links or buttons
+    if ((e.target as HTMLElement).closest('a, button')) {
+      return;
+    }
+    navigate(`/r/${post.subreddit.name}/comments/${post.id}`);
+  };
+
   const currentScore = post.score + (vote - (post.userVote || 0));
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow">
+    <div 
+      className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow cursor-pointer"
+      onClick={handleCardClick}
+    >
       <div className="flex gap-4">
         {/* Vote buttons */}
         <div className="flex flex-col items-center gap-1">
           <button 
-            onClick={() => handleVote(1)}
+            onClick={(e) => handleVote(1, e)}
             className={`p-1 rounded hover:bg-gray-100 ${vote === 1 ? 'text-blue-600' : 'text-gray-400'}`}
+            aria-label="Stem op"
           >
             <ArrowUp size={20} />
           </button>
@@ -36,8 +50,9 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
             {formatScore(currentScore)}
           </span>
           <button 
-            onClick={() => handleVote(-1)}
+            onClick={(e) => handleVote(-1, e)}
             className={`p-1 rounded hover:bg-gray-100 ${vote === -1 ? 'text-red-500' : 'text-gray-400'}`}
+            aria-label="Stem ned"
           >
             <ArrowDown size={20} />
           </button>

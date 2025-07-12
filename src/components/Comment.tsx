@@ -17,6 +17,7 @@ import {
 import { Comment as CommentType } from '../types';
 import { formatTimeAgo, formatScore } from '../utils/formatting';
 import { clsx } from 'clsx';
+import { useClickOutside } from '../hooks/useClickOutside';
 
 interface CommentProps {
   comment: CommentType;
@@ -36,6 +37,7 @@ export const Comment: React.FC<CommentProps> = ({
   const [collapsed, setCollapsed] = useState(comment.isCollapsed || false);
   const [showActions, setShowActions] = useState(false);
   const [showReplyForm, setShowReplyForm] = useState(false);
+  const dropdownRef = useClickOutside<HTMLDivElement>(() => setShowActions(false), showActions);
 
   const handleVote = (direction: 1 | -1) => {
     if (vote === direction) {
@@ -132,8 +134,7 @@ export const Comment: React.FC<CommentProps> = ({
           {/* Score */}
           <span className={clsx(
             'font-bold',
-            vote === 1 && 'text-orange-500',
-            vote === -1 && 'text-blue-600'
+            vote === 1 ? 'text-blue-600' : vote === -1 ? 'text-red-500' : 'text-gray-600'
           )}>
             {formatScore(currentScore)} {currentScore === 1 ? 'point' : 'point'}
           </span>
@@ -148,7 +149,7 @@ export const Comment: React.FC<CommentProps> = ({
           )}
 
           {/* Awards */}
-          {comment.awards.length > 0 && (
+          {comment.awards && comment.awards.length > 0 && (
             <div className="flex items-center gap-0.5">
               {comment.awards.map((award, index) => (
                 <div key={index} className="flex items-center">
@@ -170,7 +171,7 @@ export const Comment: React.FC<CommentProps> = ({
         {/* Comment Body */}
         {!collapsed && (
           <>
-            <div className="text-sm mb-2 whitespace-pre-wrap break-words">
+            <div className="text-gray-700 text-sm mb-2 whitespace-pre-wrap break-words leading-relaxed">
               {comment.body}
             </div>
 
@@ -179,14 +180,14 @@ export const Comment: React.FC<CommentProps> = ({
               {/* Vote Buttons */}
               <button 
                 onClick={() => handleVote(1)}
-                className={clsx('p-1 rounded hover:bg-gray-100', vote === 1 && 'text-orange-500')}
+                className={clsx('p-1 rounded hover:bg-gray-100 transition-colors', vote === 1 ? 'text-blue-600' : 'text-gray-400')}
                 aria-label="Upvote"
               >
                 <ArrowUp size={16} />
               </button>
               <button 
                 onClick={() => handleVote(-1)}
-                className={clsx('p-1 rounded hover:bg-gray-100', vote === -1 && 'text-blue-600')}
+                className={clsx('p-1 rounded hover:bg-gray-100 transition-colors', vote === -1 ? 'text-red-500' : 'text-gray-400')}
                 aria-label="Downvote"
               >
                 <ArrowDown size={16} />
@@ -225,7 +226,7 @@ export const Comment: React.FC<CommentProps> = ({
               </button>
 
               {/* More Options */}
-              <div className="relative">
+              <div className="relative" ref={dropdownRef}>
                 <button 
                   onClick={() => setShowActions(!showActions)}
                   className="text-gray-500 hover:bg-gray-100 p-1 rounded"
@@ -256,7 +257,7 @@ export const Comment: React.FC<CommentProps> = ({
             {showReplyForm && (
               <div className="mt-3 mb-3">
                 <textarea 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm resize-none focus:outline-none focus:border-blue-500 text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 text-sm"
                   placeholder="Hvad tænker du?"
                   rows={4}
                 />
@@ -275,7 +276,7 @@ export const Comment: React.FC<CommentProps> = ({
             )}
 
             {/* Nested Replies */}
-            {comment.replies.length > 0 && (
+            {comment.replies && comment.replies.length > 0 && (
               <div className="mt-3">
                 {comment.replies.map(reply => (
                   <Comment 
@@ -290,7 +291,7 @@ export const Comment: React.FC<CommentProps> = ({
             )}
 
             {/* Continue Thread Link */}
-            {depth >= maxDepth && comment.replies.length > 0 && (
+            {depth >= maxDepth && comment.replies && comment.replies.length > 0 && comment.post && comment.post.subreddit && (
               <Link 
                 to={`/r/${comment.post.subreddit.name}/comments/${comment.post.id}?thread=${comment.id}`}
                 className="text-xs text-blue-600 hover:underline mt-2 inline-block"
@@ -304,7 +305,7 @@ export const Comment: React.FC<CommentProps> = ({
         {/* Collapsed State */}
         {collapsed && (
           <div className="text-xs text-gray-500">
-            {comment.replies.length > 0 && (
+            {comment.replies && comment.replies.length > 0 && (
               <span>{comment.replies.length} {comment.replies.length === 1 ? 'svar mere' : 'svar mere'}</span>
             )}
           </div>

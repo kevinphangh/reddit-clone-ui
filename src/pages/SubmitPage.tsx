@@ -18,6 +18,7 @@ import {
   X
 } from 'lucide-react';
 import { clsx } from 'clsx';
+import { useClickOutside } from '../hooks/useClickOutside';
 
 export const SubmitPage: React.FC = () => {
   const navigate = useNavigate();
@@ -33,6 +34,9 @@ export const SubmitPage: React.FC = () => {
   const [showSubredditDropdown, setShowSubredditDropdown] = useState(false);
   const [showFlairDropdown, setShowFlairDropdown] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  
+  const subredditDropdownRef = useClickOutside<HTMLDivElement>(() => setShowSubredditDropdown(false), showSubredditDropdown);
+  const flairDropdownRef = useClickOutside<HTMLDivElement>(() => setShowFlairDropdown(false), showFlairDropdown);
 
   // Mock subreddits for dropdown
   const mockSubreddits = [
@@ -102,7 +106,7 @@ export const SubmitPage: React.FC = () => {
 
       {/* Community Selector */}
       <div className="bg-white border border-gray-200 rounded-lg p-4 mb-4">
-        <div className="relative">
+        <div className="relative" ref={subredditDropdownRef}>
           <button
             onClick={() => setShowSubredditDropdown(!showSubredditDropdown)}
             className={clsx(
@@ -130,7 +134,7 @@ export const SubmitPage: React.FC = () => {
                 <input
                   type="text"
                   placeholder="Søg fællesskaber"
-                  className="w-full w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm"
                 />
               </div>
               <div className="max-h-[300px] overflow-y-auto">
@@ -142,7 +146,7 @@ export const SubmitPage: React.FC = () => {
                       setShowSubredditDropdown(false);
                       setErrors({ ...errors, subreddit: '' });
                     }}
-                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-3 w-full"
+                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-3"
                   >
                     <span className="text-2xl">{sub.icon}</span>
                     <div className="text-left">
@@ -337,7 +341,7 @@ export const SubmitPage: React.FC = () => {
 
           {/* Flair Selector */}
           <div className="mb-4">
-            <div className="relative">
+            <div className="relative" ref={flairDropdownRef}>
               <button
                 type="button"
                 onClick={() => setShowFlairDropdown(!showFlairDropdown)}

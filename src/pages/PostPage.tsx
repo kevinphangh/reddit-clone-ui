@@ -17,6 +17,7 @@ import { CommentSection } from '../components/CommentSection';
 import { mockPosts, mockComments } from '../data/mockData';
 import { formatTimeAgo, formatScore, getDomainFromUrl } from '../utils/formatting';
 import { clsx } from 'clsx';
+import { useClickOutside } from '../hooks/useClickOutside';
 
 export const PostPage: React.FC = () => {
   const { postId } = useParams();
@@ -36,6 +37,7 @@ export const PostPage: React.FC = () => {
   const [vote, setVote] = useState(post.userVote || 0);
   const [saved, setSaved] = useState(post.saved || false);
   const [showActions, setShowActions] = useState(false);
+  const dropdownRef = useClickOutside<HTMLDivElement>(() => setShowActions(false), showActions);
 
   const handleVote = (direction: 1 | -1) => {
     if (vote === direction) {
@@ -53,24 +55,23 @@ export const PostPage: React.FC = () => {
       <div className="bg-white border border-gray-200 rounded-lg mb-4">
         <div className="flex">
           {/* Vote Section */}
-          <div className="flex flex-col items-center p-2 bg-gray-100">
+          <div className="flex flex-col items-center p-2 bg-gray-50">
             <button 
               onClick={() => handleVote(1)}
-              className={clsx('p-1 rounded hover:bg-gray-100', vote === 1 && 'text-orange-500')}
+              className={clsx('p-1 rounded hover:bg-gray-200 transition-colors', vote === 1 ? 'text-blue-600' : 'text-gray-400')}
               aria-label="Upvote"
             >
               <ArrowUp size={24} />
             </button>
             <span className={clsx(
               'text-base font-bold my-1',
-              vote === 1 && 'text-orange-500',
-              vote === -1 && 'text-blue-600'
+              vote === 1 ? 'text-blue-600' : vote === -1 ? 'text-red-500' : 'text-gray-600'
             )}>
               {formatScore(currentScore)}
             </span>
             <button 
               onClick={() => handleVote(-1)}
-              className={clsx('p-1 rounded hover:bg-gray-100', vote === -1 && 'text-blue-600')}
+              className={clsx('p-1 rounded hover:bg-gray-200 transition-colors', vote === -1 ? 'text-red-500' : 'text-gray-400')}
               aria-label="Downvote"
             >
               <ArrowDown size={24} />
@@ -81,26 +82,26 @@ export const PostPage: React.FC = () => {
           <div className="flex-1 p-3">
             {/* Meta Info */}
             <div className="flex items-center gap-1 text-xs text-gray-500 mb-2">
-              <Link to={`/r/${post.subreddit.name}`} className="font-bold hover:underline">
-                r/{post.subreddit.name}
+              <Link to={`/r/${post.subreddit.name}`} className="font-bold hover:underline text-gray-900">
+                {post.subreddit.name}
               </Link>
               <span>•</span>
-              <span>Posted by</span>
+              <span>af</span>
               <Link to={`/user/${post.author.username}`} className="hover:underline">
-                u/{post.author.username}
+                {post.author.username}
               </Link>
               <span>{formatTimeAgo(post.createdAt)}</span>
-              {post.editedAt && <span>(edited)</span>}
+              {post.editedAt && <span>(redigeret)</span>}
               {post.isPinned && (
                 <>
                   <span>•</span>
-                  <span className="text-green-600 font-bold">PINNED</span>
+                  <span className="text-green-600 font-bold">FASTGJORT</span>
                 </>
               )}
             </div>
 
             {/* Title and Flairs */}
-            <h1 className="text-xl font-medium mb-2">
+            <h1 className="text-xl font-semibold text-gray-900 mb-3">
               {post.title}
               {' '}
               {post.flair && (
@@ -115,7 +116,7 @@ export const PostPage: React.FC = () => {
                 </span>
               )}
               {post.isNSFW && (
-                <span className="text-sm font-bold text-red-500 ml-2">NSFW</span>
+                <span className="text-sm font-bold text-red-500 ml-2">18+</span>
               )}
               {post.isSpoiler && (
                 <span className="text-sm font-bold text-gray-500 ml-2">SPOILER</span>
@@ -126,7 +127,7 @@ export const PostPage: React.FC = () => {
             </h1>
 
             {/* Awards */}
-            {post.awards.length > 0 && (
+            {post.awards && post.awards.length > 0 && (
               <div className="flex items-center gap-1 mb-3">
                 {post.awards.map((award, index) => (
                   <div key={index} className="flex items-center">
@@ -146,7 +147,7 @@ export const PostPage: React.FC = () => {
 
             {/* Post Content Based on Type */}
             {post.type === 'text' && post.content && (
-              <div className="text-sm mb-4 whitespace-pre-wrap">
+              <div className="text-gray-700 leading-relaxed mb-4 whitespace-pre-wrap">
                 {post.content}
               </div>
             )}
@@ -214,7 +215,7 @@ export const PostPage: React.FC = () => {
               </button>
 
               {/* More Options */}
-              <div className="relative">
+              <div className="relative" ref={dropdownRef}>
                 <button 
                   onClick={() => setShowActions(!showActions)}
                   className="text-gray-500 hover:bg-gray-100 p-1 rounded"
@@ -242,7 +243,7 @@ export const PostPage: React.FC = () => {
 
               {/* Upvote Percentage */}
               <div className="ml-auto text-xs text-gray-500">
-                {Math.round(post.upvoteRatio * 100)}% positive stemmer
+                {Math.round(post.upvoteRatio * 100)}% positiv
               </div>
             </div>
           </div>

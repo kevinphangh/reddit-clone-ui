@@ -50,9 +50,12 @@ export const Header: React.FC<HeaderProps> = ({
               <Link to="/submit" className="p-2 text-blue-600 hover:bg-blue-50 rounded">
                 <Plus size={20} />
               </Link>
-              <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium">
+              <button 
+                className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium hover:bg-blue-700 transition-colors"
+                aria-label="Brugerprofil"
+              >
                 {username.charAt(0).toUpperCase()}
-              </div>
+              </button>
             </>
           ) : (
             <>

@@ -3,7 +3,7 @@ export interface User {
   username: string;
   displayName?: string;
   avatar?: string;
-  point: {
+  points: {
     post: number;
     comment: number;
   };

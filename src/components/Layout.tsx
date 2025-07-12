@@ -3,14 +3,12 @@ import { Header } from './Header';
 
 interface LayoutProps {
   children: React.ReactNode;
-  showSidebar?: boolean;
   isLoggedIn?: boolean;
   username?: string;
 }
 
 export const Layout: React.FC<LayoutProps> = ({ 
   children, 
-  showSidebar = true,
   isLoggedIn = false,
   username
 }) => {
@@ -19,8 +17,7 @@ export const Layout: React.FC<LayoutProps> = ({
       <Header isLoggedIn={isLoggedIn} username={username} />
       
       <div className="px-4 py-6">
-        {showSidebar ? (
-          <div className="flex justify-center relative">
+        <div className="flex justify-center relative">
             {/* Main Content - Truly centered */}
             <main className="max-w-3xl w-full mx-auto">
               {children}
@@ -36,17 +33,22 @@ export const Layout: React.FC<LayoutProps> = ({
                 <p className="text-gray-700 text-sm leading-relaxed mb-4">
                   Del dine erfaringer, stil spørgsmål, og hjælp hinanden med at navigere i hverdagens udfordringer.
                 </p>
-                <p className="text-gray-600 text-xs">
+                <p className="text-gray-600 text-xs mb-4">
                   Sammen er vi stærkere 💙
                 </p>
+                <div className="pt-4 border-t border-gray-200">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Medlemmer</span>
+                    <span className="font-semibold text-gray-900">12.387</span>
+                  </div>
+                  <div className="flex justify-between text-sm mt-2">
+                    <span className="text-gray-600">Online nu</span>
+                    <span className="font-semibold text-green-600">423</span>
+                  </div>
+                </div>
               </div>
             </aside>
-          </div>
-        ) : (
-          <main className="max-w-4xl mx-auto">
-            {children}
-          </main>
-        )}
+        </div>
       </div>
     </div>
   );

@@ -19,7 +19,10 @@ function App() {
   const [isLoggedIn] = useState(true);
   const [currentUser] = useState({
     username: 'anne_pedagog',
-    point: 4666
+    points: {
+      post: 1245,
+      comment: 3421
+    }
   });
 
   return (
