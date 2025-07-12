@@ -23,16 +23,16 @@ export const Layout: React.FC<LayoutProps> = ({
     <div className="min-h-screen bg-gray-50">
       <Header isLoggedIn={isLoggedIn} username={username} />
       
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="px-4 py-6">
         {showSidebar ? (
-          <div className="flex">
-            {/* Main Content - Centered */}
-            <main className="flex-1 max-w-3xl mx-auto">
+          <div className="flex justify-center">
+            {/* Main Content - Centered in viewport */}
+            <main className="max-w-3xl w-full">
               {children}
             </main>
             
-            {/* Sidebar - Fixed to right */}
-            <aside className="w-80 hidden lg:block ml-8">
+            {/* Sidebar - Positioned absolute to right */}
+            <aside className="fixed right-4 top-20 w-80 hidden xl:block">
               <Sidebar 
                 subreddit={subreddit} 
                 showSubredditInfo={!!subreddit}
