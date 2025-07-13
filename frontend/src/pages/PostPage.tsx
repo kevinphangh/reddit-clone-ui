@@ -27,10 +27,24 @@ export const PostPage: React.FC = () => {
   
   // Load comments when component mounts
   useEffect(() => {
-    if (postId) {
-      refreshComments(postId);
-    }
-  }, [postId]);
+    let isMounted = true;
+    
+    const loadComments = async () => {
+      if (postId && isMounted) {
+        try {
+          await refreshComments(postId);
+        } catch (error) {
+          console.error('Failed to load comments:', error);
+        }
+      }
+    };
+    
+    loadComments();
+    
+    return () => {
+      isMounted = false;
+    };
+  }, [postId, refreshComments]);
   
   if (!post) {
     return (
@@ -43,8 +57,12 @@ export const PostPage: React.FC = () => {
 
   const isOwner = user?.username === post.author.username;
 
-  const handleVote = (direction: 1 | -1) => {
-    votePost(String(post.id), direction);
+  const handleVote = async (direction: 1 | -1) => {
+    try {
+      await votePost(String(post.id), direction);
+    } catch (err) {
+      console.error('Vote failed:', err);
+    }
   };
 
   const handleEdit = () => {

@@ -32,8 +32,17 @@ export const Comment: React.FC<CommentProps> = ({
 
   const isOwner = user?.username === comment.author.username && !comment.isDeleted;
 
-  const handleVote = (direction: 1 | -1) => {
-    voteComment(String(comment.id), direction);
+  const handleVote = async (direction: 1 | -1) => {
+    if (!isLoggedIn) {
+      alert('Du skal være logget ind for at stemme');
+      return;
+    }
+    try {
+      await voteComment(String(comment.id), direction);
+    } catch (err) {
+      console.error('Vote failed:', err);
+      alert('Kunne ikke stemme. Prøv igen senere.');
+    }
   };
 
   const handleEdit = () => {
@@ -41,16 +50,26 @@ export const Comment: React.FC<CommentProps> = ({
     setIsEditing(true);
   };
 
-  const handleSaveEdit = () => {
+  const handleSaveEdit = async () => {
     if (editText.trim()) {
-      updateComment(String(comment.id), editText.trim());
-      setIsEditing(false);
+      try {
+        await updateComment(String(comment.id), editText.trim());
+        setIsEditing(false);
+      } catch (err) {
+        console.error('Failed to update comment:', err);
+        alert('Kunne ikke opdatere kommentar');
+      }
     }
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (window.confirm('Er du sikker på at du vil slette denne kommentar?')) {
-      deleteComment(String(comment.id));
+      try {
+        await deleteComment(String(comment.id));
+      } catch (err) {
+        console.error('Failed to delete comment:', err);
+        alert('Kunne ikke slette kommentar');
+      }
     }
   };
 
@@ -204,11 +223,12 @@ export const Comment: React.FC<CommentProps> = ({
                   if (replyText.trim() && comment.post) {
                     setIsSubmitting(true);
                     try {
-                      await createComment(String(comment.post.id), String(comment.id), replyText.trim());
+                      await createComment(String(comment.post.id), replyText.trim(), String(comment.id));
                       setReplyText('');
                       setShowReplyForm(false);
                     } catch (err) {
-                      // Failed to create reply
+                      console.error('Failed to create reply:', err);
+                      alert('Kunne ikke oprette svar. Prøv igen.');
                     } finally {
                       setIsSubmitting(false);
                     }

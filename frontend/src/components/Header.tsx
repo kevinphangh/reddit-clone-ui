@@ -38,7 +38,7 @@ export const Header: React.FC = () => {
 
   return (
     <header className="bg-white border-b border-gray-200 px-4 py-3">
-      <div className="flex items-center justify-between max-w-full sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl mx-auto">
+      <div className="flex items-center justify-between max-w-7xl mx-auto">
         {/* Logo */}
         <Link to="/" className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900">
           <span className="hidden sm:inline">VIA Pædagoger</span>

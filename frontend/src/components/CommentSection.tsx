@@ -61,11 +61,12 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
                     if (commentText.trim()) {
                       setIsSubmitting(true);
                       try {
-                        await createComment(postId, null, commentText.trim());
+                        await createComment(postId, commentText.trim());
                         setCommentText('');
                         setShowCommentForm(false);
                       } catch (err) {
-                        // Failed to create comment
+                        console.error('Failed to create comment:', err);
+                        alert('Kunne ikke oprette kommentar. Prøv igen.');
                       } finally {
                         setIsSubmitting(false);
                       }

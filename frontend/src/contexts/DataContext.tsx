@@ -15,7 +15,7 @@ interface DataContextType {
   votePost: (postId: string, direction: 1 | -1) => void;
   
   // Comment actions
-  createComment: (postId: string, parentId: string | null, body: string) => Promise<Comment>;
+  createComment: (postId: string, body: string, parentId?: string | null) => Promise<Comment>;
   updateComment: (commentId: string, body: string) => Promise<void>;
   deleteComment: (commentId: string) => Promise<void>;
   voteComment: (commentId: string, direction: 1 | -1) => void;
@@ -127,7 +127,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
           id: comment.post.id.toString(),
           title: comment.post.title
         },
-        parent: undefined,
+        parent: comment.parent_id ? { id: comment.parent_id.toString() } as Comment : undefined,
         createdAt: new Date(comment.created_at),
         updatedAt: new Date(comment.updated_at),
         editedAt: comment.edited_at ? new Date(comment.edited_at) : undefined,
@@ -136,8 +136,13 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         userVote: comment.user_vote || 0,
         saved: comment.saved || false,
         depth,
-        replies: comment.replies ? comment.replies.map((r: any) => processComment(r, depth + 1)) : [],
+        replies: [],
       };
+      
+      // Process nested replies if they exist
+      if (comment.replies && Array.isArray(comment.replies)) {
+        transformed.replies = comment.replies.map((r: any) => processComment(r, depth + 1));
+      }
       
       result.push(transformed);
       return transformed;
@@ -253,11 +258,13 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
           ? { ...p, userVote: currentVote, score: post.score }
           : p
       ));
+      console.error('Failed to vote on post:', err);
+      throw err;
     }
   };
 
   // Comment actions
-  const createComment = async (postId: string, parentId: string | null, body: string): Promise<Comment> => {
+  const createComment = async (postId: string, body: string, parentId?: string | null): Promise<Comment> => {
     try {
       const newComment = await api.createComment(postId, body, parentId);
       
@@ -320,8 +327,14 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
           : p
       ));
       
+      // Refresh comments to ensure proper tree structure
+      setTimeout(() => {
+        refreshComments(postId);
+      }, 100);
+      
       return transformedComment;
     } catch (err) {
+      console.error('Failed to create comment:', err);
       throw new Error('Failed to create comment');
     }
   };
@@ -409,13 +422,17 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const currentVote = comment.userVote || 0;
     const newVote = currentVote === direction ? 0 : direction;
     
-    const voteCommentRecursive = (comments: Comment[]): Comment[] => {
+    const voteCommentRecursive = (comments: Comment[], updateScore: boolean = true): Comment[] => {
       return comments.map(c => {
         if (c.id === commentId) {
-          return { ...c, userVote: newVote, score: c.score - currentVote + newVote };
+          if (updateScore) {
+            return { ...c, userVote: newVote, score: c.score - currentVote + newVote };
+          } else {
+            return { ...c, userVote: currentVote, score: comment.score };
+          }
         }
         if (c.replies && c.replies.length > 0) {
-          return { ...c, replies: voteCommentRecursive(c.replies) };
+          return { ...c, replies: voteCommentRecursive(c.replies, updateScore) };
         }
         return c;
       });
@@ -425,20 +442,27 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setComments(prev => voteCommentRecursive(prev));
     
     try {
-      await api.voteComment(commentId, newVote);
+      const result = await api.voteComment(commentId, newVote);
       
       // Update with server response
-      const updatedComment = getCommentById(commentId);
-      if (updatedComment) {
-        setComments(prev => prev.map(c => 
-          c.id === commentId 
-            ? { ...c, score: updatedComment.score, userVote: newVote }
-            : c
-        ));
-      }
+      const updateWithServerData = (comments: Comment[]): Comment[] => {
+        return comments.map(c => {
+          if (c.id === commentId) {
+            return { ...c, score: result.score, userVote: result.user_vote || 0 };
+          }
+          if (c.replies && c.replies.length > 0) {
+            return { ...c, replies: updateWithServerData(c.replies) };
+          }
+          return c;
+        });
+      };
+      
+      setComments(prev => updateWithServerData(prev));
     } catch (err) {
       // Revert on error
-      setComments(prev => voteCommentRecursive(prev));
+      setComments(prev => voteCommentRecursive(prev, false));
+      console.error('Failed to vote on comment:', err);
+      throw err;
     }
   };
 

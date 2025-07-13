@@ -13,14 +13,15 @@ export const Layout: React.FC<LayoutProps> = ({
       <Header />
       
       <div className="px-4 py-4 md:py-6 lg:py-8">
-        <div className="flex justify-center relative">
-            {/* Main Content - Responsive width for different screens */}
-            <main className="max-w-full sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl w-full mx-auto">
-              {children}
-            </main>
-            
-            {/* Info Panel - Shows earlier on large screens */}
-            <aside className="fixed right-4 lg:right-8 xl:right-12 2xl:right-16 top-20 w-64 lg:w-72 xl:w-80 hidden lg:block">
+        <div className="relative max-w-screen-2xl mx-auto">
+          {/* Main Content - Always centered */}
+          <main className="max-w-3xl mx-auto">
+            {children}
+          </main>
+          
+          {/* Info Panel - Better spacing on larger screens */}
+          <aside className="hidden xl:block absolute left-[calc(50%+400px)] 2xl:left-[calc(50%+420px)] top-0 w-72 xl:w-80">
+            <div className="sticky top-20">
               <div className="bg-white border border-gray-200 rounded-lg p-6">
                 <h2 className="text-lg font-semibold text-gray-900 mb-4">Nuværende studerende</h2>
                 <p className="text-gray-700 text-sm leading-relaxed mb-4">
@@ -43,7 +44,8 @@ export const Layout: React.FC<LayoutProps> = ({
                   </div>
                 </div>
               </div>
-            </aside>
+            </div>
+          </aside>
         </div>
       </div>
     </div>

@@ -12,6 +12,8 @@ export const UserPage: React.FC = () => {
   const [userPosts, setUserPosts] = useState<Post[]>([]);
   const [userComments, setUserComments] = useState<CommentType[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [userCreatedAt, setUserCreatedAt] = useState<Date | null>(null);
   
   useEffect(() => {
     if (username) {
@@ -21,7 +23,14 @@ export const UserPage: React.FC = () => {
   
   const loadUserData = async () => {
     setLoading(true);
+    setError(null);
     try {
+      // Get user info first
+      if (!userCreatedAt) {
+        const userInfo = await api.getUser(username!);
+        setUserCreatedAt(new Date(userInfo.created_at));
+      }
+      
       if (activeTab === 'posts') {
         const posts = await api.getUserPosts(username!);
         setUserPosts(posts.map(post => ({
@@ -84,6 +93,7 @@ export const UserPage: React.FC = () => {
       }
     } catch (error) {
       console.error('Failed to load user data:', error);
+      setError('Kunne ikke indlæse brugerdata. Prøv igen senere.');
     } finally {
       setLoading(false);
     }
@@ -99,6 +109,12 @@ export const UserPage: React.FC = () => {
 
   return (
     <div>
+      {error && (
+        <div className="bg-white border border-red-200 rounded-lg p-4 mb-4">
+          <p className="text-red-600 text-center">{error}</p>
+        </div>
+      )}
+      
       {/* User Header */}
       <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6 mb-4">
         <div className="flex items-center gap-4">
@@ -107,7 +123,7 @@ export const UserPage: React.FC = () => {
           </div>
           <div>
             <h1 className="text-2xl font-bold">u/{username}</h1>
-            <p className="text-gray-500">Medlem siden {formatTimeAgo(new Date(Date.now() - 90 * 24 * 60 * 60 * 1000))}</p>
+            <p className="text-gray-500">Medlem siden {userCreatedAt ? formatTimeAgo(userCreatedAt) : 'indlæser...'}</p>
           </div>
         </div>
       </div>

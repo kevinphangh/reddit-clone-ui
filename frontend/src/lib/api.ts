@@ -93,8 +93,21 @@ class ApiClient {
     });
 
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ detail: 'Network error' }));
-      throw new ApiError(response.status, error.detail || 'API Error');
+      let errorMessage = 'API Error';
+      try {
+        const error = await response.json();
+        errorMessage = error.detail || error.message || errorMessage;
+      } catch {
+        errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+      }
+      
+      if (response.status === 401) {
+        // Unauthorized - clear token
+        this.setToken(null);
+        window.location.href = '/login';
+      }
+      
+      throw new ApiError(response.status, errorMessage);
     }
 
     return response.json();
