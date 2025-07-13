@@ -1,5 +1,5 @@
 export interface User {
-  id: string;
+  id: number | string; // Support both for compatibility
   username: string;
   email?: string;
   displayName?: string;
@@ -14,7 +14,7 @@ export interface User {
 }
 
 export interface Subreddit {
-  id: string;
+  id: number | string;
   name: string;
   displayName: string;
   description: string;
@@ -26,7 +26,7 @@ export interface Subreddit {
 }
 
 export interface SubredditRule {
-  id: string;
+  id: number | string;
   title: string;
   description: string;
   order: number;
@@ -34,37 +34,42 @@ export interface SubredditRule {
 
 
 export interface Post {
-  id: string;
+  id: number | string;
   title: string;
-  content?: string;
+  content?: string | null;
   url?: string;
   type: 'text' | 'link' | 'image' | 'video' | 'poll';
   author: User;
   subreddit: Subreddit;
   createdAt: Date;
+  updatedAt: Date;
   editedAt?: Date;
   score: number;
   upvoteRatio: number;
   commentCount: number;
   isLocked?: boolean;
-  userVote?: 1 | -1 | 0;
+  userVote?: 1 | -1 | 0 | number;
   saved?: boolean;
 }
 
 export interface Comment {
-  id: string;
+  id: number | string;
   body: string;
   author: User;
-  post: Post;
+  post: {
+    id: number | string;
+    title: string;
+  };
   parent?: Comment;
   createdAt: Date;
   editedAt?: Date;
+  updatedAt: Date;
   score: number;
   replies: Comment[];
   isDeleted?: boolean;
   isRemoved?: boolean;
   isLocked?: boolean;
-  userVote?: 1 | -1 | 0;
+  userVote?: 1 | -1 | 0 | number;
   saved?: boolean;
   depth: number;
 }

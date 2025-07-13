@@ -1,24 +1,23 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Post, Comment, Subreddit } from '../types';
-import { mockPosts, mockComments, mockSubreddits } from '../data/mockData';
+import { Post, Comment } from '../types';
+import { api } from '../lib/api';
 
 interface DataContextType {
   posts: Post[];
   comments: Comment[];
-  subreddits: Subreddit[];
   loading: boolean;
   error: string | null;
   
   // Post actions
   createPost: (title: string, content: string, subredditName?: string) => Promise<Post>;
-  updatePost: (postId: string, updates: Partial<Post>) => void;
-  deletePost: (postId: string) => void;
+  updatePost: (postId: string, updates: Partial<Post>) => Promise<void>;
+  deletePost: (postId: string) => Promise<void>;
   votePost: (postId: string, direction: 1 | -1) => void;
   
   // Comment actions
   createComment: (postId: string, parentId: string | null, body: string) => Promise<Comment>;
-  updateComment: (commentId: string, body: string) => void;
-  deleteComment: (commentId: string) => void;
+  updateComment: (commentId: string, body: string) => Promise<void>;
+  deleteComment: (commentId: string) => Promise<void>;
   voteComment: (commentId: string, direction: 1 | -1) => void;
   
   // Get data
@@ -26,6 +25,10 @@ interface DataContextType {
   getPostComments: (postId: string) => Comment[];
   getUserPosts: (username: string) => Post[];
   getUserComments: (username: string) => Comment[];
+  
+  // Refresh data
+  refreshPosts: () => Promise<void>;
+  refreshComments: (postId: string) => Promise<void>;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -33,266 +36,425 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [comments, setComments] = useState<Comment[]>([]);
-  const [subreddits] = useState<Subreddit[]>(mockSubreddits);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // Load saved data from localStorage
+  // Load posts on mount
   useEffect(() => {
+    refreshPosts();
+  }, []);
+
+  const refreshPosts = async () => {
     try {
-      const savedPosts = localStorage.getItem('forum_posts');
-      const savedComments = localStorage.getItem('forum_comments');
+      setLoading(true);
+      setError(null);
       
-      if (savedPosts) {
-        const parsedPosts = JSON.parse(savedPosts);
-        // Convert date strings back to Date objects
-        setPosts(parsedPosts.map((p: any) => ({
-          ...p,
-          createdAt: new Date(p.createdAt),
-          editedAt: p.editedAt ? new Date(p.editedAt) : undefined
-        })));
-      } else {
-        setPosts(mockPosts);
-      }
+      const data = await api.getPosts({ limit: 50 });
       
-      if (savedComments) {
-        const parsedComments = JSON.parse(savedComments);
-        setComments(parsedComments.map((c: any) => ({
-          ...c,
-          createdAt: new Date(c.createdAt),
-          editedAt: c.editedAt ? new Date(c.editedAt) : undefined
-        })));
-      } else {
-        setComments(mockComments);
-      }
+      // Transform API data to match frontend format
+      const transformedPosts: Post[] = data.map(post => ({
+        id: post.id.toString(),
+        title: post.title,
+        content: post.content,
+        type: 'text' as const,
+        author: {
+          ...post.author,
+          id: post.author.id.toString(),
+          cakeDay: new Date(post.author.created_at),
+          points: post.author.points || { post: 0, comment: 0 }
+        },
+        subreddit: {
+          id: '1',
+          name: 'viapædagoger',
+          displayName: 'VIA Pædagoger',
+          description: '',
+          members: 1,
+          activeUsers: 1,
+          createdAt: new Date(),
+          rules: []
+        },
+        createdAt: new Date(post.created_at),
+        updatedAt: new Date(post.updated_at),
+        editedAt: post.edited_at ? new Date(post.edited_at) : undefined,
+        score: post.score,
+        commentCount: post.comment_count,
+        isLocked: post.is_locked,
+        upvoteRatio: 1,
+        userVote: post.user_vote || 0,
+        saved: post.saved || false,
+      }));
+      
+      setPosts(transformedPosts);
     } catch (err) {
-      // Error loading data, use mock data
-      setPosts(mockPosts);
-      setComments(mockComments);
+      setError('Failed to load posts');
+      console.error('Error loading posts:', err);
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
-  // Save data to localStorage whenever it changes
-  useEffect(() => {
-    if (!loading) {
-      localStorage.setItem('forum_posts', JSON.stringify(posts));
-      localStorage.setItem('forum_comments', JSON.stringify(comments));
+  const refreshComments = async (postId: string) => {
+    try {
+      const data = await api.getComments(postId);
+      
+      // Transform and add to comments state
+      const transformedComments = transformComments(data);
+      
+      // Replace comments for this post
+      setComments(prev => {
+        const otherComments = prev.filter(c => c.post.id !== postId);
+        return [...otherComments, ...transformedComments];
+      });
+    } catch (err) {
+      console.error('Error loading comments:', err);
     }
-  }, [posts, comments, loading]);
+  };
+
+  const transformComments = (apiComments: any[]): Comment[] => {
+    const result: Comment[] = [];
+    
+    const processComment = (comment: any, depth: number = 0): Comment => {
+      const transformed: Comment = {
+        id: comment.id.toString(),
+        body: comment.body,
+        author: {
+          ...comment.author,
+          id: comment.author.id.toString(),
+          cakeDay: new Date(comment.author.created_at),
+          points: comment.author.points || { post: 0, comment: 0 }
+        },
+        post: {
+          id: comment.post.id.toString(),
+          title: comment.post.title
+        },
+        parent: undefined,
+        createdAt: new Date(comment.created_at),
+        updatedAt: new Date(comment.updated_at),
+        editedAt: comment.edited_at ? new Date(comment.edited_at) : undefined,
+        score: comment.score,
+        isDeleted: comment.is_deleted || false,
+        userVote: comment.user_vote || 0,
+        saved: comment.saved || false,
+        depth,
+        replies: comment.replies ? comment.replies.map((r: any) => processComment(r, depth + 1)) : [],
+      };
+      
+      result.push(transformed);
+      return transformed;
+    };
+    
+    apiComments.forEach(comment => processComment(comment));
+    return result;
+  };
 
   // Post actions
-  const createPost = async (title: string, content: string, subredditName?: string): Promise<Post> => {
-    const user = JSON.parse(localStorage.getItem('forum_user') || '{}');
-    const subreddit = subreddits.find(s => s.name === subredditName) || subreddits[0];
-    
-    const newPost: Post = {
-      id: `post_${Date.now()}`,
-      title,
-      content,
-      type: 'text',
-      author: {
-        id: user.id || 'anon',
-        username: user.username || 'anonymous',
-        isVerified: false,
-        isPremium: false,
-        points: { post: 0, comment: 0 },
-        cakeDay: new Date()
-      },
-      subreddit: subreddit,
-      score: 1,
-      upvoteRatio: 1,
-      commentCount: 0,
-      createdAt: new Date(),
-      userVote: 1,
-      saved: false
-    };
-    
-    setPosts(prev => [newPost, ...prev]);
-    return newPost;
-  };
-
-  const updatePost = (postId: string, updates: Partial<Post>) => {
-    setPosts(prev => prev.map(post => 
-      post.id === postId 
-        ? { ...post, ...updates, editedAt: new Date() }
-        : post
-    ));
-  };
-
-  const deletePost = (postId: string) => {
-    setPosts(prev => prev.filter(post => post.id !== postId));
-    // Also delete all comments for this post
-    setComments(prev => prev.filter(comment => comment.post.id !== postId));
-  };
-
-  const votePost = (postId: string, direction: 1 | -1) => {
-    setPosts(prev => prev.map(post => {
-      if (post.id !== postId) return post;
+  const createPost = async (title: string, content: string): Promise<Post> => {
+    try {
+      const newPost = await api.createPost(title, content);
       
-      const currentVote = post.userVote || 0;
-      const newVote = currentVote === direction ? 0 : direction;
-      const scoreDiff = newVote - currentVote;
-      
-      return {
-        ...post,
-        userVote: newVote,
-        score: post.score + scoreDiff
+      const transformedPost: Post = {
+        id: newPost.id.toString(),
+        title: newPost.title,
+        content: newPost.content,
+        type: 'text' as const,
+        author: {
+          ...newPost.author,
+          id: newPost.author.id.toString(),
+          cakeDay: new Date(newPost.author.created_at),
+          points: newPost.author.points || { post: 0, comment: 0 }
+        },
+        subreddit: {
+          id: '1',
+          name: 'viapædagoger',
+          displayName: 'VIA Pædagoger',
+          description: '',
+          members: 1,
+          activeUsers: 1,
+          createdAt: new Date(),
+          rules: []
+        },
+        createdAt: new Date(newPost.created_at),
+        updatedAt: new Date(newPost.updated_at),
+        editedAt: newPost.edited_at ? new Date(newPost.edited_at) : undefined,
+        score: newPost.score,
+        commentCount: newPost.comment_count,
+        isLocked: newPost.is_locked,
+        upvoteRatio: 1,
+        userVote: 1,
+        saved: false,
       };
-    }));
+      
+      setPosts(prev => [transformedPost, ...prev]);
+      return transformedPost;
+    } catch (err) {
+      throw new Error('Failed to create post');
+    }
   };
 
-  // Comment actions
-  const createComment = async (postId: string, parentId: string | null, body: string): Promise<Comment> => {
-    const user = JSON.parse(localStorage.getItem('forum_user') || '{}');
-    const post = posts.find(p => p.id === postId);
-    
-    if (!post) throw new Error('Post not found');
-    
-    const newComment: Comment = {
-      id: `comment_${Date.now()}`,
-      body,
-      author: {
-        id: user.id || 'anon',
-        username: user.username || 'anonymous',
-        isVerified: false,
-        isPremium: false,
-        points: { post: 0, comment: 0 },
-        cakeDay: new Date()
-      },
-      score: 1,
-      createdAt: new Date(),
-      post: post,
-      userVote: 1,
-      saved: false,
-      replies: [],
-      depth: 0
-    };
-    
-    if (parentId) {
-      // Add as reply to parent comment
-      setComments(prev => {
-        const addReply = (comments: Comment[]): Comment[] => {
-          return comments.map(comment => {
-            if (comment.id === parentId) {
-              return {
-                ...comment,
-                replies: [...(comment.replies || []), newComment]
-              };
-            }
-            if (comment.replies && comment.replies.length > 0) {
-              return {
-                ...comment,
-                replies: addReply(comment.replies)
-              };
-            }
-            return comment;
-          });
-        };
-        return addReply(prev);
+  const updatePost = async (postId: string, updates: Partial<Post>) => {
+    try {
+      const updatedPost = await api.updatePost(postId, {
+        title: updates.title,
+        content: updates.content || undefined,
       });
-    } else {
-      // Add as top-level comment
-      setComments(prev => [...prev, newComment]);
+      
+      setPosts(prev => prev.map(post => 
+        post.id === postId 
+          ? { 
+              ...post,
+              title: updatedPost.title,
+              content: updatedPost.content || undefined,
+              editedAt: updatedPost.edited_at ? new Date(updatedPost.edited_at) : undefined,
+              updatedAt: new Date(updatedPost.updated_at),
+            }
+          : post
+      ));
+    } catch (err) {
+      throw new Error('Failed to update post');
     }
+  };
+
+  const deletePost = async (postId: string) => {
+    try {
+      await api.deletePost(postId);
+      setPosts(prev => prev.filter(post => post.id !== postId));
+    } catch (err) {
+      throw new Error('Failed to delete post');
+    }
+  };
+
+  const votePost = async (postId: string, direction: 1 | -1) => {
+    const post = posts.find(p => p.id === postId);
+    if (!post) return;
     
-    // Update post comment count
+    const currentVote = post.userVote || 0;
+    const newVote = currentVote === direction ? 0 : direction;
+    
+    // Optimistic update
     setPosts(prev => prev.map(p => 
       p.id === postId 
-        ? { ...p, commentCount: p.commentCount + 1 }
+        ? { ...p, userVote: newVote, score: p.score - currentVote + newVote }
         : p
     ));
     
-    return newComment;
-  };
-
-  const updateComment = (commentId: string, body: string) => {
-    const updateCommentRecursive = (comments: Comment[]): Comment[] => {
-      return comments.map(comment => {
-        if (comment.id === commentId) {
-          return { ...comment, body, editedAt: new Date() };
-        }
-        if (comment.replies && comment.replies.length > 0) {
-          return {
-            ...comment,
-            replies: updateCommentRecursive(comment.replies)
-          };
-        }
-        return comment;
-      });
-    };
-    
-    setComments(prev => updateCommentRecursive(prev));
-  };
-
-  const deleteComment = (commentId: string) => {
-    let postId: string | null = null;
-    
-    const deleteCommentRecursive = (comments: Comment[]): Comment[] => {
-      return comments.map(comment => {
-        if (comment.id === commentId) {
-          postId = comment.post.id;
-          return {
-            ...comment,
-            body: '[slettet]',
-            author: { 
-              id: 'deleted',
-              username: '[deleted]', 
-              isVerified: false, 
-              isPremium: false,
-              points: { post: 0, comment: 0 },
-              cakeDay: new Date()
-            },
-            isDeleted: true
-          };
-        }
-        if (comment.replies && comment.replies.length > 0) {
-          return {
-            ...comment,
-            replies: deleteCommentRecursive(comment.replies)
-          };
-        }
-        return comment;
-      });
-    };
-    
-    setComments(prev => deleteCommentRecursive(prev));
-    
-    // Update post comment count
-    if (postId) {
+    try {
+      const result = await api.votePost(postId, newVote);
+      
+      // Update with server response
       setPosts(prev => prev.map(p => 
         p.id === postId 
-          ? { ...p, commentCount: Math.max(0, p.commentCount - 1) }
+          ? { ...p, score: result.score, userVote: result.user_vote || 0 }
+          : p
+      ));
+    } catch (err) {
+      // Revert on error
+      setPosts(prev => prev.map(p => 
+        p.id === postId 
+          ? { ...p, userVote: currentVote, score: post.score }
           : p
       ));
     }
   };
 
-  const voteComment = (commentId: string, direction: 1 | -1) => {
+  // Comment actions
+  const createComment = async (postId: string, parentId: string | null, body: string): Promise<Comment> => {
+    try {
+      const newComment = await api.createComment(postId, body, parentId);
+      
+      const transformedComment: Comment = {
+        id: newComment.id.toString(),
+        body: newComment.body,
+        author: {
+          ...newComment.author,
+          id: newComment.author.id.toString(),
+          cakeDay: new Date(newComment.author.created_at),
+          points: newComment.author.points || { post: 0, comment: 0 }
+        },
+        post: {
+          id: newComment.post.id.toString(),
+          title: newComment.post.title
+        },
+        parent: undefined,
+        createdAt: new Date(newComment.created_at),
+        updatedAt: new Date(newComment.updated_at),
+        editedAt: newComment.edited_at ? new Date(newComment.edited_at) : undefined,
+        score: newComment.score,
+        isDeleted: newComment.is_deleted || false,
+        userVote: 1,
+        saved: false,
+        depth: parentId ? 1 : 0,
+        replies: [],
+      };
+      
+      if (parentId) {
+        // Add as reply
+        setComments(prev => {
+          const addReply = (comments: Comment[]): Comment[] => {
+            return comments.map(comment => {
+              if (comment.id === parentId) {
+                return {
+                  ...comment,
+                  replies: [...(comment.replies || []), transformedComment]
+                };
+              }
+              if (comment.replies && comment.replies.length > 0) {
+                return {
+                  ...comment,
+                  replies: addReply(comment.replies)
+                };
+              }
+              return comment;
+            });
+          };
+          return addReply(prev);
+        });
+      } else {
+        // Add as top-level comment
+        setComments(prev => [...prev, transformedComment]);
+      }
+      
+      // Update post comment count
+      setPosts(prev => prev.map(p => 
+        p.id === postId 
+          ? { ...p, commentCount: p.commentCount + 1 }
+          : p
+      ));
+      
+      return transformedComment;
+    } catch (err) {
+      throw new Error('Failed to create comment');
+    }
+  };
+
+  const updateComment = async (commentId: string, body: string) => {
+    try {
+      const updatedComment = await api.updateComment(commentId, body);
+      
+      const updateCommentRecursive = (comments: Comment[]): Comment[] => {
+        return comments.map(comment => {
+          if (comment.id === commentId) {
+            return { 
+              ...comment, 
+              body: updatedComment.body,
+              editedAt: updatedComment.edited_at ? new Date(updatedComment.edited_at) : undefined
+            };
+          }
+          if (comment.replies && comment.replies.length > 0) {
+            return {
+              ...comment,
+              replies: updateCommentRecursive(comment.replies)
+            };
+          }
+          return comment;
+        });
+      };
+      
+      setComments(prev => updateCommentRecursive(prev));
+    } catch (err) {
+      throw new Error('Failed to update comment');
+    }
+  };
+
+  const deleteComment = async (commentId: string) => {
+    try {
+      await api.deleteComment(commentId);
+      
+      const deleteCommentRecursive = (comments: Comment[]): Comment[] => {
+        return comments.map(comment => {
+          if (comment.id === commentId) {
+            return {
+              ...comment,
+              body: '[slettet]',
+              author: { 
+                id: 'deleted',
+                username: '[deleted]', 
+                isVerified: false, 
+                isPremium: false,
+                points: { post: 0, comment: 0 },
+                cakeDay: new Date()
+              },
+              isDeleted: true
+            };
+          }
+          if (comment.replies && comment.replies.length > 0) {
+            return {
+              ...comment,
+              replies: deleteCommentRecursive(comment.replies)
+            };
+          }
+          return comment;
+        });
+      };
+      
+      setComments(prev => deleteCommentRecursive(prev));
+      
+      // Update post comment count
+      const comment = getCommentById(commentId);
+      if (comment) {
+        setPosts(prev => prev.map(p => 
+          p.id === comment.post.id 
+            ? { ...p, commentCount: Math.max(0, p.commentCount - 1) }
+            : p
+        ));
+      }
+    } catch (err) {
+      throw new Error('Failed to delete comment');
+    }
+  };
+
+  const voteComment = async (commentId: string, direction: 1 | -1) => {
+    const comment = getCommentById(commentId);
+    if (!comment) return;
+    
+    const currentVote = comment.userVote || 0;
+    const newVote = currentVote === direction ? 0 : direction;
+    
     const voteCommentRecursive = (comments: Comment[]): Comment[] => {
-      return comments.map(comment => {
-        if (comment.id === commentId) {
-          const currentVote = comment.userVote || 0;
-          const newVote = currentVote === direction ? 0 : direction;
-          const scoreDiff = newVote - currentVote;
-          
-          return {
-            ...comment,
-            userVote: newVote,
-            score: comment.score + scoreDiff
-          };
+      return comments.map(c => {
+        if (c.id === commentId) {
+          return { ...c, userVote: newVote, score: c.score - currentVote + newVote };
         }
-        if (comment.replies && comment.replies.length > 0) {
-          return {
-            ...comment,
-            replies: voteCommentRecursive(comment.replies)
-          };
+        if (c.replies && c.replies.length > 0) {
+          return { ...c, replies: voteCommentRecursive(c.replies) };
         }
-        return comment;
+        return c;
       });
     };
     
+    // Optimistic update
     setComments(prev => voteCommentRecursive(prev));
+    
+    try {
+      await api.voteComment(commentId, newVote);
+      
+      // Update with server response
+      const updatedComment = getCommentById(commentId);
+      if (updatedComment) {
+        setComments(prev => prev.map(c => 
+          c.id === commentId 
+            ? { ...c, score: updatedComment.score, userVote: newVote }
+            : c
+        ));
+      }
+    } catch (err) {
+      // Revert on error
+      setComments(prev => voteCommentRecursive(prev));
+    }
+  };
+
+  // Helper functions
+  const getCommentById = (commentId: string): Comment | undefined => {
+    const findComment = (comments: Comment[]): Comment | undefined => {
+      for (const comment of comments) {
+        if (comment.id === commentId) return comment;
+        if (comment.replies) {
+          const found = findComment(comment.replies);
+          if (found) return found;
+        }
+      }
+      return undefined;
+    };
+    return findComment(comments);
   };
 
   // Get data functions
@@ -328,9 +490,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     <DataContext.Provider value={{
       posts,
       comments,
-      subreddits,
       loading,
-      error: null,
+      error,
       createPost,
       updatePost,
       deletePost,
@@ -342,7 +503,9 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       getPost,
       getPostComments,
       getUserPosts,
-      getUserComments
+      getUserComments,
+      refreshPosts,
+      refreshComments,
     }}>
       {children}
     </DataContext.Provider>

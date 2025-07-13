@@ -15,7 +15,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
 
   const handleVote = (direction: 1 | -1, e: React.MouseEvent) => {
     e.stopPropagation();
-    votePost(post.id, direction);
+    votePost(String(post.id), direction);
   };
 
   const handleCardClick = (e: React.MouseEvent) => {

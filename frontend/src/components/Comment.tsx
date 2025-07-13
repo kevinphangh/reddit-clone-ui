@@ -33,7 +33,7 @@ export const Comment: React.FC<CommentProps> = ({
   const isOwner = user?.username === comment.author.username && !comment.isDeleted;
 
   const handleVote = (direction: 1 | -1) => {
-    voteComment(comment.id, direction);
+    voteComment(String(comment.id), direction);
   };
 
   const handleEdit = () => {
@@ -43,14 +43,14 @@ export const Comment: React.FC<CommentProps> = ({
 
   const handleSaveEdit = () => {
     if (editText.trim()) {
-      updateComment(comment.id, editText.trim());
+      updateComment(String(comment.id), editText.trim());
       setIsEditing(false);
     }
   };
 
   const handleDelete = () => {
     if (window.confirm('Er du sikker på at du vil slette denne kommentar?')) {
-      deleteComment(comment.id);
+      deleteComment(String(comment.id));
     }
   };
 
@@ -204,7 +204,7 @@ export const Comment: React.FC<CommentProps> = ({
                   if (replyText.trim() && comment.post) {
                     setIsSubmitting(true);
                     try {
-                      await createComment(comment.post.id, comment.id, replyText.trim());
+                      await createComment(String(comment.post.id), String(comment.id), replyText.trim());
                       setReplyText('');
                       setShowReplyForm(false);
                     } catch (err) {

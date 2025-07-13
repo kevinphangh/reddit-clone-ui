@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
   ArrowUp, 
@@ -16,7 +16,7 @@ import { clsx } from 'clsx';
 export const PostPage: React.FC = () => {
   const { postId } = useParams();
   const navigate = useNavigate();
-  const { getPost, getPostComments, votePost, updatePost, deletePost } = useData();
+  const { getPost, getPostComments, votePost, updatePost, deletePost, refreshComments } = useData();
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState('');
@@ -24,6 +24,13 @@ export const PostPage: React.FC = () => {
   
   const post = getPost(postId!);
   const comments = getPostComments(postId!);
+  
+  // Load comments when component mounts
+  useEffect(() => {
+    if (postId) {
+      refreshComments(postId);
+    }
+  }, [postId]);
   
   if (!post) {
     return (
@@ -37,7 +44,7 @@ export const PostPage: React.FC = () => {
   const isOwner = user?.username === post.author.username;
 
   const handleVote = (direction: 1 | -1) => {
-    votePost(post.id, direction);
+    votePost(String(post.id), direction);
   };
 
   const handleEdit = () => {
@@ -47,13 +54,13 @@ export const PostPage: React.FC = () => {
   };
 
   const handleSaveEdit = () => {
-    updatePost(post.id, { title: editTitle, content: editContent });
+    updatePost(String(post.id), { title: editTitle, content: editContent });
     setIsEditing(false);
   };
 
   const handleDelete = () => {
     if (window.confirm('Er du sikker på at du vil slette dette indlæg?')) {
-      deletePost(post.id);
+      deletePost(String(post.id));
       navigate('/');
     }
   };
@@ -219,7 +226,7 @@ export const PostPage: React.FC = () => {
         comments={comments}
         commentCount={post.commentCount}
         isLocked={post.isLocked}
-        postId={post.id}
+        postId={String(post.id)}
       />
     </div>
   );

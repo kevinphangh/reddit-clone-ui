@@ -1,12 +1,15 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User } from '../types';
+import { api, ApiError } from '../lib/api';
 
 interface AuthContextType {
   isLoggedIn: boolean;
   user: User | null;
+  loading: boolean;
   login: (username: string, password: string) => Promise<boolean>;
   register: (username: string, email: string, password: string) => Promise<boolean>;
   logout: () => void;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -22,73 +25,96 @@ export const useAuth = () => {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Check localStorage on mount
+  // Check if user is logged in on mount
   useEffect(() => {
-    const savedUser = localStorage.getItem('forum_user');
-    if (savedUser) {
-      const userData = JSON.parse(savedUser);
-      setUser(userData);
-      setIsLoggedIn(true);
-    }
+    checkAuth();
   }, []);
 
-  const login = async (username: string, password: string): Promise<boolean> => {
-    // Simuler login - i virkeligheden ville dette kalde en API
-    if (username && password.length >= 6) {
-      const userData: User = {
-        id: `user_${Date.now()}`,
-        username,
-        email: `${username}@via.dk`,
-        points: {
-          post: Math.floor(Math.random() * 1000),
-          comment: Math.floor(Math.random() * 2000)
-        },
-        cakeDay: new Date(),
-        isPremium: false,
-        isVerified: false
-      };
-      
-      setUser(userData);
-      setIsLoggedIn(true);
-      localStorage.setItem('forum_user', JSON.stringify(userData));
-      return true;
+  const checkAuth = async () => {
+    const token = localStorage.getItem('auth_token');
+    if (token) {
+      try {
+        const userData = await api.getMe();
+        setUser({
+          ...userData,
+          cakeDay: new Date(userData.created_at),
+        });
+        setIsLoggedIn(true);
+      } catch (error) {
+        // Token is invalid
+        api.setToken(null);
+      }
     }
-    return false;
+    setLoading(false);
+  };
+
+  const refreshUser = async () => {
+    if (isLoggedIn) {
+      try {
+        const userData = await api.getMe();
+        setUser({
+          ...userData,
+          cakeDay: new Date(userData.created_at),
+        });
+      } catch (error) {
+        console.error('Failed to refresh user:', error);
+      }
+    }
+  };
+
+  const login = async (username: string, password: string): Promise<boolean> => {
+    try {
+      await api.login(username, password);
+      
+      // Get user data after successful login
+      const userData = await api.getMe();
+      setUser({
+        ...userData,
+        cakeDay: new Date(userData.created_at),
+      });
+      setIsLoggedIn(true);
+      
+      return true;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Login failed:', error.message);
+      }
+      return false;
+    }
   };
 
   const register = async (username: string, email: string, password: string): Promise<boolean> => {
-    // Simuler registrering
-    if (username && email.includes('@') && password.length >= 6) {
-      const userData: User = {
-        id: `user_${Date.now()}`,
-        username,
-        email,
-        points: {
-          post: 0,
-          comment: 0
-        },
-        cakeDay: new Date(),
-        isPremium: false,
-        isVerified: false
-      };
+    try {
+      await api.register(username, email, password);
       
-      setUser(userData);
-      setIsLoggedIn(true);
-      localStorage.setItem('forum_user', JSON.stringify(userData));
-      return true;
+      // Automatically login after registration
+      return await login(username, password);
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Registration failed:', error.message);
+      }
+      return false;
     }
-    return false;
   };
 
   const logout = () => {
+    api.setToken(null);
     setUser(null);
     setIsLoggedIn(false);
-    localStorage.removeItem('forum_user');
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, user, login, register, logout }}>
+    <AuthContext.Provider value={{ 
+      isLoggedIn, 
+      user, 
+      loading, 
+      login, 
+      register, 
+      logout,
+      refreshUser 
+    }}>
       {children}
     </AuthContext.Provider>
   );
