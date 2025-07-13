@@ -17,7 +17,7 @@ export const SearchDropdown: React.FC<SearchDropdownProps> = ({ results, onClose
       {results.map(post => (
         <Link
           key={post.id}
-          to={`/r/${post.subreddit.name}/comments/${post.id}`}
+          to={`/comments/${post.id}`}
           onClick={onClose}
           className="block px-4 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
         >
@@ -25,8 +25,6 @@ export const SearchDropdown: React.FC<SearchDropdownProps> = ({ results, onClose
             {post.title}
           </div>
           <div className="flex items-center gap-2 text-xs text-gray-500 mt-1">
-            <span>{post.subreddit.name}</span>
-            <span>•</span>
             <span>{formatTimeAgo(post.createdAt)}</span>
             <span>•</span>
             <MessageSquare size={12} />

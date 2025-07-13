@@ -1,4 +1,4 @@
-import { formatDistanceToNow, format } from 'date-fns';
+import { formatDistanceToNow } from 'date-fns';
 
 export function formatNumber(num: number): string {
   if (num >= 1000000) {
@@ -30,8 +30,4 @@ export function formatTimeAgo(date: Date): string {
   }
   
   return distance;
-}
-
-export function formatFullDate(date: Date): string {
-  return format(date, 'd. MMM yyyy', { locale: undefined });
 }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useData } from '../contexts/DataContext';
 import { Comment } from './Comment';
 import { Comment as CommentType } from '../types';
 
@@ -7,16 +8,20 @@ interface CommentSectionProps {
   comments: CommentType[];
   commentCount: number;
   isLocked?: boolean;
+  postId: string;
 }
 
 export const CommentSection: React.FC<CommentSectionProps> = ({ 
   comments, 
   commentCount,
-  isLocked = false
+  isLocked = false,
+  postId
 }) => {
   const { isLoggedIn } = useAuth();
+  const { createComment } = useData();
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [commentText, setCommentText] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
 
   return (
@@ -52,10 +57,24 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
                   Annuller
                 </button>
                 <button 
+                  onClick={async () => {
+                    if (commentText.trim()) {
+                      setIsSubmitting(true);
+                      try {
+                        await createComment(postId, null, commentText.trim());
+                        setCommentText('');
+                        setShowCommentForm(false);
+                      } catch (err) {
+                        // Failed to create comment
+                      } finally {
+                        setIsSubmitting(false);
+                      }
+                    }
+                  }}
                   className="text-sm px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
-                  disabled={!commentText.trim()}
+                  disabled={!commentText.trim() || isSubmitting}
                 >
-                  Send
+                  {isSubmitting ? 'Sender...' : 'Send'}
                 </button>
               </div>
             </div>

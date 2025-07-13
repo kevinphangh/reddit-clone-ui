@@ -8,32 +8,51 @@ import {
 import { Comment as CommentType } from '../types';
 import { formatTimeAgo, formatScore } from '../utils/formatting';
 import { clsx } from 'clsx';
+import { useData } from '../contexts/DataContext';
+import { useAuth } from '../contexts/AuthContext';
 
 interface CommentProps {
   comment: CommentType;
   depth?: number;
   maxDepth?: number;
-  onReply?: (commentId: string) => void;
 }
 
 export const Comment: React.FC<CommentProps> = ({ 
   comment, 
   depth = 0,
-  maxDepth = 10,
-  onReply
+  maxDepth = 10
 }) => {
-  const [vote, setVote] = useState(comment.userVote || 0);
+  const { voteComment, createComment, updateComment, deleteComment } = useData();
+  const { isLoggedIn, user } = useAuth();
   const [showReplyForm, setShowReplyForm] = useState(false);
+  const [replyText, setReplyText] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editText, setEditText] = useState('');
+
+  const isOwner = user?.username === comment.author.username && !comment.isDeleted;
 
   const handleVote = (direction: 1 | -1) => {
-    if (vote === direction) {
-      setVote(0);
-    } else {
-      setVote(direction);
+    voteComment(comment.id, direction);
+  };
+
+  const handleEdit = () => {
+    setEditText(comment.body);
+    setIsEditing(true);
+  };
+
+  const handleSaveEdit = () => {
+    if (editText.trim()) {
+      updateComment(comment.id, editText.trim());
+      setIsEditing(false);
     }
   };
 
-  const currentScore = comment.score + (vote - (comment.userVote || 0));
+  const handleDelete = () => {
+    if (window.confirm('Er du sikker på at du vil slette denne kommentar?')) {
+      deleteComment(comment.id);
+    }
+  };
 
   if (comment.isDeleted) {
     return (
@@ -83,9 +102,37 @@ export const Comment: React.FC<CommentProps> = ({
         </div>
 
         {/* Comment Body */}
-        <div className="text-gray-700 text-sm mb-2">
-          {comment.body}
-        </div>
+        {isEditing ? (
+          <div className="mb-2">
+            <textarea
+              value={editText}
+              onChange={(e) => setEditText(e.target.value)}
+              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              rows={3}
+            />
+            <div className="flex gap-2 mt-2">
+              <button
+                onClick={handleSaveEdit}
+                className="text-xs px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+              >
+                Gem
+              </button>
+              <button
+                onClick={() => setIsEditing(false)}
+                className="text-xs px-3 py-1 border border-gray-300 rounded hover:bg-gray-50"
+              >
+                Annuller
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="text-gray-700 text-sm mb-2">
+            {comment.body}
+            {comment.editedAt && (
+              <span className="text-xs text-gray-500 ml-2">(redigeret)</span>
+            )}
+          </div>
+        )}
 
         {/* Actions */}
         <div className="flex items-center gap-3">
@@ -93,26 +140,26 @@ export const Comment: React.FC<CommentProps> = ({
           <div className="flex items-center gap-1">
             <button 
               onClick={() => handleVote(1)}
-              className={clsx('p-1 rounded hover:bg-gray-100', vote === 1 ? 'text-blue-600' : 'text-gray-400')}
+              className={clsx('p-1 rounded hover:bg-gray-100', comment.userVote === 1 ? 'text-blue-600' : 'text-gray-400')}
             >
               <ArrowUp size={16} />
             </button>
             <span className={clsx(
               'text-xs font-medium',
-              vote === 1 ? 'text-blue-600' : vote === -1 ? 'text-red-500' : 'text-gray-600'
+              comment.userVote === 1 ? 'text-blue-600' : comment.userVote === -1 ? 'text-red-500' : 'text-gray-600'
             )}>
-              {formatScore(currentScore)}
+              {formatScore(comment.score)}
             </span>
             <button 
               onClick={() => handleVote(-1)}
-              className={clsx('p-1 rounded hover:bg-gray-100', vote === -1 ? 'text-red-500' : 'text-gray-400')}
+              className={clsx('p-1 rounded hover:bg-gray-100', comment.userVote === -1 ? 'text-red-500' : 'text-gray-400')}
             >
               <ArrowDown size={16} />
             </button>
           </div>
 
           {/* Reply */}
-          {!comment.isLocked && depth < maxDepth && (
+          {!comment.isLocked && depth < maxDepth && isLoggedIn && (
             <button 
               onClick={() => setShowReplyForm(!showReplyForm)}
               className="text-xs text-gray-500 hover:text-gray-700"
@@ -121,22 +168,62 @@ export const Comment: React.FC<CommentProps> = ({
               Svar
             </button>
           )}
+
+          {/* Edit/Delete */}
+          {isOwner && !isEditing && (
+            <>
+              <button
+                onClick={handleEdit}
+                className="text-xs text-gray-500 hover:text-gray-700"
+              >
+                Rediger
+              </button>
+              <button
+                onClick={handleDelete}
+                className="text-xs text-red-600 hover:text-red-700"
+              >
+                Slet
+              </button>
+            </>
+          )}
         </div>
 
         {/* Reply Form */}
         {showReplyForm && (
           <div className="mt-3">
             <textarea 
+              value={replyText}
+              onChange={(e) => setReplyText(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 text-sm"
               placeholder="Skriv et svar..."
               rows={3}
             />
             <div className="flex gap-2 mt-2">
-              <button className="text-xs px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">
-                Send
+              <button 
+                onClick={async () => {
+                  if (replyText.trim() && comment.post) {
+                    setIsSubmitting(true);
+                    try {
+                      await createComment(comment.post.id, comment.id, replyText.trim());
+                      setReplyText('');
+                      setShowReplyForm(false);
+                    } catch (err) {
+                      // Failed to create reply
+                    } finally {
+                      setIsSubmitting(false);
+                    }
+                  }
+                }}
+                disabled={!replyText.trim() || isSubmitting}
+                className="text-xs px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+              >
+                {isSubmitting ? 'Sender...' : 'Send'}
               </button>
               <button 
-                onClick={() => setShowReplyForm(false)}
+                onClick={() => {
+                  setShowReplyForm(false);
+                  setReplyText('');
+                }}
                 className="text-xs px-3 py-1 border border-gray-300 rounded hover:bg-gray-50"
               >
                 Annuller
@@ -154,7 +241,6 @@ export const Comment: React.FC<CommentProps> = ({
                 comment={reply} 
                 depth={depth + 1}
                 maxDepth={maxDepth}
-                onReply={onReply}
               />
             ))}
           </div>

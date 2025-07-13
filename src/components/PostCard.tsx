@@ -1,24 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowUp, ArrowDown, MessageSquare } from 'lucide-react';
 import { Post } from '../types';
 import { formatTimeAgo, formatScore } from '../utils/formatting';
+import { useData } from '../contexts/DataContext';
 
 interface PostCardProps {
   post: Post;
 }
 
 export const PostCard: React.FC<PostCardProps> = ({ post }) => {
-  const [vote, setVote] = useState(post.userVote || 0);
   const navigate = useNavigate();
+  const { votePost } = useData();
 
   const handleVote = (direction: 1 | -1, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (vote === direction) {
-      setVote(0);
-    } else {
-      setVote(direction);
-    }
+    votePost(post.id, direction);
   };
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -26,32 +23,30 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
     if ((e.target as HTMLElement).closest('a, button')) {
       return;
     }
-    navigate(`/r/${post.subreddit.name}/comments/${post.id}`);
+    navigate(`/comments/${post.id}`);
   };
-
-  const currentScore = post.score + (vote - (post.userVote || 0));
 
   return (
     <div 
-      className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow cursor-pointer"
+      className="bg-white border border-gray-200 rounded-lg p-3 md:p-4 hover:shadow-sm transition-shadow cursor-pointer"
       onClick={handleCardClick}
     >
-      <div className="flex gap-4">
+      <div className="flex gap-3 md:gap-4">
         {/* Vote buttons */}
         <div className="flex flex-col items-center gap-1">
           <button 
             onClick={(e) => handleVote(1, e)}
-            className={`p-1 rounded hover:bg-gray-100 ${vote === 1 ? 'text-blue-600' : 'text-gray-400'}`}
+            className={`p-1 rounded hover:bg-gray-100 ${post.userVote === 1 ? 'text-blue-600' : 'text-gray-400'}`}
             aria-label="Stem op"
           >
             <ArrowUp size={20} />
           </button>
-          <span className={`text-sm font-medium ${vote === 1 ? 'text-blue-600' : vote === -1 ? 'text-red-500' : 'text-gray-600'}`}>
-            {formatScore(currentScore)}
+          <span className={`text-sm font-medium ${post.userVote === 1 ? 'text-blue-600' : post.userVote === -1 ? 'text-red-500' : 'text-gray-600'}`}>
+            {formatScore(post.score)}
           </span>
           <button 
             onClick={(e) => handleVote(-1, e)}
-            className={`p-1 rounded hover:bg-gray-100 ${vote === -1 ? 'text-red-500' : 'text-gray-400'}`}
+            className={`p-1 rounded hover:bg-gray-100 ${post.userVote === -1 ? 'text-red-500' : 'text-gray-400'}`}
             aria-label="Stem ned"
           >
             <ArrowDown size={20} />
@@ -62,10 +57,6 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         <div className="flex-1">
           {/* Meta */}
           <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-            <Link to={`/r/${post.subreddit.name}`} className="font-medium hover:text-blue-600">
-              {post.subreddit.name}
-            </Link>
-            <span>•</span>
             <span>af {post.author.username}</span>
             <span>•</span>
             <span>{formatTimeAgo(post.createdAt)}</span>
@@ -74,8 +65,8 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
           {/* Title */}
           <h3 className="mb-2">
             <Link 
-              to={`/r/${post.subreddit.name}/comments/${post.id}`}
-              className="text-lg font-medium text-gray-900 hover:text-blue-600"
+              to={`/comments/${post.id}`}
+              className="text-base md:text-lg font-medium text-gray-900 hover:text-blue-600"
             >
               {post.title}
             </Link>
@@ -92,11 +83,11 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
           {/* Actions */}
           <div className="flex items-center gap-4">
             <Link 
-              to={`/r/${post.subreddit.name}/comments/${post.id}`}
+              to={`/comments/${post.id}`}
               className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
             >
               <MessageSquare size={16} />
-              <span>{post.commentCount} kommentarer</span>
+              <span>{post.commentCount} {post.commentCount === 1 ? 'kommentar' : 'kommentarer'}</span>
             </Link>
           </div>
         </div>

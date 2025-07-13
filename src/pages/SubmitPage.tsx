@@ -2,15 +2,18 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AlertCircle, LogIn } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { useData } from '../contexts/DataContext';
 
 export const SubmitPage: React.FC = () => {
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
+  const { createPost } = useData();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!title.trim()) {
@@ -23,8 +26,14 @@ export const SubmitPage: React.FC = () => {
       return;
     }
     
-    // In a real app, this would submit to the backend
-    navigate('/');
+    setIsSubmitting(true);
+    try {
+      const newPost = await createPost(title.trim(), content.trim());
+      navigate(`/comments/${newPost.id}`);
+    } catch (err) {
+      setError('Der opstod en fejl. Prøv igen.');
+      setIsSubmitting(false);
+    }
   };
 
   // Redirect to login if not logged in
@@ -60,7 +69,7 @@ export const SubmitPage: React.FC = () => {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="bg-white border border-gray-200 rounded-lg p-6">
+      <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6">
         <h1 className="text-xl font-semibold mb-6">Opret indlæg</h1>
         
         {error && (
@@ -111,9 +120,10 @@ export const SubmitPage: React.FC = () => {
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+              disabled={isSubmitting}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Opret indlæg
+              {isSubmitting ? 'Opretter...' : 'Opret indlæg'}
             </button>
           </div>
         </form>

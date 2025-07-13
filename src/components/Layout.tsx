@@ -3,20 +3,16 @@ import { Header } from './Header';
 
 interface LayoutProps {
   children: React.ReactNode;
-  isLoggedIn?: boolean;
-  username?: string;
 }
 
 export const Layout: React.FC<LayoutProps> = ({ 
-  children, 
-  isLoggedIn = false,
-  username
+  children
 }) => {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header isLoggedIn={isLoggedIn} username={username} />
+      <Header />
       
-      <div className="px-4 py-6">
+      <div className="px-4 py-4 md:py-6">
         <div className="flex justify-center relative">
             {/* Main Content - Truly centered */}
             <main className="max-w-3xl w-full mx-auto">

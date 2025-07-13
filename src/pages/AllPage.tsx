@@ -1,10 +1,12 @@
 import React from 'react';
 import { PostCard } from '../components/PostCard';
-import { mockPosts } from '../data/mockData';
+import { useData } from '../contexts/DataContext';
 
 export const AllPage: React.FC = () => {
+  const { posts } = useData();
+  
   // Show all posts chronologically
-  const allPosts = [...mockPosts].sort((a, b) => 
+  const allPosts = [...posts].sort((a, b) => 
     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 

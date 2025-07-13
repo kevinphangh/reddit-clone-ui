@@ -1,10 +1,12 @@
 import React from 'react';
 import { PostCard } from '../components/PostCard';
-import { mockPosts } from '../data/mockData';
+import { useData } from '../contexts/DataContext';
 
 export const PopularPage: React.FC = () => {
+  const { posts } = useData();
+  
   // Show most popular posts (sorted by score)
-  const popularPosts = [...mockPosts].sort((a, b) => b.score - a.score);
+  const popularPosts = [...posts].sort((a, b) => b.score - a.score);
 
   return (
     <div className="space-y-4">

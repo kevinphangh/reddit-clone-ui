@@ -1,13 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-
-interface User {
-  username: string;
-  email: string;
-  points: {
-    post: number;
-    comment: number;
-  };
-}
+import { User } from '../types';
 
 interface AuthContextType {
   isLoggedIn: boolean;
@@ -45,12 +37,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Simuler login - i virkeligheden ville dette kalde en API
     if (username && password.length >= 6) {
       const userData: User = {
+        id: `user_${Date.now()}`,
         username,
         email: `${username}@via.dk`,
         points: {
           post: Math.floor(Math.random() * 1000),
           comment: Math.floor(Math.random() * 2000)
-        }
+        },
+        cakeDay: new Date(),
+        isPremium: false,
+        isVerified: false
       };
       
       setUser(userData);
@@ -65,12 +61,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Simuler registrering
     if (username && email.includes('@') && password.length >= 6) {
       const userData: User = {
+        id: `user_${Date.now()}`,
         username,
         email,
         points: {
           post: 0,
           comment: 0
-        }
+        },
+        cakeDay: new Date(),
+        isPremium: false,
+        isVerified: false
       };
       
       setUser(userData);

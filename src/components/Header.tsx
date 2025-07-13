@@ -1,36 +1,36 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Plus, LogOut, ChevronDown } from 'lucide-react';
+import { Search, Plus, LogOut, ChevronDown, Bell } from 'lucide-react';
 import { SearchDropdown } from './SearchDropdown';
-import { mockPosts } from '../data/mockData';
 import { useClickOutside } from '../hooks/useClickOutside';
 import { useAuth } from '../contexts/AuthContext';
+import { useNotifications } from '../contexts/NotificationContext';
+import { useData } from '../contexts/DataContext';
 
-interface HeaderProps {
-  isLoggedIn?: boolean;
-  username?: string;
-}
-
-export const Header: React.FC<HeaderProps> = () => {
+export const Header: React.FC = () => {
   const { isLoggedIn, user, logout } = useAuth();
+  const { unreadCount } = useNotifications();
+  const { posts } = useData();
   const [searchQuery, setSearchQuery] = useState('');
   const [showResults, setShowResults] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
   const searchRef = useClickOutside<HTMLDivElement>(() => setShowResults(false), showResults);
   const userMenuRef = useClickOutside<HTMLDivElement>(() => setShowUserMenu(false), showUserMenu);
+  const notificationRef = useClickOutside<HTMLDivElement>(() => setShowNotifications(false), showNotifications);
 
   // Live search results
   const searchResults = useMemo(() => {
     if (!searchQuery.trim()) return [];
     
     const query = searchQuery.toLowerCase();
-    return mockPosts
+    return posts
       .filter(post => 
         post.title.toLowerCase().includes(query) ||
         post.content?.toLowerCase().includes(query)
       )
       .slice(0, 5); // Max 5 results
-  }, [searchQuery]);
+  }, [searchQuery, posts]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,12 +40,12 @@ export const Header: React.FC<HeaderProps> = () => {
     <header className="bg-white border-b border-gray-200 px-4 py-3">
       <div className="flex items-center justify-between max-w-3xl mx-auto">
         {/* Logo */}
-        <Link to="/" className="text-xl font-semibold text-gray-900">
+        <Link to="/" className="text-xl font-semibold text-gray-900 md:text-xl text-lg">
           VIA Pædagoger
         </Link>
 
-        {/* Search */}
-        <form onSubmit={handleSearch} className="flex-1 max-w-md mx-8">
+        {/* Search - Hidden on mobile */}
+        <form onSubmit={handleSearch} className="flex-1 max-w-md mx-8 hidden md:block">
           <div className="relative" ref={searchRef}>
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
             <input
@@ -83,6 +83,35 @@ export const Header: React.FC<HeaderProps> = () => {
           
           {isLoggedIn ? (
             <>
+              {/* Notifications */}
+              <div className="relative" ref={notificationRef}>
+                <button
+                  onClick={() => setShowNotifications(!showNotifications)}
+                  className="p-2 hover:bg-gray-50 rounded relative"
+                  aria-label="Notifikationer"
+                >
+                  <Bell size={20} className="text-gray-600" />
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                      {unreadCount}
+                    </span>
+                  )}
+                </button>
+                
+                {showNotifications && (
+                  <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+                    <div className="p-4 border-b border-gray-200">
+                      <h3 className="font-medium">Notifikationer</h3>
+                    </div>
+                    <div className="max-h-96 overflow-y-auto">
+                      <p className="p-4 text-sm text-gray-500 text-center">
+                        Ingen nye notifikationer
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               <div className="relative" ref={userMenuRef}>
                 <button 
                   onClick={() => setShowUserMenu(!showUserMenu)}
@@ -117,10 +146,10 @@ export const Header: React.FC<HeaderProps> = () => {
             </>
           ) : (
             <>
-              <Link to="/register" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+              <Link to="/register" className="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm md:text-base md:px-4">
                 Tilmeld
               </Link>
-              <Link to="/login" className="px-4 py-2 border border-gray-300 rounded hover:border-gray-400">
+              <Link to="/login" className="px-3 py-2 border border-gray-300 rounded hover:border-gray-400 text-sm md:text-base md:px-4">
                 Log ind
               </Link>
             </>

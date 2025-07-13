@@ -1,20 +1,29 @@
 import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
   ArrowUp, 
   ArrowDown, 
-  MessageSquare
+  MessageSquare,
+  Edit2,
+  Trash2
 } from 'lucide-react';
 import { CommentSection } from '../components/CommentSection';
-import { mockPosts, mockComments } from '../data/mockData';
+import { useData } from '../contexts/DataContext';
+import { useAuth } from '../contexts/AuthContext';
 import { formatTimeAgo, formatScore } from '../utils/formatting';
 import { clsx } from 'clsx';
 
 export const PostPage: React.FC = () => {
   const { postId } = useParams();
+  const navigate = useNavigate();
+  const { getPost, getPostComments, votePost, updatePost, deletePost } = useData();
+  const { user } = useAuth();
+  const [isEditing, setIsEditing] = useState(false);
+  const [editTitle, setEditTitle] = useState('');
+  const [editContent, setEditContent] = useState('');
   
-  // Mock finding the post
-  const post = mockPosts.find(p => p.id === postId);
+  const post = getPost(postId!);
+  const comments = getPostComments(postId!);
   
   if (!post) {
     return (
@@ -25,17 +34,29 @@ export const PostPage: React.FC = () => {
     );
   }
 
-  const [vote, setVote] = useState(post.userVote || 0);
+  const isOwner = user?.username === post.author.username;
 
   const handleVote = (direction: 1 | -1) => {
-    if (vote === direction) {
-      setVote(0);
-    } else {
-      setVote(direction);
-    }
+    votePost(post.id, direction);
   };
 
-  const currentScore = post.score + (vote - (post.userVote || 0));
+  const handleEdit = () => {
+    setEditTitle(post.title);
+    setEditContent(post.content || '');
+    setIsEditing(true);
+  };
+
+  const handleSaveEdit = () => {
+    updatePost(post.id, { title: editTitle, content: editContent });
+    setIsEditing(false);
+  };
+
+  const handleDelete = () => {
+    if (window.confirm('Er du sikker på at du vil slette dette indlæg?')) {
+      deletePost(post.id);
+      navigate('/');
+    }
+  };
 
   return (
     <div>
@@ -46,20 +67,20 @@ export const PostPage: React.FC = () => {
           <div className="flex flex-col items-center p-2 bg-gray-50">
             <button 
               onClick={() => handleVote(1)}
-              className={clsx('p-1 rounded hover:bg-gray-200 transition-colors', vote === 1 ? 'text-blue-600' : 'text-gray-400')}
+              className={clsx('p-1 rounded hover:bg-gray-200 transition-colors', post.userVote === 1 ? 'text-blue-600' : 'text-gray-400')}
               aria-label="Upvote"
             >
               <ArrowUp size={24} />
             </button>
             <span className={clsx(
               'text-base font-bold my-1',
-              vote === 1 ? 'text-blue-600' : vote === -1 ? 'text-red-500' : 'text-gray-600'
+              post.userVote === 1 ? 'text-blue-600' : post.userVote === -1 ? 'text-red-500' : 'text-gray-600'
             )}>
-              {formatScore(currentScore)}
+              {formatScore(post.score)}
             </span>
             <button 
               onClick={() => handleVote(-1)}
-              className={clsx('p-1 rounded hover:bg-gray-200 transition-colors', vote === -1 ? 'text-red-500' : 'text-gray-400')}
+              className={clsx('p-1 rounded hover:bg-gray-200 transition-colors', post.userVote === -1 ? 'text-red-500' : 'text-gray-400')}
               aria-label="Downvote"
             >
               <ArrowDown size={24} />
@@ -79,16 +100,36 @@ export const PostPage: React.FC = () => {
             </div>
 
             {/* Title */}
-            <h1 className="text-xl font-semibold text-gray-900 mb-3">
-              {post.title}
-            </h1>
+            {isEditing ? (
+              <input
+                type="text"
+                value={editTitle}
+                onChange={(e) => setEditTitle(e.target.value)}
+                className="text-xl font-semibold w-full mb-3 px-2 py-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              />
+            ) : (
+              <h1 className="text-xl font-semibold text-gray-900 mb-3">
+                {post.title}
+              </h1>
+            )}
 
 
             {/* Post Content Based on Type */}
-            {post.type === 'text' && post.content && (
-              <div className="text-gray-700 leading-relaxed mb-4 whitespace-pre-wrap">
-                {post.content}
-              </div>
+            {post.type === 'text' && (
+              isEditing ? (
+                <textarea
+                  value={editContent}
+                  onChange={(e) => setEditContent(e.target.value)}
+                  className="w-full text-gray-700 mb-4 px-2 py-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500 min-h-[100px]"
+                  rows={5}
+                />
+              ) : (
+                post.content && (
+                  <div className="text-gray-700 leading-relaxed mb-4 whitespace-pre-wrap">
+                    {post.content}
+                  </div>
+                )
+              )
             )}
 
             {post.type === 'link' && post.url && (
@@ -125,9 +166,49 @@ export const PostPage: React.FC = () => {
             )}
 
             {/* Actions */}
-            <div className="flex items-center gap-1 text-sm text-gray-500">
-              <MessageSquare size={16} />
-              <span>{post.commentCount} kommentarer</span>
+            <div className="flex items-center justify-between text-sm text-gray-500">
+              <div className="flex items-center gap-1">
+                <MessageSquare size={16} />
+                <span>{post.commentCount} {post.commentCount === 1 ? 'kommentar' : 'kommentarer'}</span>
+              </div>
+              
+              {isOwner && (
+                <div className="flex items-center gap-2">
+                  {isEditing ? (
+                    <>
+                      <button
+                        onClick={handleSaveEdit}
+                        className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+                      >
+                        Gem
+                      </button>
+                      <button
+                        onClick={() => setIsEditing(false)}
+                        className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50"
+                      >
+                        Annuller
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        onClick={handleEdit}
+                        className="flex items-center gap-1 px-2 py-1 hover:bg-gray-100 rounded"
+                      >
+                        <Edit2 size={14} />
+                        Rediger
+                      </button>
+                      <button
+                        onClick={handleDelete}
+                        className="flex items-center gap-1 px-2 py-1 hover:bg-gray-100 rounded text-red-600"
+                      >
+                        <Trash2 size={14} />
+                        Slet
+                      </button>
+                    </>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -135,9 +216,10 @@ export const PostPage: React.FC = () => {
 
       {/* Comments Section */}
       <CommentSection 
-        comments={mockComments.filter(c => c.post.id === post.id)}
+        comments={comments}
         commentCount={post.commentCount}
         isLocked={post.isLocked}
+        postId={post.id}
       />
     </div>
   );
