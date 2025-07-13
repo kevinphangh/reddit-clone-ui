@@ -38,14 +38,15 @@ export const Header: React.FC = () => {
 
   return (
     <header className="bg-white border-b border-gray-200 px-4 py-3">
-      <div className="flex items-center justify-between max-w-3xl mx-auto">
+      <div className="flex items-center justify-between max-w-full sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl mx-auto">
         {/* Logo */}
-        <Link to="/" className="text-xl font-semibold text-gray-900 md:text-xl text-lg">
-          VIA Pædagoger
+        <Link to="/" className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900">
+          <span className="hidden sm:inline">VIA Pædagoger</span>
+          <span className="sm:hidden">VIA</span>
         </Link>
 
-        {/* Search - Hidden on mobile */}
-        <form onSubmit={handleSearch} className="flex-1 max-w-md mx-8 hidden md:block">
+        {/* Search - Responsive */}
+        <form onSubmit={handleSearch} className="flex-1 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg mx-2 sm:mx-4 md:mx-8">
           <div className="relative" ref={searchRef}>
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
             <input
@@ -57,7 +58,7 @@ export const Header: React.FC = () => {
               }}
               onFocus={() => setShowResults(true)}
               placeholder="Søg..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+              className="w-full pl-8 sm:pl-10 pr-2 sm:pr-4 py-1.5 sm:py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
             />
             {showResults && searchResults.length > 0 && (
               <SearchDropdown 
@@ -72,7 +73,7 @@ export const Header: React.FC = () => {
         </form>
 
         {/* Actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1 sm:gap-2 md:gap-3">
           <Link 
             to="/submit" 
             className="p-2 text-blue-600 hover:bg-blue-50 rounded transition-colors"

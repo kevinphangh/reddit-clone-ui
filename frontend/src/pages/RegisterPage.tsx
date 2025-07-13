@@ -45,9 +45,9 @@ export const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto">
-      <div className="bg-white border border-gray-200 rounded-lg p-6 md:p-8">
-        <h1 className="text-2xl font-bold mb-6">Opret konto</h1>
+    <div className="max-w-sm sm:max-w-md lg:max-w-lg mx-auto px-4">
+      <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 md:p-8">
+        <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Opret konto</h1>
         
         {error && (
           <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md flex items-center gap-2 text-sm text-red-700">

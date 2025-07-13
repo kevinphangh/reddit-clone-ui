@@ -28,10 +28,10 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
 
   return (
     <div 
-      className="bg-white border border-gray-200 rounded-lg p-3 md:p-4 hover:shadow-sm transition-shadow cursor-pointer"
+      className="bg-white border border-gray-200 rounded-lg p-3 sm:p-4 md:p-5 lg:p-6 hover:shadow-sm transition-shadow cursor-pointer"
       onClick={handleCardClick}
     >
-      <div className="flex gap-3 md:gap-4">
+      <div className="flex gap-2 sm:gap-3 md:gap-4">
         {/* Vote buttons */}
         <div className="flex flex-col items-center gap-1">
           <button 
@@ -56,7 +56,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         {/* Content */}
         <div className="flex-1">
           {/* Meta */}
-          <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+          <div className="flex flex-wrap items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-500 mb-2">
             <span>af {post.author.username}</span>
             <span>•</span>
             <span>{formatTimeAgo(post.createdAt)}</span>
@@ -66,7 +66,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
           <h3 className="mb-2">
             <Link 
               to={`/comments/${post.id}`}
-              className="text-base md:text-lg font-medium text-gray-900 hover:text-blue-600"
+              className="text-base sm:text-lg md:text-xl lg:text-2xl font-medium text-gray-900 hover:text-blue-600"
             >
               {post.title}
             </Link>
@@ -74,17 +74,17 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
 
           {/* Content preview */}
           {post.type === 'text' && post.content && (
-            <p className="text-gray-600 mb-3 line-clamp-3">
+            <p className="text-sm md:text-base text-gray-600 mb-3 line-clamp-2 md:line-clamp-3">
               {post.content.substring(0, 200)}
               {post.content.length > 200 && '...'}
             </p>
           )}
 
           {/* Actions */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
             <Link 
               to={`/comments/${post.id}`}
-              className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
+              className="flex items-center gap-1 text-xs sm:text-sm text-gray-500 hover:text-gray-700"
             >
               <MessageSquare size={16} />
               <span>{post.commentCount} {post.commentCount === 1 ? 'kommentar' : 'kommentarer'}</span>
