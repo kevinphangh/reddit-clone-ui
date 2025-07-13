@@ -14,6 +14,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         settings.FRONTEND_URL,
+        "https://via-paedagoger.vercel.app",
+        "https://*.vercel.app",
         "http://localhost:3000",
         "http://localhost:3001", 
         "http://localhost:3002",

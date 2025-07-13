@@ -31,11 +31,11 @@ export const RegisterPage: React.FC = () => {
     setLoading(true);
 
     try {
-      const success = await register(username, email, password);
-      if (success) {
+      const result = await register(username, email, password);
+      if (result.success) {
         navigate('/');
       } else {
-        setError('Kunne ikke oprette konto. Prøv et andet brugernavn.');
+        setError(result.error || 'Kunne ikke oprette konto. Prøv igen.');
       }
     } catch (err) {
       setError('Der skete en fejl. Prøv igen.');
