@@ -30,8 +30,21 @@ Dette forum er designet til at hjælpe nuværende pædagogstuderende med at:
 - **Intuitivt design**: Velkendt forum-oplevelse
 - **Hurtig**: Optimeret for performance og hastighed
 
+## 🏗️ Projekt Struktur
+
+```
+forum/
+├── frontend/          # React frontend applikation
+│   ├── src/          # Source kode
+│   ├── public/       # Statiske filer
+│   └── ...
+├── backend/          # Backend API (kommer snart)
+└── README.md
+```
+
 ## 🛠️ Teknisk Stack
 
+### Frontend
 - **React 19** - Moderne frontend framework
 - **TypeScript 5** - Type safety og bedre udviklingsoplevelse
 - **Tailwind CSS 3** - Utility-first CSS framework
@@ -39,6 +52,9 @@ Dette forum er designet til at hjælpe nuværende pædagogstuderende med at:
 - **Vite 7** - Lynhurtig build tool
 - **Lucide React** - Moderne ikoner
 - **date-fns** - Dato formatering
+
+### Backend (Kommer snart)
+- TBD
 
 ## 📦 Installation
 
@@ -49,22 +65,23 @@ cd reddit-clone-ui
 git checkout sandbox
 ```
 
-2. **Installer afhængigheder:**
+2. **Installer frontend afhængigheder:**
 ```bash
+cd frontend
 npm install
 ```
 
-3. **Start udviklingsserveren:**
+3. **Start frontend udviklingsserveren:**
 ```bash
 npm run dev
 ```
 
 4. **Åbn din browser på** `http://localhost:5173`
 
-## 🏗️ Projektstruktur
+## 📁 Frontend Struktur
 
 ```
-src/
+frontend/src/
 ├── components/          # Genbrugelige UI komponenter
 │   ├── Header.tsx      # Hovednavigation
 │   ├── Layout.tsx      # Grundlæggende layout
@@ -76,6 +93,10 @@ src/
 │   ├── PostPage.tsx    # Enkelt indlæg visning
 │   ├── SubmitPage.tsx  # Opret indlæg
 │   └── ...
+├── contexts/           # React Context providers
+│   ├── AuthContext.tsx # Authentication
+│   ├── DataContext.tsx # Data management
+│   └── NotificationContext.tsx
 ├── types/              # TypeScript type definitioner
 ├── utils/              # Hjælpefunktioner
 ├── data/               # Mock data med pædagogisk indhold
@@ -98,10 +119,11 @@ src/
 ## 🔧 Tilgængelige Scripts
 
 ```bash
+# Frontend commands (kør fra frontend/ mappen)
 npm run dev          # Start udviklingsserver (port 5173)
 npm run build        # Byg til produktion
 npm run preview      # Preview produktionsbuild
-npm run typecheck    # Kør TypeScript type-tjek
+npm run lint         # Kør TypeScript type-tjek
 ```
 
 ## 🚀 Deployment
