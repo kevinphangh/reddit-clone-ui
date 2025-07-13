@@ -49,3 +49,5 @@ ENV/
 backend/*.db
 backend/*.sqlite
 backend/.env
+*.db
+test.db

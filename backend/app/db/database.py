@@ -4,10 +4,20 @@ from sqlalchemy.ext.declarative import declarative_base
 from app.core.config import settings
 
 # Create async engine
-engine = create_async_engine(
-    settings.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://"),
-    echo=settings.ENVIRONMENT == "development"
-)
+# Handle SQLite and PostgreSQL URLs
+if settings.DATABASE_URL.startswith("sqlite"):
+    # SQLite with aiosqlite
+    engine = create_async_engine(
+        settings.DATABASE_URL,
+        echo=settings.ENVIRONMENT == "development",
+        connect_args={"check_same_thread": False}
+    )
+else:
+    # PostgreSQL with asyncpg
+    engine = create_async_engine(
+        settings.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://"),
+        echo=settings.ENVIRONMENT == "development"
+    )
 
 # Create async session factory
 AsyncSessionLocal = sessionmaker(

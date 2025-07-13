@@ -1,4 +1,5 @@
 from typing import List, Optional
+from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, and_
@@ -9,6 +10,7 @@ from app.models.vote import VoteType
 from app.models.saved_item import ItemType
 from app.schemas.comment import Comment as CommentSchema, CommentCreate, CommentUpdate
 from app.core.deps import get_current_active_user, get_current_user_optional
+from app.core.voting import handle_vote
 
 router = APIRouter()
 
@@ -126,7 +128,13 @@ async def create_comment(
     )
     db.add(db_comment)
     
-    # Add author's upvote
+    # Update post comment count
+    post.comment_count += 1
+    
+    await db.commit()
+    await db.refresh(db_comment)
+    
+    # Add author's upvote (after comment has ID)
     db_vote = Vote(
         user_id=current_user.id,
         target_id=db_comment.id,
@@ -134,12 +142,7 @@ async def create_comment(
         value=1
     )
     db.add(db_vote)
-    
-    # Update post comment count
-    post.comment_count += 1
-    
     await db.commit()
-    await db.refresh(db_comment)
     
     # Load relationships
     await db.refresh(db_comment, ["author", "post"])
@@ -176,7 +179,7 @@ async def update_comment(
     
     # Update comment
     comment.body = comment_update.body
-    comment.edited_at = func.now()
+    comment.edited_at = datetime.utcnow()
     
     await db.commit()
     await db.refresh(comment)
@@ -224,48 +227,19 @@ async def vote_comment(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_active_user)
 ):
-    # Get comment
+    """Vote on a comment. vote_value: 1 = upvote, -1 = downvote, 0 = remove vote"""
+    # Check if comment exists
     result = await db.execute(
         select(Comment).where(and_(Comment.id == comment_id, Comment.is_deleted == False))
     )
-    comment = result.scalar_one_or_none()
-    
-    if not comment:
+    if not result.scalar_one_or_none():
         raise HTTPException(status_code=404, detail="Comment not found")
     
-    # Check existing vote
-    vote_result = await db.execute(
-        select(Vote).where(
-            and_(
-                Vote.user_id == current_user.id,
-                Vote.target_id == comment_id,
-                Vote.target_type == VoteType.COMMENT
-            )
-        )
+    # Handle vote using shared utility
+    return await handle_vote(
+        db=db,
+        user_id=current_user.id,
+        target_id=comment_id,
+        target_type="comment",
+        vote_value=vote_value
     )
-    existing_vote = vote_result.scalar_one_or_none()
-    
-    if vote_value == 0:
-        # Remove vote
-        if existing_vote:
-            comment.score -= existing_vote.value
-            await db.delete(existing_vote)
-    else:
-        if existing_vote:
-            # Update vote
-            comment.score += (vote_value - existing_vote.value)
-            existing_vote.value = vote_value
-        else:
-            # Create new vote
-            comment.score += vote_value
-            new_vote = Vote(
-                user_id=current_user.id,
-                target_id=comment_id,
-                target_type=VoteType.COMMENT,
-                value=vote_value
-            )
-            db.add(new_vote)
-    
-    await db.commit()
-    
-    return {"score": comment.score, "user_vote": vote_value if vote_value != 0 else None}

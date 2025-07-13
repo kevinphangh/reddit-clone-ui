@@ -17,8 +17,11 @@ from app.core.config import settings
 # access to the values within the .ini file in use.
 config = context.config
 
-# Set database URL from environment
-config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
+# Set database URL from environment (convert async to sync for migrations)
+database_url = settings.DATABASE_URL
+if database_url.startswith("sqlite+aiosqlite"):
+    database_url = database_url.replace("sqlite+aiosqlite", "sqlite")
+config.set_main_option("sqlalchemy.url", database_url)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.

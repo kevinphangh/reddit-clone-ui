@@ -35,9 +35,5 @@ class Comment(CommentBase):
     class Config:
         from_attributes = True
 
-class CommentInDB(Comment):
-    author_id: int
-    post_id: int
-
 # Update forward reference
 Comment.model_rebuild()

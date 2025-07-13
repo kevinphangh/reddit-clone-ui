@@ -1,4 +1,5 @@
 from typing import List, Optional
+from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, and_
@@ -9,6 +10,7 @@ from app.models.vote import VoteType
 from app.models.saved_item import ItemType
 from app.schemas.post import Post as PostSchema, PostCreate, PostUpdate
 from app.core.deps import get_current_active_user, get_current_user_optional
+from app.core.voting import handle_vote
 
 router = APIRouter()
 
@@ -111,8 +113,10 @@ async def create_post(
         score=1  # Start with 1 (author's implicit upvote)
     )
     db.add(db_post)
+    await db.commit()
+    await db.refresh(db_post)
     
-    # Add author's upvote
+    # Add author's upvote (after post has ID)
     db_vote = Vote(
         user_id=current_user.id,
         target_id=db_post.id,
@@ -120,9 +124,7 @@ async def create_post(
         value=1
     )
     db.add(db_vote)
-    
     await db.commit()
-    await db.refresh(db_post)
     
     # Load author relationship
     await db.refresh(db_post, ["author"])
@@ -158,7 +160,7 @@ async def update_post(
     if update_data:
         for field, value in update_data.items():
             setattr(post, field, value)
-        post.edited_at = func.now()
+        post.edited_at = datetime.utcnow()
     
     await db.commit()
     await db.refresh(post)
@@ -196,49 +198,20 @@ async def vote_post(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_active_user)
 ):
-    # Get post
+    """Vote on a post. vote_value: 1 = upvote, -1 = downvote, 0 = remove vote"""
+    # Check if post exists
     result = await db.execute(select(Post).where(and_(Post.id == post_id, Post.is_deleted == False)))
-    post = result.scalar_one_or_none()
-    
-    if not post:
+    if not result.scalar_one_or_none():
         raise HTTPException(status_code=404, detail="Post not found")
     
-    # Check existing vote
-    vote_result = await db.execute(
-        select(Vote).where(
-            and_(
-                Vote.user_id == current_user.id,
-                Vote.target_id == post_id,
-                Vote.target_type == VoteType.POST
-            )
-        )
+    # Handle vote using shared utility
+    return await handle_vote(
+        db=db,
+        user_id=current_user.id,
+        target_id=post_id,
+        target_type="post",
+        vote_value=vote_value
     )
-    existing_vote = vote_result.scalar_one_or_none()
-    
-    if vote_value == 0:
-        # Remove vote
-        if existing_vote:
-            post.score -= existing_vote.value
-            await db.delete(existing_vote)
-    else:
-        if existing_vote:
-            # Update vote
-            post.score += (vote_value - existing_vote.value)
-            existing_vote.value = vote_value
-        else:
-            # Create new vote
-            post.score += vote_value
-            new_vote = Vote(
-                user_id=current_user.id,
-                target_id=post_id,
-                target_type=VoteType.POST,
-                value=vote_value
-            )
-            db.add(new_vote)
-    
-    await db.commit()
-    
-    return {"score": post.score, "user_vote": vote_value if vote_value != 0 else None}
 
 @router.post("/{post_id}/save")
 async def toggle_save_post(

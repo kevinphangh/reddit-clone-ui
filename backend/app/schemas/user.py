@@ -9,9 +9,6 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str
 
-class UserUpdate(BaseModel):
-    email: Optional[EmailStr] = None
-
 class User(UserBase):
     id: int
     created_at: datetime
@@ -23,6 +20,3 @@ class User(UserBase):
     
     class Config:
         from_attributes = True
-
-class UserInDB(User):
-    hashed_password: str

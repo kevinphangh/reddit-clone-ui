@@ -1,6 +1,6 @@
 # VIA Pædagoger Forum
 
-Et minimalistisk online forum specifikt for nuværende pædagogstuderende ved VIA University College. Bygget med moderne React, TypeScript og Tailwind CSS med fokus på enkelhed og brugervenlighed.
+Et moderne, fuldt funktionelt online forum specifikt for nuværende pædagogstuderende ved VIA University College. Bygget med React + TypeScript frontend og FastAPI Python backend med komplet API integration.
 
 ## 🎯 Formål
 
@@ -13,32 +13,50 @@ Dette forum er designet til at hjælpe nuværende pædagogstuderende med at:
 
 ## ⚡ Funktioner
 
-### ✨ Minimalistisk Design
+### ✨ Komplet Forum Funktionalitet
+- **Brugerautentificering**: Sikker registrering og login med JWT tokens
+- **Diskussionstråde**: Opret, rediger og slet indlæg
+- **Kommentarsystem**: Indlejrede kommentarer med svar-funktionalitet
+- **Voting system**: Stem indlæg og kommentarer op eller ned
+- **Brugerprofiler**: Se brugeres indlæg og kommentarer
+- **Søgefunktion**: Find indhold hurtigt og nemt
+
+### 🎨 Minimalistisk Design
 - **Centreret layout**: Indhold er perfekt centreret på siden
 - **Dansk minimalistik**: Ren, skandinavisk æstetik med hvid, grå og blå
 - **Responsive**: Fungerer perfekt på alle enheder
 - **Tilgængeligt**: Tydelig navigation og brugervenligt interface
 
-### 💬 Forum Funktionalitet
-- **Diskussionstråde**: Del spørgsmål, erfaringer og viden
-- **Kommentarsystem**: Indlejrede kommentarer med svar-funktionalitet
-- **Voting system**: Stem indlæg og kommentarer op eller ned
-- **Søgefunktion**: Find indhold hurtigt og nemt
-
-### 🎨 Brugervenligt Interface
-- **Enkelt navigation**: Fokus på indholdet
-- **Intuitivt design**: Velkendt forum-oplevelse
-- **Hurtig**: Optimeret for performance og hastighed
+### 🔧 Production-Ready
+- **Type-sikker**: 100% TypeScript med fuld type coverage
+- **Performance optimeret**: Fast API calls og optimistic updates
+- **Fejlhåndtering**: Robuste error boundaries og user feedback
+- **Deployment klar**: Konfigureret til Vercel (frontend) og Fly.io (backend)
 
 ## 🏗️ Projekt Struktur
 
 ```
 forum/
-├── frontend/          # React frontend applikation
-│   ├── src/          # Source kode
-│   ├── public/       # Statiske filer
-│   └── ...
-├── backend/          # Backend API (kommer snart)
+├── frontend/                 # React + TypeScript frontend
+│   ├── src/
+│   │   ├── components/      # UI komponenter
+│   │   ├── pages/          # Side komponenter
+│   │   ├── contexts/       # React Context providers
+│   │   ├── lib/           # API client og utilities
+│   │   ├── types/         # TypeScript definitioner
+│   │   └── utils/         # Hjælpefunktioner
+│   ├── public/            # Statiske filer
+│   └── package.json
+├── backend/                 # FastAPI Python backend
+│   ├── app/
+│   │   ├── api/          # API endpoints
+│   │   ├── core/         # Core functionality og utilities
+│   │   ├── db/           # Database konfiguration
+│   │   ├── models/       # SQLAlchemy modeller
+│   │   └── schemas/      # Pydantic schemas
+│   ├── alembic/          # Database migrations
+│   ├── requirements.txt
+│   └── main.py
 └── README.md
 ```
 
@@ -53,105 +71,175 @@ forum/
 - **Lucide React** - Moderne ikoner
 - **date-fns** - Dato formatering
 
-### Backend (Kommer snart)
-- TBD
+### Backend
+- **FastAPI** - Moderne, hurtig Python web framework
+- **SQLAlchemy** - ORM med async support
+- **PostgreSQL** - Production database (med SQLite til udvikling)
+- **Alembic** - Database migrations
+- **JWT** - Sikker autentificering
+- **Pydantic** - Data validation og serialization
+- **Uvicorn** - ASGI server
 
-## 📦 Installation
+## 📦 Installation & Setup
 
-1. **Klon repositoriet:**
+### Prerequisites
+- Node.js 18+ 
+- Python 3.11+
+- PostgreSQL (til production) eller SQLite (automatisk til udvikling)
+
+### 1. Klon repositoriet
 ```bash
 git clone https://github.com/kevinphangh/reddit-clone-ui.git
 cd reddit-clone-ui
-git checkout sandbox
 ```
 
-2. **Installer frontend afhængigheder:**
+### 2. Backend Setup
+```bash
+cd backend
+
+# Opret virtual environment
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+
+# Installer dependencies
+pip install -r requirements-dev.txt
+
+# Kopier environment variabler
+cp .env.example .env  # Rediger efter behov
+
+# Initialiser database
+python init_db.py
+
+# Start backend server
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+Backend kører nu på `http://localhost:8000`
+
+### 3. Frontend Setup
 ```bash
 cd frontend
-npm install
-```
 
-3. **Start frontend udviklingsserveren:**
-```bash
+# Installer dependencies
+npm install
+
+# Start development server
 npm run dev
 ```
 
-4. **Åbn din browser på** `http://localhost:5173`
+Frontend kører nu på `http://localhost:3000`
 
-## 📁 Frontend Struktur
-
-```
-frontend/src/
-├── components/          # Genbrugelige UI komponenter
-│   ├── Header.tsx      # Hovednavigation
-│   ├── Layout.tsx      # Grundlæggende layout
-│   ├── PostCard.tsx    # Indlægsvisning
-│   ├── Comment.tsx     # Kommentarkomponent
-│   └── CommentSection.tsx
-├── pages/              # Sidekomponenter
-│   ├── HomePage.tsx    # Forside med indlæg
-│   ├── PostPage.tsx    # Enkelt indlæg visning
-│   ├── SubmitPage.tsx  # Opret indlæg
-│   └── ...
-├── contexts/           # React Context providers
-│   ├── AuthContext.tsx # Authentication
-│   ├── DataContext.tsx # Data management
-│   └── NotificationContext.tsx
-├── types/              # TypeScript type definitioner
-├── utils/              # Hjælpefunktioner
-├── data/               # Mock data med pædagogisk indhold
-└── styles/             # Globale styles
-```
-
-## 🎨 Design Principper
-
-### Minimalistisk Tilgang
-- **Ren æstetik**: Skandinavisk design med fokus på indhold
-- **Konsistent farvepalette**: Blå, grå og hvid for ro og professionalisme
-- **Typografi**: Inter font for læsbarhed
-- **Whitespace**: Rigelig plads for bedre læsbarhed
-
-### Centreret Layout
-- **Hovedindhold**: Perfekt centreret i viewport
-- **Info panel**: Diskret placeret til højre på større skærme
-- **Header**: Matcher indholdsbredden præcist
+### 4. Åbn din browser
+Gå til `http://localhost:3000` og opret en bruger for at komme i gang!
 
 ## 🔧 Tilgængelige Scripts
 
+### Frontend Commands
 ```bash
-# Frontend commands (kør fra frontend/ mappen)
-npm run dev          # Start udviklingsserver (port 5173)
+cd frontend
+npm run dev          # Start udviklingsserver
 npm run build        # Byg til produktion
 npm run preview      # Preview produktionsbuild
-npm run lint         # Kør TypeScript type-tjek
+npm run typecheck    # TypeScript type-tjek
+npm run lint         # Lint checking
 ```
+
+### Backend Commands
+```bash
+cd backend
+source venv/bin/activate
+
+# Development
+uvicorn main:app --reload               # Start med hot reload
+python init_db.py                      # Initialiser database
+
+# Database migrations
+alembic revision --autogenerate -m "Description"  # Opret migration
+alembic upgrade head                               # Kør migrations
+
+# Production
+uvicorn main:app --host 0.0.0.0 --port 8000      # Production server
+```
+
+## 🔗 API Endpoints
+
+### Autentificering
+- `POST /api/auth/register` - Registrer ny bruger
+- `POST /api/auth/login` - Login bruger
+- `GET /api/auth/me` - Hent bruger info
+
+### Indlæg
+- `GET /api/posts` - Hent alle indlæg
+- `POST /api/posts` - Opret nyt indlæg
+- `GET /api/posts/{id}` - Hent specifikt indlæg
+- `PUT /api/posts/{id}` - Opdater indlæg
+- `DELETE /api/posts/{id}` - Slet indlæg
+- `POST /api/posts/{id}/vote` - Stem på indlæg
+
+### Kommentarer
+- `GET /api/comments/post/{post_id}` - Hent kommentarer til indlæg
+- `POST /api/comments/post/{post_id}` - Opret ny kommentar
+- `PUT /api/comments/{id}` - Opdater kommentar
+- `DELETE /api/comments/{id}` - Slet kommentar
+- `POST /api/comments/{id}/vote` - Stem på kommentar
+
+### Brugere
+- `GET /api/users/{username}` - Hent bruger profil
+- `GET /api/users/{username}/posts` - Hent brugers indlæg
+- `GET /api/users/{username}/comments` - Hent brugers kommentarer
 
 ## 🚀 Deployment
 
-Projektet er optimeret til deployment på moderne hosting platforms som:
-- **Vercel** (anbefalet)
-- **Netlify**
-- **GitHub Pages**
+### Frontend (Vercel)
+1. Push til GitHub
+2. Forbind repository til Vercel
+3. Sæt environment variable: `VITE_API_URL=https://your-backend-url.com`
+4. Deploy automatisk på hver push
 
-```bash
-npm run build  # Generer dist/ mappe til deployment
-```
+### Backend (Fly.io)
+1. Installer Fly CLI: `curl -L https://fly.io/install.sh | sh`
+2. Login: `fly auth login`
+3. Deploy: `fly launch` (første gang) eller `fly deploy`
+4. Sæt environment variabler: `fly secrets set SECRET_KEY=your-secret-key`
 
-## 📊 Performance
+## 📊 Performance & Sikkerhed
 
+### Performance
 - ⚡ **Lynhurtig**: Optimeret med Vite og moderne React
 - 📱 **Responsive**: Mobile-first design
 - 🎯 **SEO-klar**: Semantisk HTML struktur
-- ♿ **Tilgængeligt**: WCAG-kompatibel navigation
+- 🔄 **Optimistic Updates**: Hurtig brugeroplevelse
+
+### Sikkerhed
+- 🔐 **JWT Authentication**: Sikre tokens med expiration
+- 🛡️ **Input Validation**: Pydantic schemas validerer alle inputs
+- 🔒 **CORS Protection**: Konfigureret til specifikke domæner
+- 🚫 **SQL Injection Protection**: SQLAlchemy ORM forebygger attacks
+
+## 🧪 Testing
+
+```bash
+# Frontend testing (når implementeret)
+cd frontend
+npm run test
+
+# Backend testing (når implementeret)
+cd backend
+pytest
+```
 
 ## 🤝 Bidrag
 
-Projektet er optimeret og klar til brug. Bidrag er velkomne via Pull Requests.
+1. Fork projektet
+2. Opret feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit ændringer (`git commit -m 'Add some AmazingFeature'`)
+4. Push til branch (`git push origin feature/AmazingFeature`)
+5. Åbn en Pull Request
 
 ## ⚠️ Vigtig Information
 
 - **Målgruppe**: Specifikt for nuværende pædagogstuderende ved VIA
-- **Status**: Minimalistisk og production-ready design
+- **Status**: Production-ready med komplet API integration
 - **Disclaimer**: Uafhængigt projekt, ikke officielt tilknyttet VIA University College
 
 ## 📄 Licens
@@ -160,4 +248,4 @@ MIT License - se LICENSE fil for detaljer.
 
 ---
 
-*Bygget med ❤️ for VIA pædagogstuderende*
+*Bygget med ❤️ for VIA pædagogstuderende - Fra idé til fuldt funktionelt forum*

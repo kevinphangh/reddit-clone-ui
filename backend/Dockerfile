@@ -16,4 +16,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Run migrations and start server
-CMD alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8080
+CMD alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port ${PORT:-8080}

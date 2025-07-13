@@ -1,5 +1,5 @@
 from typing import Optional
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -8,6 +8,13 @@ from app.core.security import decode_token
 from app.models.user import User
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
+
+def get_token_optional(request: Request) -> Optional[str]:
+    """Extract token from request without raising an error if missing"""
+    authorization = request.headers.get("Authorization")
+    if authorization and authorization.startswith("Bearer "):
+        return authorization.split(" ")[1]
+    return None
 
 async def get_current_user(
     token: str = Depends(oauth2_scheme),
@@ -43,12 +50,22 @@ async def get_current_active_user(
     return current_user
 
 async def get_current_user_optional(
-    token: Optional[str] = Depends(oauth2_scheme),
+    token: Optional[str] = Depends(get_token_optional),
     db: AsyncSession = Depends(get_db)
 ) -> Optional[User]:
     if not token:
         return None
     try:
-        return await get_current_user(token, db)
-    except HTTPException:
+        payload = decode_token(token)
+        if payload is None:
+            return None
+        
+        username: str = payload.get("sub")
+        if username is None:
+            return None
+        
+        result = await db.execute(select(User).where(User.username == username))
+        user = result.scalar_one_or_none()
+        return user
+    except Exception:
         return None

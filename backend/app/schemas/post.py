@@ -32,6 +32,3 @@ class Post(PostBase):
     class Config:
         from_attributes = True
 
-class PostInDB(Post):
-    author_id: int
-    is_deleted: bool
