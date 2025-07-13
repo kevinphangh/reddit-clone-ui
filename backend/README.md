@@ -1,47 +1,92 @@
 # VIA Pædagoger Backend
 
-Backend API for VIA Pædagoger forum.
+Backend API for VIA Pædagoger forum built with FastAPI and PostgreSQL.
 
-## Getting Started
+## Tech Stack
 
-Backend implementation coming soon.
+- **Framework**: FastAPI
+- **Database**: PostgreSQL with SQLAlchemy ORM
+- **Authentication**: JWT tokens
+- **Async**: Full async/await support
+- **Deployment**: Fly.io ready
 
-## Planned Tech Stack
+## Setup
 
-- **Runtime**: Node.js or Python
-- **Framework**: TBD (Express.js, FastAPI, etc.)
-- **Database**: PostgreSQL or MongoDB
-- **Authentication**: JWT
-- **API**: RESTful or GraphQL
+### 1. Create virtual environment
+```bash
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
-## API Endpoints (Planned)
+### 2. Install dependencies
+```bash
+pip install -r requirements.txt
+```
 
-### Authentication
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - Login user
-- `POST /api/auth/logout` - Logout user
-- `GET /api/auth/me` - Get current user
+### 3. Setup environment variables
+```bash
+cp .env.example .env
+# Edit .env with your database credentials
+```
 
-### Posts
-- `GET /api/posts` - Get all posts
-- `GET /api/posts/:id` - Get single post
-- `POST /api/posts` - Create new post
-- `PUT /api/posts/:id` - Update post
-- `DELETE /api/posts/:id` - Delete post
-- `POST /api/posts/:id/vote` - Vote on post
+### 4. Setup PostgreSQL database
+```bash
+# Create database
+createdb via_forum
 
-### Comments
-- `GET /api/posts/:postId/comments` - Get comments for post
-- `POST /api/posts/:postId/comments` - Create comment
-- `PUT /api/comments/:id` - Update comment
-- `DELETE /api/comments/:id` - Delete comment
-- `POST /api/comments/:id/vote` - Vote on comment
+# Run migrations
+alembic upgrade head
+```
 
-### Users
-- `GET /api/users/:username` - Get user profile
-- `GET /api/users/:username/posts` - Get user's posts
-- `GET /api/users/:username/comments` - Get user's comments
+### 5. Run development server
+```bash
+uvicorn main:app --reload
+```
 
-## Development
+API will be available at http://localhost:8000
 
-Coming soon...
+## API Documentation
+
+When running, visit:
+- Swagger UI: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
+
+## Deployment to Fly.io
+
+1. Install Fly CLI: https://fly.io/docs/hands-on/install-flyctl/
+
+2. Login to Fly:
+```bash
+flyctl auth login
+```
+
+3. Create Fly app:
+```bash
+flyctl launch
+```
+
+4. Create PostgreSQL database:
+```bash
+flyctl postgres create
+flyctl postgres attach <postgres-app-name>
+```
+
+5. Set secrets:
+```bash
+flyctl secrets set SECRET_KEY="your-secret-key"
+flyctl secrets set FRONTEND_URL="https://your-frontend.vercel.app"
+```
+
+6. Deploy:
+```bash
+flyctl deploy
+```
+
+## Environment Variables
+
+- `DATABASE_URL` - PostgreSQL connection string
+- `SECRET_KEY` - Secret key for JWT tokens
+- `ALGORITHM` - JWT algorithm (default: HS256)
+- `ACCESS_TOKEN_EXPIRE_MINUTES` - Token expiration time
+- `FRONTEND_URL` - Frontend URL for CORS
+- `ENVIRONMENT` - development/production
