@@ -1,6 +1,16 @@
 // FORCE HTTPS - Updated 2025-07-14 18:30
-const API_URL = 'https://via-forum-api.fly.dev';
-console.log('API URL is:', API_URL); // Debug log to verify
+const API_URL = import.meta.env.VITE_API_URL || 'https://via-forum-api.fly.dev';
+
+// PERMANENT FIX: Always ensure HTTPS
+const ensureHttps = (url: string): string => {
+  if (url.startsWith('http://')) {
+    console.warn('WARNING: Attempted to use HTTP URL, converting to HTTPS:', url);
+    return url.replace('http://', 'https://');
+  }
+  return url;
+};
+
+console.log('API URL is:', ensureHttps(API_URL)); // Debug log to verify
 
 // API Response types
 interface ApiUser {
@@ -79,8 +89,8 @@ class ApiClient {
     options: RequestInit = {}
   ): Promise<T> {
     // FORCE HTTPS - Remove any accidental HTTP
-    const baseUrl = API_URL.replace('http://', 'https://');
-    const url = `${baseUrl}${endpoint}`;
+    const baseUrl = ensureHttps(API_URL);
+    const url = ensureHttps(`${baseUrl}${endpoint}`);
     console.log('Making request to:', url); // Debug log
     
     const headers: Record<string, string> = {
@@ -147,8 +157,8 @@ class ApiClient {
     formData.append('password', password);
 
     // FORCE HTTPS - same as in request method
-    const baseUrl = API_URL.replace('http://', 'https://');
-    const url = `${baseUrl}/api/auth/login`;
+    const baseUrl = ensureHttps(API_URL);
+    const url = ensureHttps(`${baseUrl}/api/auth/login`);
     
     const response = await fetch(url, {
       method: 'POST',
@@ -204,7 +214,7 @@ class ApiClient {
   }
 
   async votePost(postId: string, value: number) {
-    return this.request<{ score: number; user_vote: number | null }>(`/api/posts/${postId}/vote/?vote_value=${value}`, {
+    return this.request<{ score: number; user_vote: number | null }>(`/api/posts/${postId}/vote?vote_value=${value}`, {
       method: 'POST',
     });
   }
