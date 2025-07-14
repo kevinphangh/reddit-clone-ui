@@ -20,6 +20,7 @@ app.add_middleware(
         "https://via-forum-ajg5xlvui-kevins-projects-aa4b90de.vercel.app",
         "https://via-forum-r1k7ex80x-kevins-projects-aa4b90de.vercel.app",
         "https://via-forum-6ms4atdw1-kevins-projects-aa4b90de.vercel.app",
+        "https://via-forum-m5uc8v0w0-kevins-projects-aa4b90de.vercel.app",
         "https://*.vercel.app",
         "http://localhost:3000",
         "http://localhost:3001", 
