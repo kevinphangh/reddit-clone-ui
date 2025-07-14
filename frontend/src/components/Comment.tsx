@@ -37,7 +37,9 @@ export const Comment: React.FC<CommentProps> = ({
 
   const handleVote = async (direction: 1 | -1) => {
     if (!isLoggedIn) {
-      alert('Du skal være logget ind for at stemme');
+      if (window.confirm('Du skal være logget ind for at stemme. Vil du logge ind nu?')) {
+        window.location.href = '/login?from=' + window.location.pathname;
+      }
       return;
     }
     try {

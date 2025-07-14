@@ -59,10 +59,18 @@ export const PostPage: React.FC = () => {
   const isOwner = user?.username === post.author.username;
 
   const handleVote = async (direction: 1 | -1) => {
+    if (!user) {
+      if (window.confirm('Du skal være logget ind for at stemme. Vil du logge ind nu?')) {
+        navigate('/login?from=' + window.location.pathname);
+      }
+      return;
+    }
+    
     try {
       await votePost(String(post.id), direction);
     } catch (err) {
       console.error('Vote failed:', err);
+      alert('Der opstod en fejl ved afstemning. Prøv igen senere.');
     }
   };
 

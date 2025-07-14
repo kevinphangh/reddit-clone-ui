@@ -4,6 +4,7 @@ import { ArrowUp, ArrowDown, MessageSquare } from 'lucide-react';
 import { Post } from '../types';
 import { formatTimeAgo, formatScore } from '../utils/formatting';
 import { useData } from '../contexts/DataContext';
+import { useAuth } from '../contexts/AuthContext';
 
 interface PostCardProps {
   post: Post;
@@ -12,9 +13,18 @@ interface PostCardProps {
 export const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const navigate = useNavigate();
   const { votePost } = useData();
+  const { isLoggedIn } = useAuth();
 
   const handleVote = (direction: 1 | -1, e: React.MouseEvent) => {
     e.stopPropagation();
+    
+    if (!isLoggedIn) {
+      if (window.confirm('Du skal være logget ind for at stemme. Vil du logge ind nu?')) {
+        navigate('/login?from=' + window.location.pathname);
+      }
+      return;
+    }
+    
     votePost(String(post.id), direction);
   };
 
@@ -36,8 +46,9 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         <div className="flex flex-col items-center gap-1">
           <button 
             onClick={(e) => handleVote(1, e)}
-            className={`p-1 rounded hover:bg-gray-100 ${post.userVote === 1 ? 'text-primary-600' : 'text-gray-400'}`}
+            className={`p-1 rounded hover:bg-gray-100 ${post.userVote === 1 ? 'text-primary-600' : 'text-gray-400'} ${!isLoggedIn ? 'cursor-help' : ''}`}
             aria-label="Stem op"
+            title={!isLoggedIn ? 'Log ind for at stemme' : 'Stem op'}
           >
             <ArrowUp size={20} />
           </button>
@@ -46,8 +57,9 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
           </span>
           <button 
             onClick={(e) => handleVote(-1, e)}
-            className={`p-1 rounded hover:bg-gray-100 ${post.userVote === -1 ? 'text-red-500' : 'text-gray-400'}`}
+            className={`p-1 rounded hover:bg-gray-100 ${post.userVote === -1 ? 'text-red-500' : 'text-gray-400'} ${!isLoggedIn ? 'cursor-help' : ''}`}
             aria-label="Stem ned"
+            title={!isLoggedIn ? 'Log ind for at stemme' : 'Stem ned'}
           >
             <ArrowDown size={20} />
           </button>
