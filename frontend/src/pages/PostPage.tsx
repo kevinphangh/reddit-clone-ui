@@ -49,8 +49,9 @@ export const PostPage: React.FC = () => {
   if (!post) {
     return (
       <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
-        <h1 className="text-xl font-bold mb-2">Indlæg ikke fundet</h1>
-        <p className="text-gray-500">Det indlæg du leder efter eksisterer ikke.</p>
+        <h1 className="text-xl font-bold mb-2">Hmm, vi kan ikke finde dette indlæg 🤔</h1>
+        <p className="text-gray-600 mb-4">Det indlæg du leder efter eksisterer ikke eller er blevet slettet.</p>
+        <p className="text-primary-600 text-sm">Gå tilbage til <Link to="/" className="underline">forsiden</Link> og find andre spændende indlæg!</p>
       </div>
     );
   }
@@ -89,23 +90,23 @@ export const PostPage: React.FC = () => {
       <div className="bg-white border border-gray-200 rounded-lg mb-4">
         <div className="flex">
           {/* Vote Section */}
-          <div className="flex flex-col items-center p-2 bg-gray-50">
+          <div className="flex flex-col items-center p-2 bg-primary-50">
             <button 
               onClick={() => handleVote(1)}
-              className={clsx('p-1 rounded hover:bg-gray-200 transition-colors', post.userVote === 1 ? 'text-blue-600' : 'text-gray-400')}
+              className={clsx('p-1 rounded hover:bg-primary-100 transition-colors', post.userVote === 1 ? 'text-primary-600' : 'text-gray-400')}
               aria-label="Upvote"
             >
               <ArrowUp size={24} />
             </button>
             <span className={clsx(
               'text-base font-bold my-1',
-              post.userVote === 1 ? 'text-blue-600' : post.userVote === -1 ? 'text-red-500' : 'text-gray-600'
+              post.userVote === 1 ? 'text-primary-600' : post.userVote === -1 ? 'text-red-500' : 'text-gray-600'
             )}>
               {formatScore(post.score)}
             </span>
             <button 
               onClick={() => handleVote(-1)}
-              className={clsx('p-1 rounded hover:bg-gray-200 transition-colors', post.userVote === -1 ? 'text-red-500' : 'text-gray-400')}
+              className={clsx('p-1 rounded hover:bg-primary-100 transition-colors', post.userVote === -1 ? 'text-red-500' : 'text-gray-400')}
               aria-label="Downvote"
             >
               <ArrowDown size={24} />
@@ -116,8 +117,8 @@ export const PostPage: React.FC = () => {
           <div className="flex-1 p-3">
             {/* Meta Info */}
             <div className="flex items-center gap-1 text-xs text-gray-500 mb-2">
-              <span>af</span>
-              <Link to={`/user/${post.author.username}`} className="hover:underline">
+              <span>Delt af</span>
+              <Link to={`/user/${post.author.username}`} className="hover:underline font-medium text-primary-600">
                 {post.author.username}
               </Link>
               <span>•</span>
@@ -130,7 +131,7 @@ export const PostPage: React.FC = () => {
                 type="text"
                 value={editTitle}
                 onChange={(e) => setEditTitle(e.target.value)}
-                className="text-xl font-semibold w-full mb-3 px-2 py-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                className="text-xl font-semibold w-full mb-3 px-2 py-1 border border-gray-300 rounded focus:outline-none focus:border-primary-500"
               />
             ) : (
               <h1 className="text-xl font-semibold text-gray-900 mb-3">
@@ -145,7 +146,7 @@ export const PostPage: React.FC = () => {
                 <textarea
                   value={editContent}
                   onChange={(e) => setEditContent(e.target.value)}
-                  className="w-full text-gray-700 mb-4 px-2 py-1 border border-gray-300 rounded focus:outline-none focus:border-blue-500 min-h-[100px]"
+                  className="w-full text-gray-700 mb-4 px-2 py-1 border border-gray-300 rounded focus:outline-none focus:border-primary-500 min-h-[100px]"
                   rows={5}
                 />
               ) : (
@@ -163,7 +164,7 @@ export const PostPage: React.FC = () => {
                   href={post.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
+                  className="text-primary-600 hover:underline"
                 >
                   {post.url}
                 </a>
@@ -193,7 +194,7 @@ export const PostPage: React.FC = () => {
             {/* Actions */}
             <div className="flex items-center justify-between text-sm text-gray-500">
               <div className="flex items-center gap-1">
-                <MessageSquare size={16} />
+                <MessageSquare size={16} className="text-primary-500" />
                 <span>{post.commentCount} {post.commentCount === 1 ? 'kommentar' : 'kommentarer'}</span>
               </div>
               
@@ -203,7 +204,7 @@ export const PostPage: React.FC = () => {
                     <>
                       <button
                         onClick={handleSaveEdit}
-                        className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+                        className="px-3 py-1 bg-primary-600 text-white rounded hover:bg-primary-700"
                       >
                         Gem
                       </button>
@@ -218,14 +219,14 @@ export const PostPage: React.FC = () => {
                     <>
                       <button
                         onClick={handleEdit}
-                        className="flex items-center gap-1 px-2 py-1 hover:bg-gray-100 rounded"
+                        className="flex items-center gap-1 px-2 py-1 hover:bg-primary-50 rounded text-primary-600"
                       >
                         <Edit2 size={14} />
                         Rediger
                       </button>
                       <button
                         onClick={handleDelete}
-                        className="flex items-center gap-1 px-2 py-1 hover:bg-gray-100 rounded text-red-600"
+                        className="flex items-center gap-1 px-2 py-1 hover:bg-red-50 rounded text-red-600"
                       >
                         <Trash2 size={14} />
                         Slet
