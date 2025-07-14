@@ -25,6 +25,14 @@ export const HomePage: React.FC = () => {
   
   return (
     <div className="space-y-4">
+      {/* Welcome message */}
+      <div className="bg-white border border-gray-200 rounded-lg p-6 text-center">
+        <h2 className="text-xl font-semibold mb-2">Velkommen til fællesskabet! 🌟</h2>
+        <p className="text-gray-600 mb-3">Her deler vi vores oplevelser, hjælper hinanden og skaber en stærkere fællesskab af pædagogstuderende.</p>
+        <p className="text-primary-600 text-sm font-medium">Sammen skaber vi de bedste pædagoger ✨</p>
+      </div>
+      
+      {/* Posts */}
       {posts.map(post => (
         <PostCard key={post.id} post={post} />
       ))}
