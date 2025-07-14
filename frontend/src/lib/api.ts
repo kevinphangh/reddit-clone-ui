@@ -1,4 +1,6 @@
-const API_URL = import.meta.env.VITE_API_URL || 'https://via-forum-api.fly.dev';
+// FORCE HTTPS - Updated 2025-07-14 18:30
+const API_URL = 'https://via-forum-api.fly.dev';
+console.log('API URL is:', API_URL); // Debug log to verify
 
 // API Response types
 interface ApiUser {
@@ -76,7 +78,10 @@ class ApiClient {
     endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
-    const url = `${API_URL}${endpoint}`;
+    // FORCE HTTPS - Remove any accidental HTTP
+    const baseUrl = API_URL.replace('http://', 'https://');
+    const url = `${baseUrl}${endpoint}`;
+    console.log('Making request to:', url); // Debug log
     
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
