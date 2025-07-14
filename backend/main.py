@@ -17,6 +17,8 @@ app.add_middleware(
         "https://via-paedagoger.vercel.app",
         "https://via-forum-2bjux99jd-kevins-projects-aa4b90de.vercel.app",
         "https://via-forum-842nw4l1g-kevins-projects-aa4b90de.vercel.app",
+        "https://via-forum-ajg5xlvui-kevins-projects-aa4b90de.vercel.app",
+        "https://via-forum-r1k7ex80x-kevins-projects-aa4b90de.vercel.app",
         "https://*.vercel.app",
         "http://localhost:3000",
         "http://localhost:3001", 
