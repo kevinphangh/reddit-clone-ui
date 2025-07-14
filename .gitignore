@@ -51,3 +51,4 @@ backend/*.sqlite
 backend/.env
 *.db
 test.db
+.vercel
