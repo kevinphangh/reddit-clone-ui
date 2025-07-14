@@ -41,12 +41,12 @@ export const SubmitPage: React.FC = () => {
     return (
       <div className="max-w-md mx-auto">
         <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
-          <LogIn className="mx-auto mb-4 text-gray-400" size={48} />
+          <LogIn className="mx-auto mb-4 text-primary-500" size={48} />
           <h2 className="text-xl font-semibold text-gray-900 mb-2">
-            Du skal være logget ind
+            Hej der! 👋
           </h2>
           <p className="text-gray-600 mb-6">
-            Log ind eller opret en konto for at oprette indlæg i VIA Pædagoger
+            For at dele dine tanker og være en del af vores hyggelige fællesskab, skal du først logge ind eller blive medlem
           </p>
           <div className="space-y-3">
             <a
@@ -70,7 +70,8 @@ export const SubmitPage: React.FC = () => {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6">
-        <h1 className="text-xl font-semibold mb-6">Opret indlæg</h1>
+        <h1 className="text-xl font-semibold mb-2">Del dine tanker med fællesskabet 💭</h1>
+        <p className="text-gray-600 text-sm mb-6">Hvad beskæftiger dig som pædagogstuderende? Del dine oplevelser, spørgsmål eller inspiration!</p>
         
         {error && (
           <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md flex items-center gap-2 text-sm text-red-700">
@@ -88,7 +89,7 @@ export const SubmitPage: React.FC = () => {
                 setTitle(e.target.value);
                 setError('');
               }}
-              placeholder="Titel"
+              placeholder="Hvad handler dit indlæg om?"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primary-500"
               maxLength={300}
             />
@@ -104,7 +105,7 @@ export const SubmitPage: React.FC = () => {
                 setContent(e.target.value);
                 setError('');
               }}
-              placeholder="Skriv dit indlæg her..."
+              placeholder="Fortæl os mere... Hvad tænker du på? Har du en god historie, et spørgsmål, eller noget du gerne vil diskutere?"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primary-500 min-h-[200px] resize-y"
               rows={8}
             />
@@ -123,7 +124,7 @@ export const SubmitPage: React.FC = () => {
               disabled={isSubmitting}
               className="px-4 py-2 bg-primary-600 text-white rounded hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isSubmitting ? 'Opretter...' : 'Opret indlæg'}
+              {isSubmitting ? 'Deler med fællesskabet...' : 'Del med fællesskabet ✨'}
             </button>
           </div>
         </form>

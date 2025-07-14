@@ -218,7 +218,7 @@ export const Comment: React.FC<CommentProps> = ({
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md resize-none focus:outline-none focus:border-primary-500 text-sm"
-              placeholder="Skriv et svar..."
+              placeholder="Hvad synes du? Skriv et venligt svar..."
               rows={3}
             />
             <div className="flex gap-2 mt-2">

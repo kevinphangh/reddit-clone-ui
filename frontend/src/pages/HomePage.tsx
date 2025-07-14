@@ -16,8 +16,9 @@ export const HomePage: React.FC = () => {
   if (posts.length === 0) {
     return (
       <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
-        <h2 className="text-xl font-semibold mb-2">Ingen indlæg endnu</h2>
-        <p className="text-gray-500">Vær den første til at oprette et indlæg!</p>
+        <h2 className="text-xl font-semibold mb-2">Velkommen til fællesskabet! 🌟</h2>
+        <p className="text-gray-600 mb-4">Der er ikke nogen indlæg endnu, men det er din chance for at være den første til at dele noget spændende!</p>
+        <p className="text-primary-600 text-sm">Del dine tanker, stil spørgsmål, eller fortæl om dine oplevelser som pædagogstuderende ✨</p>
       </div>
     );
   }

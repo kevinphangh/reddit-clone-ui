@@ -47,7 +47,8 @@ export const RegisterPage: React.FC = () => {
   return (
     <div className="max-w-sm sm:max-w-md lg:max-w-lg mx-auto px-4">
       <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 md:p-8">
-        <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Opret konto</h1>
+        <h1 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Bliv en del af fællesskabet! 🌟</h1>
+        <p className="text-gray-600 text-sm mb-4 sm:mb-6">Opret din konto og kom med i vores hyggelige fællesskab af pædagogstuderende.</p>
         
         {error && (
           <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md flex items-center gap-2 text-sm text-red-700">
@@ -116,20 +117,20 @@ export const RegisterPage: React.FC = () => {
             disabled={loading}
             className="w-full bg-primary-600 text-white py-2 rounded-md hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Opretter konto...' : 'Opret konto'}
+            {loading ? 'Opretter din konto...' : 'Bliv medlem af fællesskabet ✨'}
           </button>
         </form>
 
         <div className="mt-6 text-center text-sm text-gray-600">
           Har du allerede en konto?{' '}
           <Link to="/login" className="text-primary-600 hover:underline">
-            Log ind
+            Log ind her
           </Link>
         </div>
       </div>
 
       <div className="mt-4 text-xs text-gray-500 text-center">
-        Ved at oprette en konto accepterer du vores brugsbetingelser
+        Ved at blive medlem accepterer du vores fællesskabsregler og hjælper med at skabe et trygt rum for alle 🤝
       </div>
     </div>
   );

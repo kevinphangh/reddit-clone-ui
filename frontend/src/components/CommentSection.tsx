@@ -37,7 +37,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
               onClick={() => setShowCommentForm(true)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md cursor-text text-sm text-gray-500 bg-white"
             >
-              Skriv en kommentar...
+              Hvad tænker du? Skriv en kommentar...
             </div>
           ) : (
             <div>
@@ -45,7 +45,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm resize-none focus:outline-none focus:border-primary-500"
-                placeholder="Skriv en kommentar..."
+                placeholder="Hvad tænker du? Del dine tanker med fællesskabet..."
                 rows={4}
                 autoFocus
               />
@@ -97,7 +97,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
       {/* Comments Header */}
       <div className="mb-4">
         <h3 className="text-sm font-medium text-gray-700">
-          {commentCount === 0 ? 'Ingen kommentarer endnu' : `${commentCount} ${commentCount === 1 ? 'kommentar' : 'kommentarer'}`}
+          {commentCount === 0 ? 'Ingen har kommenteret endnu - vær den første! 💬' : `${commentCount} ${commentCount === 1 ? 'kommentar' : 'kommentarer'}`}
         </h3>
       </div>
 

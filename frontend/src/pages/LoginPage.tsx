@@ -37,7 +37,8 @@ export const LoginPage: React.FC = () => {
   return (
     <div className="max-w-sm sm:max-w-md lg:max-w-lg mx-auto px-4">
       <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 md:p-8">
-        <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Log ind</h1>
+        <h1 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Velkommen tilbage! 👋</h1>
+        <p className="text-gray-600 text-sm mb-4 sm:mb-6">Så dejligt at se dig igen. Log ind og vær en del af vores hyggelige fællesskab.</p>
         
         {error && (
           <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md flex items-center gap-2 text-sm text-red-700">
