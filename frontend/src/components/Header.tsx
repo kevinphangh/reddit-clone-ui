@@ -58,7 +58,7 @@ export const Header: React.FC = () => {
               }}
               onFocus={() => setShowResults(true)}
               placeholder="Søg..."
-              className="w-full pl-8 sm:pl-10 pr-2 sm:pr-4 py-1.5 sm:py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+              className="w-full pl-8 sm:pl-10 pr-2 sm:pr-4 py-1.5 sm:py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:border-primary-500"
             />
             {showResults && searchResults.length > 0 && (
               <SearchDropdown 
@@ -76,7 +76,7 @@ export const Header: React.FC = () => {
         <div className="flex items-center gap-1 sm:gap-2 md:gap-3">
           <Link 
             to="/submit" 
-            className="p-2 text-blue-600 hover:bg-blue-50 rounded transition-colors"
+            className="p-2 text-primary-600 hover:bg-primary-50 rounded transition-colors"
             aria-label="Opret indlæg"
           >
             <Plus size={20} />
@@ -119,7 +119,7 @@ export const Header: React.FC = () => {
                   className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded"
                   aria-label="Brugermenu"
                 >
-                  <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium">
+                  <div className="w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-medium">
                     {user?.username.charAt(0).toUpperCase()}
                   </div>
                   <ChevronDown size={16} className="text-gray-600" />
@@ -147,7 +147,7 @@ export const Header: React.FC = () => {
             </>
           ) : (
             <>
-              <Link to="/register" className="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm md:text-base md:px-4">
+              <Link to="/register" className="px-3 py-2 bg-primary-600 text-white rounded hover:bg-primary-700 text-sm md:text-base md:px-4">
                 Tilmeld
               </Link>
               <Link to="/login" className="px-3 py-2 border border-gray-300 rounded hover:border-gray-400 text-sm md:text-base md:px-4">

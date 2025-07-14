@@ -51,7 +51,7 @@ export const SubmitPage: React.FC = () => {
           <div className="space-y-3">
             <a
               href="/login?from=/submit"
-              className="block w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors"
+              className="block w-full bg-primary-600 text-white py-2 rounded hover:bg-primary-700 transition-colors"
             >
               Log ind
             </a>
@@ -89,7 +89,7 @@ export const SubmitPage: React.FC = () => {
                 setError('');
               }}
               placeholder="Titel"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primary-500"
               maxLength={300}
             />
             <div className="text-xs text-gray-500 mt-1 text-right">
@@ -105,7 +105,7 @@ export const SubmitPage: React.FC = () => {
                 setError('');
               }}
               placeholder="Skriv dit indlæg her..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 min-h-[200px] resize-y"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primary-500 min-h-[200px] resize-y"
               rows={8}
             />
           </div>
@@ -121,7 +121,7 @@ export const SubmitPage: React.FC = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 bg-primary-600 text-white rounded hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? 'Opretter...' : 'Opret indlæg'}
             </button>

@@ -12,6 +12,7 @@ import { StaticPage } from './pages/StaticPage';
 import { AuthProvider } from './contexts/AuthContext';
 import { DataProvider } from './contexts/DataContext';
 import { NotificationProvider } from './contexts/NotificationContext';
+import { CommentCooldownProvider } from './contexts/CommentCooldownContext';
 
 function AppContent() {
   return (
@@ -72,7 +73,9 @@ function App() {
     <AuthProvider>
       <DataProvider>
         <NotificationProvider>
-          <AppContent />
+          <CommentCooldownProvider>
+            <AppContent />
+          </CommentCooldownProvider>
         </NotificationProvider>
       </DataProvider>
     </AuthProvider>

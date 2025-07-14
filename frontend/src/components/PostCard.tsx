@@ -36,12 +36,12 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         <div className="flex flex-col items-center gap-1">
           <button 
             onClick={(e) => handleVote(1, e)}
-            className={`p-1 rounded hover:bg-gray-100 ${post.userVote === 1 ? 'text-blue-600' : 'text-gray-400'}`}
+            className={`p-1 rounded hover:bg-gray-100 ${post.userVote === 1 ? 'text-primary-600' : 'text-gray-400'}`}
             aria-label="Stem op"
           >
             <ArrowUp size={20} />
           </button>
-          <span className={`text-sm font-medium ${post.userVote === 1 ? 'text-blue-600' : post.userVote === -1 ? 'text-red-500' : 'text-gray-600'}`}>
+          <span className={`text-sm font-medium ${post.userVote === 1 ? 'text-primary-600' : post.userVote === -1 ? 'text-red-500' : 'text-gray-600'}`}>
             {formatScore(post.score)}
           </span>
           <button 
@@ -66,7 +66,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
           <h3 className="mb-2">
             <Link 
               to={`/comments/${post.id}`}
-              className="text-base sm:text-lg md:text-xl lg:text-2xl font-medium text-gray-900 hover:text-blue-600"
+              className="text-base sm:text-lg md:text-xl lg:text-2xl font-medium text-gray-900 hover:text-primary-600"
             >
               {post.title}
             </Link>

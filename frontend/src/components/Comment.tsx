@@ -3,13 +3,15 @@ import { Link } from 'react-router-dom';
 import { 
   ArrowUp, 
   ArrowDown, 
-  MessageSquare 
+  MessageSquare,
+  Clock
 } from 'lucide-react';
 import { Comment as CommentType } from '../types';
 import { formatTimeAgo, formatScore } from '../utils/formatting';
 import { clsx } from 'clsx';
 import { useData } from '../contexts/DataContext';
 import { useAuth } from '../contexts/AuthContext';
+import { useCommentCooldown } from '../contexts/CommentCooldownContext';
 
 interface CommentProps {
   comment: CommentType;
@@ -24,6 +26,7 @@ export const Comment: React.FC<CommentProps> = ({
 }) => {
   const { voteComment, createComment, updateComment, deleteComment } = useData();
   const { isLoggedIn, user } = useAuth();
+  const { canComment, isInCooldown, remainingTime, startCooldown } = useCommentCooldown();
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [replyText, setReplyText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -126,13 +129,13 @@ export const Comment: React.FC<CommentProps> = ({
             <textarea
               value={editText}
               onChange={(e) => setEditText(e.target.value)}
-              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:border-primary-500"
               rows={3}
             />
             <div className="flex gap-2 mt-2">
               <button
                 onClick={handleSaveEdit}
-                className="text-xs px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+                className="text-xs px-3 py-1 bg-primary-600 text-white rounded hover:bg-primary-700"
               >
                 Gem
               </button>
@@ -159,13 +162,13 @@ export const Comment: React.FC<CommentProps> = ({
           <div className="flex items-center gap-1">
             <button 
               onClick={() => handleVote(1)}
-              className={clsx('p-1 rounded hover:bg-gray-100', comment.userVote === 1 ? 'text-blue-600' : 'text-gray-400')}
+              className={clsx('p-1 rounded hover:bg-gray-100', comment.userVote === 1 ? 'text-primary-600' : 'text-gray-400')}
             >
               <ArrowUp size={16} />
             </button>
             <span className={clsx(
               'text-xs font-medium',
-              comment.userVote === 1 ? 'text-blue-600' : comment.userVote === -1 ? 'text-red-500' : 'text-gray-600'
+              comment.userVote === 1 ? 'text-primary-600' : comment.userVote === -1 ? 'text-red-500' : 'text-gray-600'
             )}>
               {formatScore(comment.score)}
             </span>
@@ -181,10 +184,11 @@ export const Comment: React.FC<CommentProps> = ({
           {!comment.isLocked && depth < maxDepth && isLoggedIn && (
             <button 
               onClick={() => setShowReplyForm(!showReplyForm)}
-              className="text-xs text-gray-500 hover:text-gray-700"
+              className="text-xs text-gray-500 hover:text-gray-700 disabled:opacity-50"
+              disabled={isInCooldown}
             >
               <MessageSquare size={14} className="inline mr-1" />
-              Svar
+              {isInCooldown ? `Svar (${remainingTime}s)` : 'Svar'}
             </button>
           )}
 
@@ -213,17 +217,24 @@ export const Comment: React.FC<CommentProps> = ({
             <textarea 
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md resize-none focus:outline-none focus:border-blue-500 text-sm"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md resize-none focus:outline-none focus:border-primary-500 text-sm"
               placeholder="Skriv et svar..."
               rows={3}
             />
             <div className="flex gap-2 mt-2">
+              {isInCooldown && (
+                <div className="flex items-center gap-1 text-xs text-gray-500 mr-auto">
+                  <Clock size={12} />
+                  Du kan svare igen om {remainingTime} sekunder
+                </div>
+              )}
               <button 
                 onClick={async () => {
-                  if (replyText.trim() && comment.post) {
+                  if (replyText.trim() && comment.post && canComment) {
                     setIsSubmitting(true);
                     try {
                       await createComment(String(comment.post.id), replyText.trim(), String(comment.id));
+                      startCooldown();
                       setReplyText('');
                       setShowReplyForm(false);
                     } catch (err) {
@@ -234,10 +245,11 @@ export const Comment: React.FC<CommentProps> = ({
                     }
                   }
                 }}
-                disabled={!replyText.trim() || isSubmitting}
-                className="text-xs px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+                disabled={!replyText.trim() || isSubmitting || !canComment}
+                className="text-xs px-3 py-1 bg-primary-600 text-white rounded hover:bg-primary-700 disabled:opacity-50 flex items-center gap-1"
               >
-                {isSubmitting ? 'Sender...' : 'Send'}
+                {isInCooldown && <Clock size={12} />}
+                {isSubmitting ? 'Sender...' : isInCooldown ? `Vent ${remainingTime}s` : 'Send'}
               </button>
               <button 
                 onClick={() => {
