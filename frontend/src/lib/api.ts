@@ -92,30 +92,45 @@ class ApiClient {
       headers['Authorization'] = `Bearer ${this.token}`;
     }
 
-    const response = await fetch(url, {
-      ...options,
-      headers,
-    });
+    try {
+      const response = await fetch(url, {
+        ...options,
+        headers,
+      });
 
-    if (!response.ok) {
-      let errorMessage = 'API Error';
-      try {
-        const error = await response.json();
-        errorMessage = error.detail || error.message || errorMessage;
-      } catch {
-        errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+      if (!response.ok) {
+        let errorMessage = 'API Error';
+        try {
+          const error = await response.json();
+          errorMessage = error.detail || error.message || errorMessage;
+        } catch {
+          errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+        }
+        
+        if (response.status === 401) {
+          // Unauthorized - clear token
+          this.setToken(null);
+          // Only redirect if not already on login/register page
+          const currentPath = window.location.pathname;
+          if (!currentPath.startsWith('/login') && !currentPath.startsWith('/register')) {
+            window.location.href = '/login?from=' + encodeURIComponent(currentPath);
+          }
+        }
+        
+        throw new ApiError(response.status, errorMessage);
       }
-      
-      if (response.status === 401) {
-        // Unauthorized - clear token
-        this.setToken(null);
-        window.location.href = '/login';
+
+      return response.json();
+    } catch (error) {
+      // Handle network errors
+      if (error instanceof ApiError) {
+        throw error;
       }
-      
-      throw new ApiError(response.status, errorMessage);
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        throw new ApiError(0, 'Netværksfejl - kunne ikke oprette forbindelse til serveren');
+      }
+      throw new ApiError(0, 'Der opstod en uventet fejl');
     }
-
-    return response.json();
   }
 
   // Auth endpoints
@@ -131,7 +146,11 @@ class ApiClient {
     formData.append('username', username);
     formData.append('password', password);
 
-    const response = await fetch(`${API_URL}/api/auth/login`, {
+    // FORCE HTTPS - same as in request method
+    const baseUrl = API_URL.replace('http://', 'https://');
+    const url = `${baseUrl}/api/auth/login`;
+    
+    const response = await fetch(url, {
       method: 'POST',
       body: formData,
     });

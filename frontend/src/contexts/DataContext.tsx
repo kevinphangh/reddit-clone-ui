@@ -85,8 +85,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }));
       
       setPosts(transformedPosts);
-    } catch (err) {
-      setError('Failed to load posts');
+    } catch (err: any) {
+      if (err.status === 0) {
+        setError('Netværksfejl - kunne ikke oprette forbindelse til serveren');
+      } else {
+        setError('Kunne ikke hente indlæg. Prøv at genindlæse siden.');
+      }
       console.error('Error loading posts:', err);
     } finally {
       setLoading(false);
@@ -105,7 +109,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const otherComments = prev.filter(c => c.post.id !== postId);
         return [...otherComments, ...transformedComments];
       });
-    } catch (err) {
+    } catch (err: any) {
+      if (err.status === 0) {
+        setError('Netværksfejl - kunne ikke oprette forbindelse til serveren');
+      } else {
+        setError('Kunne ikke hente kommentarer. Prøv igen senere.');
+      }
       console.error('Error loading comments:', err);
     }
   };
@@ -191,8 +200,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       setPosts(prev => [transformedPost, ...prev]);
       return transformedPost;
-    } catch (err) {
-      throw new Error('Failed to create post');
+    } catch (err: any) {
+      if (err.status === 0) {
+        throw new Error('Netværksfejl - kunne ikke oprette forbindelse til serveren');
+      } else {
+        throw new Error('Kunne ikke oprette indlæg. Prøv igen senere.');
+      }
     }
   };
 
@@ -214,8 +227,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
             }
           : post
       ));
-    } catch (err) {
-      throw new Error('Failed to update post');
+    } catch (err: any) {
+      if (err.status === 0) {
+        throw new Error('Netværksfejl - kunne ikke oprette forbindelse til serveren');
+      } else {
+        throw new Error('Kunne ikke opdatere indlæg. Prøv igen senere.');
+      }
     }
   };
 
@@ -223,8 +240,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       await api.deletePost(postId);
       setPosts(prev => prev.filter(post => post.id !== postId));
-    } catch (err) {
-      throw new Error('Failed to delete post');
+    } catch (err: any) {
+      if (err.status === 0) {
+        throw new Error('Netværksfejl - kunne ikke oprette forbindelse til serveren');
+      } else {
+        throw new Error('Kunne ikke slette indlæg. Prøv igen senere.');
+      }
     }
   };
 
@@ -251,13 +272,23 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
           ? { ...p, score: result.score, userVote: result.user_vote || 0 }
           : p
       ));
-    } catch (err) {
+    } catch (err: any) {
       // Revert on error
       setPosts(prev => prev.map(p => 
         p.id === postId 
           ? { ...p, userVote: currentVote, score: post.score }
           : p
       ));
+      
+      // Show user-friendly error message
+      if (err.status === 401) {
+        setError('Du skal være logget ind for at stemme');
+      } else if (err.status === 0) {
+        setError(err.message || 'Netværksfejl - kunne ikke oprette forbindelse til serveren');
+      } else {
+        setError('Kunne ikke stemme på indlæg. Prøv igen senere.');
+      }
+      
       console.error('Failed to vote on post:', err);
       throw err;
     }
@@ -333,9 +364,13 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }, 100);
       
       return transformedComment;
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to create comment:', err);
-      throw new Error('Failed to create comment');
+      if (err.status === 0) {
+        throw new Error('Netværksfejl - kunne ikke oprette forbindelse til serveren');
+      } else {
+        throw new Error('Kunne ikke oprette kommentar. Prøv igen senere.');
+      }
     }
   };
 
@@ -363,8 +398,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       };
       
       setComments(prev => updateCommentRecursive(prev));
-    } catch (err) {
-      throw new Error('Failed to update comment');
+    } catch (err: any) {
+      if (err.status === 0) {
+        throw new Error('Netværksfejl - kunne ikke oprette forbindelse til serveren');
+      } else {
+        throw new Error('Kunne ikke opdatere kommentar. Prøv igen senere.');
+      }
     }
   };
 
@@ -410,8 +449,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
             : p
         ));
       }
-    } catch (err) {
-      throw new Error('Failed to delete comment');
+    } catch (err: any) {
+      if (err.status === 0) {
+        throw new Error('Netværksfejl - kunne ikke oprette forbindelse til serveren');
+      } else {
+        throw new Error('Kunne ikke slette kommentar. Prøv igen senere.');
+      }
     }
   };
 
@@ -458,9 +501,19 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       };
       
       setComments(prev => updateWithServerData(prev));
-    } catch (err) {
+    } catch (err: any) {
       // Revert on error
       setComments(prev => voteCommentRecursive(prev, false));
+      
+      // Show user-friendly error message
+      if (err.status === 401) {
+        setError('Du skal være logget ind for at stemme');
+      } else if (err.status === 0) {
+        setError(err.message || 'Netværksfejl - kunne ikke oprette forbindelse til serveren');
+      } else {
+        setError('Kunne ikke stemme på kommentar. Prøv igen senere.');
+      }
+      
       console.error('Failed to vote on comment:', err);
       throw err;
     }

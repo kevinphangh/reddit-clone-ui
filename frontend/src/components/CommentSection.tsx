@@ -11,13 +11,15 @@ interface CommentSectionProps {
   commentCount: number;
   isLocked?: boolean;
   postId: string;
+  isLoading?: boolean;
 }
 
 export const CommentSection: React.FC<CommentSectionProps> = ({ 
   comments, 
   commentCount,
   isLocked = false,
-  postId
+  postId,
+  isLoading = false
 }) => {
   const { isLoggedIn } = useAuth();
   const { createComment } = useData();
@@ -103,13 +105,23 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
 
       {/* Comments List */}
       <div className="space-y-3">
-        {comments.map(comment => (
-          <Comment 
-            key={comment.id} 
-            comment={comment}
-            depth={0}
-          />
-        ))}
+        {isLoading ? (
+          <div className="text-center py-4">
+            <p className="text-gray-500">Indlæser kommentarer...</p>
+          </div>
+        ) : comments.length === 0 ? (
+          <div className="text-center py-4">
+            <p className="text-gray-500">Ingen kommentarer endnu. Vær den første til at kommentere!</p>
+          </div>
+        ) : (
+          comments.map(comment => (
+            <Comment 
+              key={comment.id} 
+              comment={comment}
+              depth={0}
+            />
+          ))
+        )}
       </div>
     </div>
   );

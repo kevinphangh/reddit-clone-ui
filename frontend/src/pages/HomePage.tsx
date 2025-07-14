@@ -3,12 +3,20 @@ import { PostCard } from '../components/PostCard';
 import { useData } from '../contexts/DataContext';
 
 export const HomePage: React.FC = () => {
-  const { posts, loading } = useData();
+  const { posts, loading, error } = useData();
   
   if (loading) {
     return (
       <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
         <p className="text-gray-500">Indlæser...</p>
+      </div>
+    );
+  }
+  
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-lg p-8 text-center">
+        <p className="text-red-600">{error}</p>
       </div>
     );
   }

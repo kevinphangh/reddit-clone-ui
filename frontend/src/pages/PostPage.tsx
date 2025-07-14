@@ -21,6 +21,7 @@ export const PostPage: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState('');
   const [editContent, setEditContent] = useState('');
+  const [commentsLoading, setCommentsLoading] = useState(true);
   
   const post = getPost(postId!);
   const comments = getPostComments(postId!);
@@ -31,10 +32,15 @@ export const PostPage: React.FC = () => {
     
     const loadComments = async () => {
       if (postId && isMounted) {
+        setCommentsLoading(true);
         try {
           await refreshComments(postId);
         } catch (error) {
           console.error('Failed to load comments:', error);
+        } finally {
+          if (isMounted) {
+            setCommentsLoading(false);
+          }
         }
       }
     };
@@ -254,6 +260,7 @@ export const PostPage: React.FC = () => {
         commentCount={post.commentCount}
         isLocked={post.isLocked}
         postId={String(post.id)}
+        isLoading={commentsLoading}
       />
     </div>
   );
