@@ -28,8 +28,10 @@ class Post(Base):
     votes = relationship("Vote", 
                         primaryjoin="and_(Post.id==Vote.target_id, Vote.target_type=='post')",
                         foreign_keys="[Vote.target_id]",
-                        cascade="all, delete-orphan")
+                        cascade="all, delete-orphan",
+                        overlaps="votes")
     saved_by = relationship("SavedItem",
                            primaryjoin="and_(Post.id==SavedItem.item_id, SavedItem.item_type=='post')",
                            foreign_keys="[SavedItem.item_id]",
-                           cascade="all, delete-orphan")
+                           cascade="all, delete-orphan",
+                           overlaps="saved_by")

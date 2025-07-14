@@ -29,8 +29,10 @@ class Comment(Base):
     votes = relationship("Vote",
                         primaryjoin="and_(Comment.id==Vote.target_id, Vote.target_type=='comment')",
                         foreign_keys="[Vote.target_id]",
-                        cascade="all, delete-orphan")
+                        cascade="all, delete-orphan",
+                        overlaps="votes")
     saved_by = relationship("SavedItem",
                            primaryjoin="and_(Comment.id==SavedItem.item_id, SavedItem.item_type=='comment')",
                            foreign_keys="[SavedItem.item_id]",
-                           cascade="all, delete-orphan")
+                           cascade="all, delete-orphan",
+                           overlaps="saved_by")

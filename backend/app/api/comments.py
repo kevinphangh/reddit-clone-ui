@@ -54,6 +54,15 @@ async def get_post_comments(
     db: AsyncSession = Depends(get_db),
     current_user: Optional[User] = Depends(get_current_user_optional)
 ):
+    # First check if the post exists
+    post_result = await db.execute(
+        select(Post).where(and_(Post.id == post_id, Post.is_deleted == False))
+    )
+    post = post_result.scalar_one_or_none()
+    
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+    
     # Get all comments for post with author info
     result = await db.execute(
         select(Comment)
