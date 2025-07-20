@@ -160,6 +160,9 @@ class ApiClient {
     const baseUrl = ensureHttps(API_URL);
     const url = ensureHttps(`${baseUrl}/api/auth/login`);
     
+    console.log('Login request to:', url);
+    console.log('Username:', username);
+    
     const response = await fetch(url, {
       method: 'POST',
       body: formData,
@@ -167,6 +170,7 @@ class ApiClient {
 
     if (!response.ok) {
       const error = await response.json().catch(() => ({ detail: 'Network error' }));
+      console.error('Login response error:', response.status, error);
       throw new ApiError(response.status, error.detail || 'Login failed');
     }
 
@@ -270,6 +274,20 @@ class ApiClient {
 
   async getUserComments(username: string) {
     return this.request<ApiComment[]>(`/api/users/${username}/comments`);
+  }
+
+  async getUserCount() {
+    // TODO: Backend endpoint not implemented yet
+    // For now, we'll try to fetch it and handle the 404 gracefully
+    try {
+      return await this.request<{ count: number }>(`/api/users/count`);
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        // Expected - endpoint not implemented yet
+        throw new ApiError(404, 'User count endpoint not available');
+      }
+      throw error;
+    }
   }
 }
 

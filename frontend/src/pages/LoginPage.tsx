@@ -37,11 +37,11 @@ export const LoginPage: React.FC = () => {
   return (
     <div className="max-w-sm sm:max-w-md lg:max-w-lg mx-auto px-4">
       <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 md:p-8">
-        <h1 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Velkommen tilbage! 👋</h1>
-        <p className="text-gray-600 text-sm mb-4 sm:mb-6">Så dejligt at se dig igen. Log ind og vær en del af vores hyggelige fællesskab.</p>
+        <h1 className="text-heading-1 mb-2 sm:mb-3">Velkommen tilbage! 👋</h1>
+        <p className="text-body-small text-gray-600 mb-4 sm:mb-6">Så dejligt at se dig igen. Log ind og vær en del af vores hyggelige fællesskab.</p>
         
         {error && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md flex items-center gap-2 text-sm text-red-700">
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md flex items-center gap-2 text-body-small text-red-700">
             <AlertCircle size={16} />
             {error}
           </div>
@@ -49,7 +49,7 @@ export const LoginPage: React.FC = () => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-body-small font-medium text-gray-700 mb-1">
               Brugernavn
             </label>
             <input
@@ -62,7 +62,7 @@ export const LoginPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-body-small font-medium text-gray-700 mb-1">
               Adgangskode
             </label>
             <input
@@ -77,13 +77,13 @@ export const LoginPage: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-primary-600 text-white py-2 rounded-md hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-primary-600 text-white text-button py-2 rounded-md hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Logger ind...' : 'Log ind'}
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-gray-600">
+        <div className="mt-6 text-center text-body-small text-gray-600">
           Har du ikke en konto?{' '}
           <Link to="/register" className="text-primary-600 hover:underline">
             Opret konto
@@ -91,7 +91,7 @@ export const LoginPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="mt-4 text-xs text-gray-500 text-center">
+      <div className="mt-4 text-caption text-gray-500 text-center">
         Tip: Brug et hvilket som helst brugernavn og en adgangskode på mindst 6 tegn
       </div>
     </div>

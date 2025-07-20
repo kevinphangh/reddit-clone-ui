@@ -84,7 +84,7 @@ export const Comment: React.FC<CommentProps> = ({
         {depth > 0 && depth < maxDepth && (
           <div className="absolute left-0 top-0 bottom-0 w-px bg-gray-300 ml-2"></div>
         )}
-        <div className="pl-4 py-2 text-gray-500 text-sm italic">
+        <div className="pl-4 py-2 text-gray-500 text-body-small italic">
           [slettet]
         </div>
       </div>
@@ -97,7 +97,7 @@ export const Comment: React.FC<CommentProps> = ({
         {depth > 0 && depth < maxDepth && (
           <div className="absolute left-0 top-0 bottom-0 w-px bg-gray-300 ml-2"></div>
         )}
-        <div className="pl-4 py-2 text-gray-500 text-sm italic">
+        <div className="pl-4 py-2 text-gray-500 text-body-small italic">
           [fjernet]
         </div>
       </div>
@@ -114,7 +114,7 @@ export const Comment: React.FC<CommentProps> = ({
       {/* Comment Content */}
       <div className={clsx('pl-4', depth === 0 && 'border-l-2 border-transparent')}>
         {/* Header */}
-        <div className="flex items-center gap-2 text-xs mb-1 text-gray-500">
+        <div className="flex items-center gap-2 text-caption mb-1 text-gray-500">
           <Link 
             to={`/user/${comment.author.username}`} 
             className="font-medium text-gray-900 hover:underline"
@@ -131,29 +131,29 @@ export const Comment: React.FC<CommentProps> = ({
             <textarea
               value={editText}
               onChange={(e) => setEditText(e.target.value)}
-              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:border-primary-500"
+              className="w-full px-2 py-1 text-body-small border border-gray-300 rounded focus:outline-none focus:border-primary-500"
               rows={3}
             />
             <div className="flex gap-2 mt-2">
               <button
                 onClick={handleSaveEdit}
-                className="text-xs px-3 py-1 bg-primary-600 text-white rounded hover:bg-primary-700"
+                className="text-button px-3 py-1 bg-primary-600 text-white rounded hover:bg-primary-700"
               >
                 Gem
               </button>
               <button
                 onClick={() => setIsEditing(false)}
-                className="text-xs px-3 py-1 border border-gray-300 rounded hover:bg-gray-50"
+                className="text-button px-3 py-1 border border-gray-300 rounded hover:bg-gray-50"
               >
                 Annuller
               </button>
             </div>
           </div>
         ) : (
-          <div className="text-gray-700 text-sm mb-2">
+          <div className="text-gray-700 text-body-small mb-2">
             {comment.body}
             {comment.editedAt && (
-              <span className="text-xs text-gray-500 ml-2">(redigeret)</span>
+              <span className="text-caption text-gray-500 ml-2">(redigeret)</span>
             )}
           </div>
         )}
@@ -169,7 +169,7 @@ export const Comment: React.FC<CommentProps> = ({
               <ArrowUp size={16} />
             </button>
             <span className={clsx(
-              'text-xs font-medium',
+              'text-caption font-medium',
               comment.userVote === 1 ? 'text-primary-600' : comment.userVote === -1 ? 'text-red-500' : 'text-gray-600'
             )}>
               {formatScore(comment.score)}
@@ -186,7 +186,7 @@ export const Comment: React.FC<CommentProps> = ({
           {!comment.isLocked && depth < maxDepth && isLoggedIn && (
             <button 
               onClick={() => setShowReplyForm(!showReplyForm)}
-              className="text-xs text-gray-500 hover:text-gray-700 disabled:opacity-50"
+              className="text-caption text-gray-500 hover:text-gray-700 disabled:opacity-50"
               disabled={isInCooldown}
             >
               <MessageSquare size={14} className="inline mr-1" />
@@ -199,13 +199,13 @@ export const Comment: React.FC<CommentProps> = ({
             <>
               <button
                 onClick={handleEdit}
-                className="text-xs text-gray-500 hover:text-gray-700"
+                className="text-caption text-gray-500 hover:text-gray-700"
               >
                 Rediger
               </button>
               <button
                 onClick={handleDelete}
-                className="text-xs text-red-600 hover:text-red-700"
+                className="text-caption text-red-600 hover:text-red-700"
               >
                 Slet
               </button>
@@ -219,13 +219,13 @@ export const Comment: React.FC<CommentProps> = ({
             <textarea 
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md resize-none focus:outline-none focus:border-primary-500 text-sm"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md resize-none focus:outline-none focus:border-primary-500 text-body-small"
               placeholder="Hvad synes du? Skriv et venligt svar..."
               rows={3}
             />
             <div className="flex gap-2 mt-2">
               {isInCooldown && (
-                <div className="flex items-center gap-1 text-xs text-gray-500 mr-auto">
+                <div className="flex items-center gap-1 text-caption text-gray-500 mr-auto">
                   <Clock size={12} />
                   Du kan svare igen om {remainingTime} sekunder
                 </div>
@@ -248,7 +248,7 @@ export const Comment: React.FC<CommentProps> = ({
                   }
                 }}
                 disabled={!replyText.trim() || isSubmitting || !canComment}
-                className="text-xs px-3 py-1 bg-primary-600 text-white rounded hover:bg-primary-700 disabled:opacity-50 flex items-center gap-1"
+                className="text-button px-3 py-1 bg-primary-600 text-white rounded hover:bg-primary-700 disabled:opacity-50 flex items-center gap-1"
               >
                 {isInCooldown && <Clock size={12} />}
                 {isSubmitting ? 'Sender...' : isInCooldown ? `Vent ${remainingTime}s` : 'Send'}
@@ -258,7 +258,7 @@ export const Comment: React.FC<CommentProps> = ({
                   setShowReplyForm(false);
                   setReplyText('');
                 }}
-                className="text-xs px-3 py-1 border border-gray-300 rounded hover:bg-gray-50"
+                className="text-button px-3 py-1 border border-gray-300 rounded hover:bg-gray-50"
               >
                 Annuller
               </button>

@@ -52,7 +52,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
           >
             <ArrowUp size={20} />
           </button>
-          <span className={`text-sm font-medium ${post.userVote === 1 ? 'text-primary-600' : post.userVote === -1 ? 'text-red-500' : 'text-gray-600'}`}>
+          <span className={`text-body-small font-medium ${post.userVote === 1 ? 'text-primary-600' : post.userVote === -1 ? 'text-red-500' : 'text-gray-600'}`}>
             {formatScore(post.score)}
           </span>
           <button 
@@ -68,7 +68,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         {/* Content */}
         <div className="flex-1">
           {/* Meta */}
-          <div className="flex flex-wrap items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-500 mb-2">
+          <div className="flex flex-wrap items-center gap-1 sm:gap-2 text-caption text-gray-500 mb-2">
             <span>af {post.author.username}</span>
             <span>•</span>
             <span>{formatTimeAgo(post.createdAt)}</span>
@@ -78,7 +78,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
           <h3 className="mb-2">
             <Link 
               to={`/comments/${post.id}`}
-              className="text-base sm:text-lg md:text-xl lg:text-2xl font-medium text-gray-900 hover:text-primary-600"
+              className="text-heading-2 text-gray-900 hover:text-primary-600"
             >
               {post.title}
             </Link>
@@ -86,7 +86,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
 
           {/* Content preview */}
           {post.type === 'text' && post.content && (
-            <p className="text-sm md:text-base text-gray-600 mb-3 line-clamp-2 md:line-clamp-3">
+            <p className="text-body text-gray-600 mb-3 line-clamp-2 md:line-clamp-3">
               {post.content.substring(0, 200)}
               {post.content.length > 200 && '...'}
             </p>
@@ -96,7 +96,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
           <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
             <Link 
               to={`/comments/${post.id}`}
-              className="flex items-center gap-1 text-xs sm:text-sm text-gray-500 hover:text-gray-700"
+              className="flex items-center gap-1 text-body-small text-gray-500 hover:text-gray-700"
             >
               <MessageSquare size={16} />
               <span>{post.commentCount} {post.commentCount === 1 ? 'kommentar' : 'kommentarer'}</span>

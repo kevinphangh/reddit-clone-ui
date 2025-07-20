@@ -37,7 +37,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
           {!showCommentForm ? (
             <div 
               onClick={() => setShowCommentForm(true)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md cursor-text text-sm text-gray-500 bg-white"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md cursor-text text-body-small text-gray-500 bg-white"
             >
               Hvad tænker du? Skriv en kommentar...
             </div>
@@ -46,14 +46,14 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
               <textarea
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm resize-none focus:outline-none focus:border-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-body-small resize-none focus:outline-none focus:border-primary-500"
                 placeholder="Hvad tænker du? Del dine tanker med fællesskabet..."
                 rows={4}
                 autoFocus
               />
               <div className="flex justify-end gap-2 mt-2">
                 {isInCooldown && (
-                  <div className="flex items-center gap-1 text-xs text-gray-500 mr-auto">
+                  <div className="flex items-center gap-1 text-caption text-gray-500 mr-auto">
                     <Clock size={12} />
                     Du kan kommentere igen om {remainingTime} sekunder
                   </div>
@@ -63,7 +63,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
                     setShowCommentForm(false);
                     setCommentText('');
                   }}
-                  className="text-sm px-3 py-1 border border-gray-300 rounded hover:bg-gray-50"
+                  className="text-button px-3 py-1 border border-gray-300 rounded hover:bg-gray-50"
                 >
                   Annuller
                 </button>
@@ -84,7 +84,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
                       }
                     }
                   }}
-                  className="text-sm px-3 py-1 bg-primary-600 text-white rounded hover:bg-primary-700 disabled:opacity-50 flex items-center gap-1"
+                  className="text-button px-3 py-1 bg-primary-600 text-white rounded hover:bg-primary-700 disabled:opacity-50 flex items-center gap-1"
                   disabled={!commentText.trim() || isSubmitting || !canComment}
                 >
                   {isInCooldown && <Clock size={12} />}
@@ -98,7 +98,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
 
       {/* Comments Header */}
       <div className="mb-4">
-        <h3 className="text-sm font-medium text-gray-700">
+        <h3 className="text-body-small font-medium text-gray-700">
           {commentCount === 0 ? 'Ingen har kommenteret endnu - vær den første! 💬' : `${commentCount} ${commentCount === 1 ? 'kommentar' : 'kommentarer'}`}
         </h3>
       </div>
@@ -107,11 +107,11 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
       <div className="space-y-3">
         {isLoading ? (
           <div className="text-center py-4">
-            <p className="text-gray-500">Indlæser kommentarer...</p>
+            <p className="text-body text-gray-500">Indlæser kommentarer...</p>
           </div>
         ) : comments.length === 0 ? (
           <div className="text-center py-4">
-            <p className="text-gray-500">Ingen kommentarer endnu. Vær den første til at kommentere!</p>
+            <p className="text-body text-gray-500">Ingen kommentarer endnu. Vær den første til at kommentere!</p>
           </div>
         ) : (
           comments.map(comment => (

@@ -102,7 +102,7 @@ export const UserPage: React.FC = () => {
   if (!username) {
     return (
       <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
-        <p className="text-gray-500">Bruger ikke fundet</p>
+        <p className="text-body text-gray-500">Bruger ikke fundet</p>
       </div>
     );
   }
@@ -111,19 +111,19 @@ export const UserPage: React.FC = () => {
     <div>
       {error && (
         <div className="bg-white border border-red-200 rounded-lg p-4 mb-4">
-          <p className="text-red-600 text-center">{error}</p>
+          <p className="text-body text-red-600 text-center">{error}</p>
         </div>
       )}
       
       {/* User Header */}
       <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6 mb-4">
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 md:w-20 md:h-20 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl md:text-3xl font-medium">
+          <div className="w-16 h-16 md:w-20 md:h-20 bg-blue-600 text-white rounded-full flex items-center justify-center text-heading-1 font-medium">
             {username.charAt(0).toUpperCase()}
           </div>
           <div>
-            <h1 className="text-2xl font-bold">u/{username}</h1>
-            <p className="text-gray-500">Medlem siden {userCreatedAt ? formatTimeAgo(userCreatedAt) : 'indlæser...'}</p>
+            <h1 className="text-heading-1">u/{username}</h1>
+            <p className="text-body text-gray-500">Medlem siden {userCreatedAt ? formatTimeAgo(userCreatedAt) : 'indlæser...'}</p>
           </div>
         </div>
       </div>
@@ -133,7 +133,7 @@ export const UserPage: React.FC = () => {
         <div className="flex border-b">
           <button
             onClick={() => setActiveTab('posts')}
-            className={`px-4 md:px-6 py-3 font-medium text-sm md:text-base ${
+            className={`px-4 md:px-6 py-3 font-medium text-button ${
               activeTab === 'posts' 
                 ? 'text-blue-600 border-b-2 border-blue-600' 
                 : 'text-gray-500 hover:text-gray-700'
@@ -143,7 +143,7 @@ export const UserPage: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveTab('comments')}
-            className={`px-4 md:px-6 py-3 font-medium text-sm md:text-base ${
+            className={`px-4 md:px-6 py-3 font-medium text-button ${
               activeTab === 'comments' 
                 ? 'text-blue-600 border-b-2 border-blue-600' 
                 : 'text-gray-500 hover:text-gray-700'
@@ -158,7 +158,7 @@ export const UserPage: React.FC = () => {
       <div className="space-y-4">
         {loading ? (
           <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
-            <p className="text-gray-500">Indlæser...</p>
+            <p className="text-body text-gray-500">Indlæser...</p>
           </div>
         ) : (
           activeTab === 'posts' ? (
@@ -166,7 +166,7 @@ export const UserPage: React.FC = () => {
               userPosts.map(post => <PostCard key={post.id} post={post} />)
             ) : (
               <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
-                <p className="text-gray-500">Ingen indlæg endnu</p>
+                <p className="text-body text-gray-500">Ingen indlæg endnu</p>
               </div>
             )
           ) : (
@@ -174,7 +174,7 @@ export const UserPage: React.FC = () => {
               <div className="bg-white border border-gray-200 rounded-lg divide-y">
                 {userComments.map(comment => (
                   <div key={comment.id} className="p-4">
-                    <div className="text-xs text-gray-500 mb-2">
+                    <div className="text-caption text-gray-500 mb-2">
                       Kommentar på "{comment.post.title}"
                     </div>
                     <Comment comment={comment} depth={0} maxDepth={0} />
@@ -183,7 +183,7 @@ export const UserPage: React.FC = () => {
               </div>
             ) : (
               <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
-                <p className="text-gray-500">Ingen kommentarer endnu</p>
+                <p className="text-body text-gray-500">Ingen kommentarer endnu</p>
               </div>
             )
           )

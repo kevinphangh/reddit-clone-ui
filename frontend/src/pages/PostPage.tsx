@@ -55,9 +55,9 @@ export const PostPage: React.FC = () => {
   if (!post) {
     return (
       <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
-        <h1 className="text-xl font-bold mb-2">Hmm, vi kan ikke finde dette indlæg 🤔</h1>
-        <p className="text-gray-600 mb-4">Det indlæg du leder efter eksisterer ikke eller er blevet slettet.</p>
-        <p className="text-primary-600 text-sm">Gå tilbage til <Link to="/" className="underline">forsiden</Link> og find andre spændende indlæg!</p>
+        <h1 className="text-heading-2 mb-2">Hmm, vi kan ikke finde dette indlæg 🤔</h1>
+        <p className="text-body text-gray-600 mb-4">Det indlæg du leder efter eksisterer ikke eller er blevet slettet.</p>
+        <p className="text-body-small text-primary-600">Gå tilbage til <Link to="/" className="underline">forsiden</Link> og find andre spændende indlæg!</p>
       </div>
     );
   }
@@ -113,7 +113,7 @@ export const PostPage: React.FC = () => {
               <ArrowUp size={24} />
             </button>
             <span className={clsx(
-              'text-base font-bold my-1',
+              'text-body font-bold my-1',
               post.userVote === 1 ? 'text-primary-600' : post.userVote === -1 ? 'text-red-500' : 'text-gray-600'
             )}>
               {formatScore(post.score)}
@@ -130,7 +130,7 @@ export const PostPage: React.FC = () => {
           {/* Content */}
           <div className="flex-1 p-3">
             {/* Meta Info */}
-            <div className="flex items-center gap-1 text-xs text-gray-500 mb-2">
+            <div className="flex items-center gap-1 text-caption text-gray-500 mb-2">
               <span>Delt af</span>
               <Link to={`/user/${post.author.username}`} className="hover:underline font-medium text-primary-600">
                 {post.author.username}
@@ -145,10 +145,10 @@ export const PostPage: React.FC = () => {
                 type="text"
                 value={editTitle}
                 onChange={(e) => setEditTitle(e.target.value)}
-                className="text-xl font-semibold w-full mb-3 px-2 py-1 border border-gray-300 rounded focus:outline-none focus:border-primary-500"
+                className="text-heading-2 w-full mb-3 px-2 py-1 border border-gray-300 rounded focus:outline-none focus:border-primary-500"
               />
             ) : (
-              <h1 className="text-xl font-semibold text-gray-900 mb-3">
+              <h1 className="text-heading-2 text-gray-900 mb-3">
                 {post.title}
               </h1>
             )}
@@ -160,12 +160,12 @@ export const PostPage: React.FC = () => {
                 <textarea
                   value={editContent}
                   onChange={(e) => setEditContent(e.target.value)}
-                  className="w-full text-gray-700 mb-4 px-2 py-1 border border-gray-300 rounded focus:outline-none focus:border-primary-500 min-h-[100px]"
+                  className="w-full text-body text-gray-700 mb-4 px-2 py-1 border border-gray-300 rounded focus:outline-none focus:border-primary-500 min-h-[100px]"
                   rows={5}
                 />
               ) : (
                 post.content && (
-                  <div className="text-gray-700 leading-relaxed mb-4 whitespace-pre-wrap">
+                  <div className="text-body text-gray-700 leading-relaxed mb-4 whitespace-pre-wrap">
                     {post.content}
                   </div>
                 )
@@ -206,7 +206,7 @@ export const PostPage: React.FC = () => {
             )}
 
             {/* Actions */}
-            <div className="flex items-center justify-between text-sm text-gray-500">
+            <div className="flex items-center justify-between text-body-small text-gray-500">
               <div className="flex items-center gap-1">
                 <MessageSquare size={16} className="text-primary-500" />
                 <span>{post.commentCount} {post.commentCount === 1 ? 'kommentar' : 'kommentarer'}</span>
@@ -218,13 +218,13 @@ export const PostPage: React.FC = () => {
                     <>
                       <button
                         onClick={handleSaveEdit}
-                        className="px-3 py-1 bg-primary-600 text-white rounded hover:bg-primary-700"
+                        className="text-button px-3 py-1 bg-primary-600 text-white rounded hover:bg-primary-700"
                       >
                         Gem
                       </button>
                       <button
                         onClick={() => setIsEditing(false)}
-                        className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50"
+                        className="text-button px-3 py-1 border border-gray-300 rounded hover:bg-gray-50"
                       >
                         Annuller
                       </button>
@@ -233,14 +233,14 @@ export const PostPage: React.FC = () => {
                     <>
                       <button
                         onClick={handleEdit}
-                        className="flex items-center gap-1 px-2 py-1 hover:bg-primary-50 rounded text-primary-600"
+                        className="text-button flex items-center gap-1 px-2 py-1 hover:bg-primary-50 rounded text-primary-600"
                       >
                         <Edit2 size={14} />
                         Rediger
                       </button>
                       <button
                         onClick={handleDelete}
-                        className="flex items-center gap-1 px-2 py-1 hover:bg-red-50 rounded text-red-600"
+                        className="text-button flex items-center gap-1 px-2 py-1 hover:bg-red-50 rounded text-red-600"
                       >
                         <Trash2 size={14} />
                         Slet

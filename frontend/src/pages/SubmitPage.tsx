@@ -42,22 +42,22 @@ export const SubmitPage: React.FC = () => {
       <div className="max-w-md mx-auto">
         <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
           <LogIn className="mx-auto mb-4 text-primary-500" size={48} />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+          <h2 className="text-heading-2 text-gray-900 mb-2">
             Hej der! 👋
           </h2>
-          <p className="text-gray-600 mb-6">
+          <p className="text-body text-gray-600 mb-6">
             For at dele dine tanker og være en del af vores hyggelige fællesskab, skal du først logge ind eller blive medlem
           </p>
           <div className="space-y-3">
             <a
               href="/login?from=/submit"
-              className="block w-full bg-primary-600 text-white py-2 rounded hover:bg-primary-700 transition-colors"
+              className="block w-full bg-primary-600 text-white text-button py-2 rounded hover:bg-primary-700 transition-colors"
             >
               Log ind
             </a>
             <a
               href="/register"
-              className="block w-full border border-gray-300 py-2 rounded hover:border-gray-400 transition-colors"
+              className="block w-full border border-gray-300 text-button py-2 rounded hover:border-gray-400 transition-colors"
             >
               Opret konto
             </a>
@@ -70,11 +70,11 @@ export const SubmitPage: React.FC = () => {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6">
-        <h1 className="text-xl font-semibold mb-2">Del dine tanker med fællesskabet 💭</h1>
-        <p className="text-gray-600 text-sm mb-6">Hvad beskæftiger dig som pædagogstuderende? Del dine oplevelser, spørgsmål eller inspiration!</p>
+        <h1 className="text-heading-2 mb-2">Del dine tanker med fællesskabet 💭</h1>
+        <p className="text-body-small text-gray-600 mb-6">Hvad beskæftiger dig som pædagogstuderende? Del dine oplevelser, spørgsmål eller inspiration!</p>
         
         {error && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md flex items-center gap-2 text-sm text-red-700">
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md flex items-center gap-2 text-body-small text-red-700">
             <AlertCircle size={16} />
             {error}
           </div>
@@ -90,10 +90,10 @@ export const SubmitPage: React.FC = () => {
                 setError('');
               }}
               placeholder="Hvad handler dit indlæg om?"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primary-500 text-body"
               maxLength={300}
             />
-            <div className="text-xs text-gray-500 mt-1 text-right">
+            <div className="text-caption text-gray-500 mt-1 text-right">
               {title.length}/300
             </div>
           </div>
@@ -106,7 +106,7 @@ export const SubmitPage: React.FC = () => {
                 setError('');
               }}
               placeholder="Fortæl os mere... Hvad tænker du på? Har du en god historie, et spørgsmål, eller noget du gerne vil diskutere?"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primary-500 min-h-[200px] resize-y"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primary-500 text-body min-h-[200px] resize-y"
               rows={8}
             />
           </div>
@@ -115,14 +115,14 @@ export const SubmitPage: React.FC = () => {
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="px-4 py-2 border border-gray-300 rounded hover:border-gray-400 transition-colors"
+              className="px-4 py-2 border border-gray-300 rounded hover:border-gray-400 transition-colors text-button"
             >
               Annuller
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-4 py-2 bg-primary-600 text-white rounded hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 bg-primary-600 text-white rounded hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-button"
             >
               {isSubmitting ? 'Deler med fællesskabet...' : 'Del med fællesskabet ✨'}
             </button>

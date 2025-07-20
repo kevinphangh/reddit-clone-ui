@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, and_
+from sqlalchemy import select, and_, func
 from sqlalchemy.orm import selectinload
 from app.db.database import get_db
 from app.models import User, Post, Comment
@@ -13,6 +13,18 @@ from app.api.posts import get_post_with_user_data
 from app.api.comments import get_comment_with_user_data
 
 router = APIRouter()
+
+@router.get("/count", response_model=dict)
+async def get_user_count(
+    db: AsyncSession = Depends(get_db)
+):
+    """Get the total number of registered users"""
+    result = await db.execute(
+        select(func.count(User.id)).where(User.is_active == True)
+    )
+    count = result.scalar()
+    
+    return {"count": count}
 
 @router.get("/{username}", response_model=UserSchema)
 async def get_user(

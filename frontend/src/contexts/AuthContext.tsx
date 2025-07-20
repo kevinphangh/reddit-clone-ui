@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User } from '../types';
 import { api, ApiError } from '../lib/api';
+import { incrementUserCount } from '../utils/userCount';
 
 interface AuthContextType {
   isLoggedIn: boolean;
@@ -37,14 +38,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (token) {
       try {
         const userData = await api.getMe();
-        setUser({
-          ...userData,
-          cakeDay: new Date(userData.created_at),
-        });
-        setIsLoggedIn(true);
+        // Verify that we got valid user data
+        if (userData && userData.id && userData.username) {
+          setUser({
+            ...userData,
+            cakeDay: new Date(userData.created_at),
+          });
+          setIsLoggedIn(true);
+        } else {
+          // Invalid user data
+          console.error('Invalid user data received:', userData);
+          api.setToken(null);
+          setIsLoggedIn(false);
+        }
       } catch (error) {
         // Token is invalid
+        console.error('Auth check failed:', error);
         api.setToken(null);
+        setIsLoggedIn(false);
       }
     }
     setLoading(false);
@@ -66,10 +77,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (username: string, password: string): Promise<boolean> => {
     try {
+      console.log('Login attempt for username:', username);
       await api.login(username, password);
       
       // Get user data after successful login
       const userData = await api.getMe();
+      console.log('User data received:', userData);
+      
       setUser({
         ...userData,
         cakeDay: new Date(userData.created_at),
@@ -79,7 +93,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return true;
     } catch (error) {
       if (error instanceof ApiError) {
-        console.error('Login failed:', error.message);
+        console.error('Login failed:', error.message, 'Status:', error.status);
       }
       return false;
     }
@@ -87,24 +101,60 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const register = async (username: string, email: string, password: string): Promise<{ success: boolean; error?: string }> => {
     try {
+      // First, register the user
+      console.log('Registering user:', username);
       await api.register(username, email, password);
       
-      // Automatically login after registration
-      const loginSuccess = await login(username, password);
-      return { success: loginSuccess };
+      // Increment the user count since registration was successful
+      incrementUserCount();
+      
+      // Wait longer to ensure backend has fully processed the registration
+      console.log('Waiting for backend to process...');
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Try to login with the new credentials
+      console.log('Attempting to login with:', username);
+      try {
+        await api.login(username, password);
+        console.log('Login successful, token received');
+        
+        // Get user data immediately after login
+        const userData = await api.getMe();
+        console.log('User data fetched:', userData.username);
+        
+        setUser({
+          ...userData,
+          cakeDay: new Date(userData.created_at),
+        });
+        setIsLoggedIn(true);
+        
+        return { success: true };
+      } catch (loginError) {
+        console.error('Login failed after registration:', loginError);
+        
+        // Registration succeeded but login failed
+        return { 
+          success: false, 
+          error: 'Konto blev oprettet succesfuldt! Log venligst ind manuelt med dit brugernavn og adgangskode.' 
+        };
+      }
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('Registration failed:', error.message);
         
         // Parse specific error messages
-        if (error.message.includes('email') && error.message.includes('already registered')) {
+        const errorMsg = error.message.toLowerCase();
+        
+        if (errorMsg.includes('email') && errorMsg.includes('already')) {
           return { success: false, error: 'Denne email er allerede registreret' };
-        } else if (error.message.includes('username') && error.message.includes('already registered')) {
+        } else if (errorMsg.includes('username') && errorMsg.includes('already')) {
           return { success: false, error: 'Dette brugernavn er allerede taget' };
-        } else if (error.message.includes('Invalid email')) {
+        } else if (errorMsg.includes('invalid') && errorMsg.includes('email')) {
           return { success: false, error: 'Ugyldig email adresse' };
-        } else if (error.message.includes('Password')) {
+        } else if (errorMsg.includes('password') && errorMsg.includes('short')) {
           return { success: false, error: 'Adgangskode skal være mindst 6 tegn' };
+        } else if (errorMsg.includes('username') && errorMsg.includes('invalid')) {
+          return { success: false, error: 'Brugernavn må kun indeholde bogstaver, tal og underscore' };
         }
         
         return { success: false, error: error.message || 'Kunne ikke oprette konto' };

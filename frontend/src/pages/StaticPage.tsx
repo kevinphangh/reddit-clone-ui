@@ -60,8 +60,8 @@ export const StaticPage: React.FC = () => {
   if (!pageData) {
     return (
       <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
-        <h1 className="text-xl font-bold mb-2">Side ikke fundet</h1>
-        <p className="text-gray-500">Den side du leder efter eksisterer ikke.</p>
+        <h1 className="text-heading-2 mb-2">Side ikke fundet</h1>
+        <p className="text-body text-gray-500">Den side du leder efter eksisterer ikke.</p>
       </div>
     );
   }
@@ -69,8 +69,8 @@ export const StaticPage: React.FC = () => {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="bg-white border border-gray-200 rounded-lg p-6">
-        <h1 className="text-2xl font-bold mb-4">{pageData.title}</h1>
-        <p className="text-gray-500">{pageData.content}</p>
+        <h1 className="text-heading-1 mb-4">{pageData.title}</h1>
+        <p className="text-body text-gray-500">{pageData.content}</p>
       </div>
     </div>
   );

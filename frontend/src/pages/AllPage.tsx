@@ -13,8 +13,8 @@ export const AllPage: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="bg-white border border-gray-200 rounded-lg p-4">
-        <h1 className="text-xl font-bold text-gray-900">Alle indlæg</h1>
-        <p className="text-gray-600">Fra alle fællesskaber</p>
+        <h1 className="text-heading-2 text-gray-900">Alle indlæg</h1>
+        <p className="text-body text-gray-600">Fra alle fællesskaber</p>
       </div>
       
       <div className="space-y-4">

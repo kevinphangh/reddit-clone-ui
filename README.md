@@ -13,13 +13,14 @@ Dette forum er designet til at hjælpe nuværende pædagogstuderende med at:
 
 ## ⚡ Funktioner
 
-### ✨ Komplet Forum Funktionalitet
+#### ✨ Komplet Forum Funktionalitet
 - **Brugerautentificering**: Sikker registrering og login med JWT tokens
 - **Diskussionstråde**: Opret, rediger og slet indlæg
 - **Kommentarsystem**: Indlejrede kommentarer med svar-funktionalitet
 - **Voting system**: Stem indlæg og kommentarer op eller ned
 - **Brugerprofiler**: Se brugeres indlæg og kommentarer
 - **Søgefunktion**: Find indhold hurtigt og nemt
+- **Dynamisk medlemstal**: Live visning af antal registrerede brugere
 
 ### 🎨 Minimalistisk Design
 - **Centreret layout**: Indhold er perfekt centreret på siden
@@ -57,7 +58,9 @@ forum/
 │   ├── alembic/          # Database migrations
 │   ├── requirements.txt
 │   └── main.py
-└── README.md
+├── README.md
+├── CLAUDE.md               # Deployment guide for Claude AI
+└── LICENSE                 # Proprietary license
 ```
 
 ## 🛠️ Teknisk Stack
@@ -187,20 +190,30 @@ uvicorn main:app --host 0.0.0.0 --port 8000      # Production server
 - `GET /api/users/{username}` - Hent bruger profil
 - `GET /api/users/{username}/posts` - Hent brugers indlæg
 - `GET /api/users/{username}/comments` - Hent brugers kommentarer
+- `GET /api/users/count` - Hent antal registrerede brugere
 
 ## 🚀 Deployment
 
+### Live URLs
+- **Frontend**: https://via-paedagoger.vercel.app
+- **Backend API**: https://via-forum-api.fly.dev
+
 ### Frontend (Vercel)
-1. Push til GitHub
-2. Forbind repository til Vercel
-3. Sæt environment variable: `VITE_API_URL=https://your-backend-url.com`
-4. Deploy automatisk på hver push
+```bash
+cd frontend
+npm run build
+vercel --prod
+# Opdater alias til korrekt domæne
+vercel alias set [deployment-url] via-paedagoger.vercel.app
+```
 
 ### Backend (Fly.io)
-1. Installer Fly CLI: `curl -L https://fly.io/install.sh | sh`
-2. Login: `fly auth login`
-3. Deploy: `fly launch` (første gang) eller `fly deploy`
-4. Sæt environment variabler: `fly secrets set SECRET_KEY=your-secret-key`
+```bash
+cd backend
+~/.fly/bin/fly deploy
+```
+
+For detaljerede deployment instruktioner, se `CLAUDE.md`.
 
 ## 📊 Performance & Sikkerhed
 
@@ -244,7 +257,7 @@ pytest
 
 ## 📄 Licens
 
-MIT License - se LICENSE fil for detaljer.
+PROPRIETARY LICENSE - Dette er proprietær software. Se LICENSE fil for detaljer.
 
 ---
 

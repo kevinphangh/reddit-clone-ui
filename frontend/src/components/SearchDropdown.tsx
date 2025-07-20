@@ -21,10 +21,10 @@ export const SearchDropdown: React.FC<SearchDropdownProps> = ({ results, onClose
           onClick={onClose}
           className="block px-4 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
         >
-          <div className="text-sm font-medium text-gray-900 line-clamp-1">
+          <div className="text-body-small font-medium text-gray-900 line-clamp-1">
             {post.title}
           </div>
-          <div className="flex items-center gap-2 text-xs text-gray-500 mt-1">
+          <div className="flex items-center gap-2 text-caption text-gray-500 mt-1">
             <span>{formatTimeAgo(post.createdAt)}</span>
             <span>•</span>
             <MessageSquare size={12} />
