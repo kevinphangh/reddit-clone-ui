@@ -91,7 +91,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return true;
     } catch (error) {
       if (error instanceof ApiError) {
-        // Login failed
+        // Login failed - check for email verification error
+        if (error.message.includes('Email not verified')) {
+          alert('Din email er ikke verificeret. Tjek din indbakke for verifikationslinket.');
+        }
       }
       return false;
     }
@@ -108,29 +111,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Wait longer to ensure backend has fully processed the registration
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // Try to login with the new credentials
-      try {
-        await api.login(username, password);
-        
-        // Get user data immediately after login
-        const userData = await api.getMe();
-        
-        setUser({
-          ...userData,
-          cakeDay: new Date(userData.created_at),
-        });
-        setIsLoggedIn(true);
-        
-        return { success: true };
-      } catch (loginError) {
-        // Login failed after registration
-        
-        // Registration succeeded but login failed
-        return { 
-          success: false, 
-          error: 'Konto blev oprettet succesfuldt! Log venligst ind manuelt med dit brugernavn og adgangskode.' 
-        };
-      }
+      // Don't try to login automatically since email verification is required
+      // Just return success so the email verification modal is shown
+      return { success: true };
     } catch (error) {
       if (error instanceof ApiError) {
         // Registration failed

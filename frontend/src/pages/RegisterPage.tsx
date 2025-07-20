@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { AlertCircle } from 'lucide-react';
-import { RegistrationVerification } from '../components/RegistrationVerification';
+import { EmailVerificationModal } from '../components/EmailVerificationModal';
 
 export const RegisterPage: React.FC = () => {
-  const navigate = useNavigate();
   const { register } = useAuth();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -15,7 +14,7 @@ export const RegisterPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [validationErrors, setValidationErrors] = useState<{[key: string]: string}>({});
-  const [showVerification, setShowVerification] = useState(false);
+  const [showEmailVerification, setShowEmailVerification] = useState(false);
 
   const validateForm = (): boolean => {
     const errors: {[key: string]: string} = {};
@@ -63,8 +62,8 @@ export const RegisterPage: React.FC = () => {
       const result = await register(username, email, password);
       if (result.success) {
         setSuccess(true);
-        // Vis verificering modal
-        setShowVerification(true);
+        // Vis email verificering modal
+        setShowEmailVerification(true);
       } else {
         setError(result.error || 'Kunne ikke oprette konto. Prøv igen.');
       }
@@ -212,16 +211,17 @@ export const RegisterPage: React.FC = () => {
         Ved at blive medlem accepterer du vores fællesskabsregler og hjælper med at skabe et trygt rum for alle 🤝
       </div>
       
-      {showVerification && (
-        <RegistrationVerification
-          username={username}
-          onVerified={() => {
-            navigate('/');
-          }}
-          onError={(error) => {
-            setShowVerification(false);
+      {showEmailVerification && (
+        <EmailVerificationModal
+          email={email}
+          onClose={() => {
+            setShowEmailVerification(false);
+            // Clear form
+            setUsername('');
+            setEmail('');
+            setPassword('');
+            setConfirmPassword('');
             setSuccess(false);
-            setError(error);
           }}
         />
       )}

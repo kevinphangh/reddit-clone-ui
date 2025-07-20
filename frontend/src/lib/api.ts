@@ -178,6 +178,12 @@ class ApiClient {
   async getMe() {
     return this.request<ApiUser>('/api/auth/me');
   }
+  
+  async verifyEmail(token: string) {
+    return this.request<{ message: string }>(`/api/auth/verify-email?token=${encodeURIComponent(token)}`, {
+      method: 'POST'
+    });
+  }
 
   // Posts endpoints
   async getPosts(params?: { skip?: number; limit?: number; sort?: string }) {

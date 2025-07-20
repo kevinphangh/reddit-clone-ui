@@ -10,6 +10,7 @@ import { RegisterPage } from './pages/RegisterPage';
 import { PopularPage } from './pages/PopularPage';
 import { AllPage } from './pages/AllPage';
 import { StaticPage } from './pages/StaticPage';
+import { VerifyEmailPage } from './pages/VerifyEmailPage';
 import { AuthProvider } from './contexts/AuthContext';
 import { DataProvider } from './contexts/DataContext';
 import { NotificationProvider } from './contexts/NotificationContext';
@@ -49,6 +50,11 @@ function AppContent() {
         <Route path="/register" element={
           <Layout>
             <RegisterPage />
+          </Layout>
+        } />
+        <Route path="/verify-email" element={
+          <Layout>
+            <VerifyEmailPage />
           </Layout>
         } />
         <Route path="/r/popular" element={
