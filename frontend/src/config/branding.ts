@@ -5,28 +5,28 @@ export const brandConfig = {
   // Primære farver
   colors: {
     primary: {
-      50: '#e6f4ff',
-      100: '#b3dfff',
-      200: '#80c9ff',
-      300: '#4db3ff',
-      400: '#1a9dff',
-      500: '#0080ff', // VIA Blue - hovedfarve
-      600: '#0066cc',
-      700: '#004d99',
-      800: '#003366',
-      900: '#001a33',
+      50: '#fdf2f8',
+      100: '#fce7f3',
+      200: '#fbcfe8',
+      300: '#f9a8d4',
+      400: '#f472b6',
+      500: '#ec4899', // Rosa - hovedfarve
+      600: '#db2777',
+      700: '#be185d',
+      800: '#9d174d',
+      900: '#831843',
     },
     secondary: {
-      50: '#e8f5e9',
-      100: '#c8e6c9',
-      200: '#a5d6a7',
-      300: '#81c784',
-      400: '#66bb6a',
-      500: '#4caf50', // VIA Green
-      600: '#43a047',
-      700: '#388e3c',
-      800: '#2e7d32',
-      900: '#1b5e20',
+      50: '#fef3f2',
+      100: '#fee5e2',
+      200: '#fecaca',
+      300: '#fca5a5',
+      400: '#f87171',
+      500: '#ef4444', // Koral/rød
+      600: '#dc2626',
+      700: '#b91c1c',
+      800: '#991b1b',
+      900: '#7f1d1d',
     },
     // Neutrale farver
     gray: {
@@ -42,10 +42,10 @@ export const brandConfig = {
       900: '#111827',
     },
     // Status farver
-    success: '#4caf50',
-    warning: '#ff9800',
-    error: '#f44336',
-    info: '#2196f3',
+    success: '#10b981',
+    warning: '#f59e0b',
+    error: '#ef4444',
+    info: '#8b5cf6',
   },
   
   // Font størrelser
@@ -98,11 +98,11 @@ export const brandConfig = {
   
   // Mascot farver (bruger primary og secondary)
   mascot: {
-    bodyColor: '#0080ff', // primary.500
-    faceColor: '#e6f4ff', // primary.50
-    eyeColor: '#003366',  // primary.800
-    capColor: '#4caf50',  // secondary.500
-    capShadowColor: '#388e3c', // secondary.700
+    bodyColor: '#ec4899', // primary.500 - rosa
+    faceColor: '#fdf2f8', // primary.50 - lys rosa
+    eyeColor: '#831843',  // primary.900 - mørk rosa
+    capColor: '#f472b6',  // primary.400 - lys rosa
+    capShadowColor: '#db2777', // primary.600 - mellem rosa
   },
 };
 

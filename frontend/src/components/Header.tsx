@@ -41,8 +41,8 @@ export const Header: React.FC = () => {
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         {/* Logo */}
         <Link to="/" className="text-heading-1 text-gray-900">
-          <span className="hidden sm:inline">VIA Pædagoger 🏡</span>
-          <span className="sm:hidden">VIA 🏡</span>
+          <span className="hidden sm:inline">VIA Pædagoger 🌸</span>
+          <span className="sm:hidden">VIA 🌸</span>
         </Link>
 
         {/* Search - Responsive */}

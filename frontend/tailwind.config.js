@@ -10,30 +10,30 @@ export default {
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
-        // VIA Brand Colors - Rediger i src/config/branding.ts
+        // Rosa farver - Rediger i src/config/branding.ts
         primary: {
-          50: '#e6f4ff',
-          100: '#b3dfff',
-          200: '#80c9ff',
-          300: '#4db3ff',
-          400: '#1a9dff',
-          500: '#0080ff', // VIA Blue - hovedfarve
-          600: '#0066cc',
-          700: '#004d99',
-          800: '#003366',
-          900: '#001a33',
+          50: '#fdf2f8',
+          100: '#fce7f3',
+          200: '#fbcfe8',
+          300: '#f9a8d4',
+          400: '#f472b6',
+          500: '#ec4899', // Rosa - hovedfarve
+          600: '#db2777',
+          700: '#be185d',
+          800: '#9d174d',
+          900: '#831843',
         },
         secondary: {
-          50: '#e8f5e9',
-          100: '#c8e6c9',
-          200: '#a5d6a7',
-          300: '#81c784',
-          400: '#66bb6a',
-          500: '#4caf50', // VIA Green
-          600: '#43a047',
-          700: '#388e3c',
-          800: '#2e7d32',
-          900: '#1b5e20',
+          50: '#fef3f2',
+          100: '#fee5e2',
+          200: '#fecaca',
+          300: '#fca5a5',
+          400: '#f87171',
+          500: '#ef4444', // Koral/rød
+          600: '#dc2626',
+          700: '#b91c1c',
+          800: '#991b1b',
+          900: '#7f1d1d',
         },
         gray: {
           50: '#f9fafb',
@@ -47,10 +47,10 @@ export default {
           800: '#1f2937',
           900: '#111827',
         },
-        success: '#4caf50',
-        warning: '#ff9800',
-        error: '#f44336',
-        info: '#2196f3',
+        success: '#10b981',
+        warning: '#f59e0b',
+        error: '#ef4444',
+        info: '#8b5cf6',
       }
     },
   },
