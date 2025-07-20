@@ -26,7 +26,6 @@ class Comment(CommentBase):
     score: int
     depth: int
     
-    # Frontend compatibility
     replies: List[CommentRef] = []
     user_vote: Optional[int] = None
     saved: bool = False
@@ -35,5 +34,4 @@ class Comment(CommentBase):
     class Config:
         from_attributes = True
 
-# Update forward reference
 Comment.model_rebuild()

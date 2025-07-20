@@ -36,7 +36,7 @@ export const PostPage: React.FC = () => {
         try {
           await refreshComments(postId);
         } catch (error) {
-          console.error('Failed to load comments:', error);
+          // Failed to load comments
         } finally {
           if (isMounted) {
             setCommentsLoading(false);
@@ -83,7 +83,7 @@ export const PostPage: React.FC = () => {
     try {
       await votePost(String(post.id), direction);
     } catch (err) {
-      console.error('Vote failed:', err);
+      // Vote failed
       alert('Der opstod en fejl ved afstemning. Prøv igen senere.');
     }
   };

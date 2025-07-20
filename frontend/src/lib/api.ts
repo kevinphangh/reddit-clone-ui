@@ -4,13 +4,12 @@ const API_URL = import.meta.env.VITE_API_URL || 'https://via-forum-api.fly.dev';
 // PERMANENT FIX: Always ensure HTTPS
 const ensureHttps = (url: string): string => {
   if (url.startsWith('http://')) {
-    console.warn('WARNING: Attempted to use HTTP URL, converting to HTTPS:', url);
+    // Convert HTTP to HTTPS silently
     return url.replace('http://', 'https://');
   }
   return url;
 };
 
-console.log('API URL is:', ensureHttps(API_URL)); // Debug log to verify
 
 // API Response types
 interface ApiUser {
@@ -91,7 +90,6 @@ class ApiClient {
     // FORCE HTTPS - Remove any accidental HTTP
     const baseUrl = ensureHttps(API_URL);
     const url = ensureHttps(`${baseUrl}${endpoint}`);
-    console.log('Making request to:', url); // Debug log
     
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
@@ -160,8 +158,6 @@ class ApiClient {
     const baseUrl = ensureHttps(API_URL);
     const url = ensureHttps(`${baseUrl}/api/auth/login`);
     
-    console.log('Login request to:', url);
-    console.log('Username:', username);
     
     const response = await fetch(url, {
       method: 'POST',
@@ -170,7 +166,7 @@ class ApiClient {
 
     if (!response.ok) {
       const error = await response.json().catch(() => ({ detail: 'Network error' }));
-      console.error('Login response error:', response.status, error);
+      // Login error: status code and details logged server-side
       throw new ApiError(response.status, error.detail || 'Login failed');
     }
 
@@ -224,7 +220,7 @@ class ApiClient {
   }
 
   async toggleSavePost(postId: string) {
-    return this.request<{ saved: boolean }>(`/api/posts/${postId}/save/`, {
+    return this.request<{ saved: boolean }>(`/api/posts/${postId}/save`, {
       method: 'POST',
     });
   }
@@ -277,8 +273,6 @@ class ApiClient {
   }
 
   async getUserCount() {
-    // TODO: Backend endpoint not implemented yet
-    // For now, we'll try to fetch it and handle the 404 gracefully
     try {
       return await this.request<{ count: number }>(`/api/users/count`);
     } catch (error) {

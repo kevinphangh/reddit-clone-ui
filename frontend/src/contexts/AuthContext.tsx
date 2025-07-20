@@ -47,13 +47,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setIsLoggedIn(true);
         } else {
           // Invalid user data
-          console.error('Invalid user data received:', userData);
+          // Invalid user data received
           api.setToken(null);
           setIsLoggedIn(false);
         }
       } catch (error) {
         // Token is invalid
-        console.error('Auth check failed:', error);
+        // Auth check failed - user not logged in
         api.setToken(null);
         setIsLoggedIn(false);
       }
@@ -70,19 +70,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           cakeDay: new Date(userData.created_at),
         });
       } catch (error) {
-        console.error('Failed to refresh user:', error);
+        // Failed to refresh user data
       }
     }
   };
 
   const login = async (username: string, password: string): Promise<boolean> => {
     try {
-      console.log('Login attempt for username:', username);
       await api.login(username, password);
       
       // Get user data after successful login
       const userData = await api.getMe();
-      console.log('User data received:', userData);
       
       setUser({
         ...userData,
@@ -93,7 +91,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return true;
     } catch (error) {
       if (error instanceof ApiError) {
-        console.error('Login failed:', error.message, 'Status:', error.status);
+        // Login failed
       }
       return false;
     }
@@ -102,25 +100,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const register = async (username: string, email: string, password: string): Promise<{ success: boolean; error?: string }> => {
     try {
       // First, register the user
-      console.log('Registering user:', username);
       await api.register(username, email, password);
       
       // Increment the user count since registration was successful
       incrementUserCount();
       
       // Wait longer to ensure backend has fully processed the registration
-      console.log('Waiting for backend to process...');
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       // Try to login with the new credentials
-      console.log('Attempting to login with:', username);
       try {
         await api.login(username, password);
-        console.log('Login successful, token received');
         
         // Get user data immediately after login
         const userData = await api.getMe();
-        console.log('User data fetched:', userData.username);
         
         setUser({
           ...userData,
@@ -130,7 +123,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         
         return { success: true };
       } catch (loginError) {
-        console.error('Login failed after registration:', loginError);
+        // Login failed after registration
         
         // Registration succeeded but login failed
         return { 
@@ -140,7 +133,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     } catch (error) {
       if (error instanceof ApiError) {
-        console.error('Registration failed:', error.message);
+        // Registration failed
         
         // Parse specific error messages
         const errorMsg = error.message.toLowerCase();

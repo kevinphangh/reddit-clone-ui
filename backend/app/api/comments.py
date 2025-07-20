@@ -79,18 +79,41 @@ async def get_post_comments(
     comment_dict = {}
     root_comments = []
     
+    # First pass: create dictionary of all comments with user data
     for comment in comments:
         await get_comment_with_user_data(comment, current_user, db)
-        comment.replies = []
         comment_dict[comment.id] = comment
+    
+    # Second pass: build the tree structure by creating proper response objects
+    comment_responses = {}
+    
+    for comment in comments:
+        # Create a dictionary representation for proper serialization
+        comment_data = {
+            "id": comment.id,
+            "body": comment.body,
+            "parent_id": comment.parent_id,
+            "author": comment.author,
+            "post": comment.post,
+            "created_at": comment.created_at,
+            "updated_at": comment.updated_at,
+            "edited_at": comment.edited_at,
+            "score": comment.score,
+            "depth": comment.depth,
+            "replies": [],
+            "user_vote": getattr(comment, 'user_vote', None),
+            "saved": getattr(comment, 'saved', False),
+            "is_deleted": comment.is_deleted
+        }
+        comment_responses[comment.id] = comment_data
         
         if comment.parent_id is None:
-            root_comments.append(comment)
+            root_comments.append(comment_data)
     
     # Build tree structure
     for comment in comments:
-        if comment.parent_id and comment.parent_id in comment_dict:
-            comment_dict[comment.parent_id].replies.append(comment)
+        if comment.parent_id and comment.parent_id in comment_responses:
+            comment_responses[comment.parent_id]["replies"].append(comment_responses[comment.id])
     
     return root_comments
 
@@ -156,11 +179,23 @@ async def create_comment(
     # Load relationships
     await db.refresh(db_comment, ["author", "post"])
     
-    db_comment.user_vote = 1
-    db_comment.saved = False
-    # Don't set replies - it will be empty by default for new comments
-    
-    return db_comment
+    # Return properly formatted response
+    return {
+        "id": db_comment.id,
+        "body": db_comment.body,
+        "parent_id": db_comment.parent_id,
+        "author": db_comment.author,
+        "post": db_comment.post,
+        "created_at": db_comment.created_at,
+        "updated_at": db_comment.updated_at,
+        "edited_at": db_comment.edited_at,
+        "score": db_comment.score,
+        "depth": db_comment.depth,
+        "replies": [],
+        "user_vote": 1,
+        "saved": False,
+        "is_deleted": db_comment.is_deleted
+    }
 
 @router.put("/{comment_id}", response_model=CommentSchema)
 async def update_comment(
@@ -194,9 +229,24 @@ async def update_comment(
     await db.refresh(comment)
     
     await get_comment_with_user_data(comment, current_user, db)
-    # Don't set replies - it's not needed for update response
     
-    return comment
+    # Return properly formatted response
+    return {
+        "id": comment.id,
+        "body": comment.body,
+        "parent_id": comment.parent_id,
+        "author": comment.author,
+        "post": comment.post,
+        "created_at": comment.created_at,
+        "updated_at": comment.updated_at,
+        "edited_at": comment.edited_at,
+        "score": comment.score,
+        "depth": comment.depth,
+        "replies": [],
+        "user_vote": getattr(comment, 'user_vote', None),
+        "saved": getattr(comment, 'saved', False),
+        "is_deleted": comment.is_deleted
+    }
 
 @router.delete("/{comment_id}")
 async def delete_comment(

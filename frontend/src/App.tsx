@@ -82,7 +82,7 @@ function App() {
         await api.getUserCount();
         setBackendAvailable(true);
       } catch (error) {
-        console.error('Backend is not available:', error);
+        // Backend is not available
         setBackendAvailable(false);
       } finally {
         setIsChecking(false);

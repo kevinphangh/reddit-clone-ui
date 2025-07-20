@@ -15,14 +15,11 @@ class Vote(Base):
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     target_id = Column(Integer, nullable=False, index=True)
     target_type = Column(Enum(VoteType), nullable=False)
-    value = Column(Integer, nullable=False)  # 1 for upvote, -1 for downvote
+    value = Column(Integer, nullable=False)
     
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     
-    # Relationships
     user = relationship("User", back_populates="votes")
-    
-    # Unique constraint to prevent multiple votes
     __table_args__ = (
         UniqueConstraint('user_id', 'target_id', 'target_type', name='_user_target_uc'),
     )

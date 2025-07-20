@@ -15,7 +15,6 @@ class User(UserBase):
     is_active: bool
     is_verified: bool
     
-    # Computed fields for frontend compatibility
     points: dict = {"post": 0, "comment": 0}
     
     class Config:

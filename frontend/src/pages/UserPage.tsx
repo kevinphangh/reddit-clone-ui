@@ -92,7 +92,7 @@ export const UserPage: React.FC = () => {
         })));
       }
     } catch (error) {
-      console.error('Failed to load user data:', error);
+      // Failed to load user data
       setError('Kunne ikke indlæse brugerdata. Prøv igen senere.');
     } finally {
       setLoading(false);

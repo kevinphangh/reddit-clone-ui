@@ -91,7 +91,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } else {
         setError('Kunne ikke hente indlæg. Prøv at genindlæse siden.');
       }
-      console.error('Error loading posts:', err);
+      // Error loading posts
     } finally {
       setLoading(false);
     }
@@ -115,7 +115,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } else {
         setError('Kunne ikke hente kommentarer. Prøv igen senere.');
       }
-      console.error('Error loading comments:', err);
+      // Error loading comments
     }
   };
 
@@ -289,7 +289,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setError('Kunne ikke stemme på indlæg. Prøv igen senere.');
       }
       
-      console.error('Failed to vote on post:', err);
+      // Failed to vote on post
       throw err;
     }
   };
@@ -365,7 +365,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       return transformedComment;
     } catch (err: any) {
-      console.error('Failed to create comment:', err);
+      // Failed to create comment
       if (err.status === 0) {
         throw new Error('Netværksfejl - kunne ikke oprette forbindelse til serveren');
       } else {
@@ -514,7 +514,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setError('Kunne ikke stemme på kommentar. Prøv igen senere.');
       }
       
-      console.error('Failed to vote on comment:', err);
+      // Failed to vote on comment
       throw err;
     }
   };

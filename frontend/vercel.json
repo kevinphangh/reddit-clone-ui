@@ -10,5 +10,6 @@
   "installCommand": "npm install",
   "env": {
     "VITE_API_URL": "https://via-forum-api.fly.dev"
-  }
+  },
+  "regions": ["arn1"]
 }

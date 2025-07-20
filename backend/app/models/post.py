@@ -22,7 +22,6 @@ class Post(Base):
     is_locked = Column(Boolean, default=False)
     is_deleted = Column(Boolean, default=False)
     
-    # Relationships
     author = relationship("User", back_populates="posts")
     comments = relationship("Comment", back_populates="post", cascade="all, delete-orphan")
     votes = relationship("Vote", 

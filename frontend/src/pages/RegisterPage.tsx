@@ -69,7 +69,7 @@ export const RegisterPage: React.FC = () => {
         setError(result.error || 'Kunne ikke oprette konto. Prøv igen.');
       }
     } catch (err) {
-      console.error('Registration error:', err);
+      // Registration error
       setError('Der skete en fejl med serveren. Prøv igen senere.');
     } finally {
       setLoading(false);

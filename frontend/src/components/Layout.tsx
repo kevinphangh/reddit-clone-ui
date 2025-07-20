@@ -23,7 +23,7 @@ export const Layout: React.FC<LayoutProps> = ({
           updateUserCount(response.count);
         }
       } catch (error) {
-        console.log('User count API not available, using local count');
+        // User count API not available, using local count
         // Fall back to localStorage count
         const localCount = getUserCount();
         setUserCount(localCount);

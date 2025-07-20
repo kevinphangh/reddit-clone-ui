@@ -45,7 +45,7 @@ export const Comment: React.FC<CommentProps> = ({
     try {
       await voteComment(String(comment.id), direction);
     } catch (err) {
-      console.error('Vote failed:', err);
+      // Vote failed
       alert('Kunne ikke stemme. Prøv igen senere.');
     }
   };
@@ -61,7 +61,7 @@ export const Comment: React.FC<CommentProps> = ({
         await updateComment(String(comment.id), editText.trim());
         setIsEditing(false);
       } catch (err) {
-        console.error('Failed to update comment:', err);
+        // Failed to update comment
         alert('Kunne ikke opdatere kommentar');
       }
     }
@@ -72,7 +72,7 @@ export const Comment: React.FC<CommentProps> = ({
       try {
         await deleteComment(String(comment.id));
       } catch (err) {
-        console.error('Failed to delete comment:', err);
+        // Failed to delete comment
         alert('Kunne ikke slette kommentar');
       }
     }
@@ -240,7 +240,7 @@ export const Comment: React.FC<CommentProps> = ({
                       setReplyText('');
                       setShowReplyForm(false);
                     } catch (err) {
-                      console.error('Failed to create reply:', err);
+                      // Failed to create reply
                       alert('Kunne ikke oprette svar. Prøv igen.');
                     } finally {
                       setIsSubmitting(false);

@@ -3,16 +3,11 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from app.core.config import settings
 
-# Create async engine
-# Handle SQLite and PostgreSQL URLs
 database_url = settings.DATABASE_URL
-
-# Handle old postgres:// URLs (convert to postgresql://)
 if database_url.startswith("postgres://"):
     database_url = database_url.replace("postgres://", "postgresql://", 1)
 
 if database_url.startswith("sqlite"):
-    # SQLite with aiosqlite
     if not database_url.startswith("sqlite+aiosqlite"):
         database_url = database_url.replace("sqlite://", "sqlite+aiosqlite://", 1)
     engine = create_async_engine(
@@ -21,7 +16,6 @@ if database_url.startswith("sqlite"):
         connect_args={"check_same_thread": False}
     )
 else:
-    # PostgreSQL with asyncpg
     if not database_url.startswith("postgresql+asyncpg"):
         database_url = database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
     engine = create_async_engine(
@@ -29,17 +23,14 @@ else:
         echo=settings.ENVIRONMENT == "development"
     )
 
-# Create async session factory
 AsyncSessionLocal = sessionmaker(
     engine,
     class_=AsyncSession,
     expire_on_commit=False
 )
 
-# Create base class for models
 Base = declarative_base()
 
-# Dependency to get DB session
 async def get_db():
     async with AsyncSessionLocal() as session:
         try:

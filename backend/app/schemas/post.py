@@ -24,7 +24,6 @@ class Post(PostBase):
     comment_count: int
     is_locked: bool
     
-    # Frontend compatibility
     type: str = "text"
     user_vote: Optional[int] = None
     saved: bool = False

@@ -22,7 +22,6 @@ class Comment(Base):
     
     is_deleted = Column(Boolean, default=False)
     
-    # Relationships
     author = relationship("User", back_populates="comments")
     post = relationship("Post", back_populates="comments")
     parent = relationship("Comment", remote_side=[id], backref="replies")

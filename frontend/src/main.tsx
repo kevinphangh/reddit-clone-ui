@@ -10,7 +10,7 @@ window.fetch = function(...args) {
   
   if (typeof input === 'string' && input.includes('via-forum-api.fly.dev')) {
     if (input.startsWith('http://')) {
-      console.warn('INTERCEPTED HTTP REQUEST - Converting to HTTPS:', input);
+      // Silently convert HTTP to HTTPS
       input = input.replace('http://', 'https://');
       args[0] = input;
     }

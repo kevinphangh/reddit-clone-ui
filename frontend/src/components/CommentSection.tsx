@@ -77,7 +77,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
                         setCommentText('');
                         setShowCommentForm(false);
                       } catch (err) {
-                        console.error('Failed to create comment:', err);
+                        // Failed to create comment
                         alert('Kunne ikke oprette kommentar. Prøv igen.');
                       } finally {
                         setIsSubmitting(false);

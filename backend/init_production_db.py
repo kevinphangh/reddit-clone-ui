@@ -14,7 +14,6 @@ async def init_database():
     # Get database URL from environment
     database_url = os.getenv("DATABASE_URL")
     if not database_url:
-        print("ERROR: DATABASE_URL not set")
         return False
     
     # Convert postgres:// to postgresql:// if needed
@@ -25,7 +24,6 @@ async def init_database():
     if database_url.startswith("postgresql://"):
         database_url = database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
     
-    print(f"Connecting to database: {database_url[:30]}...")
     
     try:
         # Create engine
@@ -33,22 +31,16 @@ async def init_database():
         
         # Create all tables
         async with engine.begin() as conn:
-            print("Creating database tables...")
             await conn.run_sync(Base.metadata.create_all)
-            print("Database tables created successfully!")
         
         # Close the engine
         await engine.dispose()
         return True
         
-    except Exception as e:
-        print(f"ERROR creating tables: {e}")
+    except Exception:
         return False
 
 if __name__ == "__main__":
     success = asyncio.run(init_database())
-    if success:
-        print("Database initialization completed successfully!")
-    else:
-        print("Database initialization failed!")
+    if not success:
         exit(1)
