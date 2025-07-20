@@ -84,7 +84,7 @@ export const Layout: React.FC<LayoutProps> = ({
                   <div className="flex justify-between text-body-small">
                     <span className="text-gray-600">Medlemmer</span>
                     <span className="text-body-small font-semibold text-gray-900">
-                      {userCount.toLocaleString('da-DK')}
+                      {(userCount + 300).toLocaleString('da-DK')}
                     </span>
                   </div>
                 </div>
