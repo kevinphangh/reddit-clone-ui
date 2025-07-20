@@ -80,7 +80,7 @@ export const RegistrationVerification: React.FC<RegistrationVerificationProps> =
               {errorMessage}
             </p>
             <p className="text-body-small text-gray-600">
-              Prøv at <a href="/login" className="text-primary-600 hover:underline">logge ind manuelt</a>
+              Prøv at <a href="/login" className="text-gray-900 font-medium hover:underline">logge ind manuelt</a>
             </p>
           </div>
         )}

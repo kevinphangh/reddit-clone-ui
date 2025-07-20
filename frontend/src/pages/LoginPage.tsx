@@ -85,7 +85,7 @@ export const LoginPage: React.FC = () => {
 
         <div className="mt-6 text-center text-body-small text-gray-600">
           Har du ikke en konto?{' '}
-          <Link to="/register" className="text-primary-600 hover:underline">
+          <Link to="/register" className="text-primary-800 hover:text-primary-900 hover:underline">
             Opret konto
           </Link>
         </div>

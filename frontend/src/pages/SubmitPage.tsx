@@ -51,7 +51,7 @@ export const SubmitPage: React.FC = () => {
     return (
       <div className="max-w-md mx-auto">
         <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 md:p-8 text-center">
-          <LogIn className="mx-auto mb-4 text-primary-500" size={48} />
+          <LogIn className="mx-auto mb-4 text-gray-700" size={48} />
           <h2 className="text-heading-2 text-gray-900 mb-2">
             Hej der! 👋
           </h2>

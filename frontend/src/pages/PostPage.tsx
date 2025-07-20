@@ -65,7 +65,7 @@ export const PostPage: React.FC = () => {
       <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 md:p-8 text-center">
         <h1 className="text-heading-2 mb-2">Hmm, vi kan ikke finde dette indlæg 🤔</h1>
         <p className="text-body text-gray-600 mb-4">Det indlæg du leder efter eksisterer ikke eller er blevet slettet.</p>
-        <p className="text-body-small text-primary-600">Gå tilbage til <Link to="/" className="underline">forsiden</Link> og find andre spændende indlæg!</p>
+        <p className="text-body-small text-gray-700">Gå tilbage til <Link to="/" className="text-primary-800 hover:text-primary-900 underline">forsiden</Link> og find andre spændende indlæg!</p>
       </div>
     );
   }
@@ -115,14 +115,14 @@ export const PostPage: React.FC = () => {
           <div className="flex flex-col items-center p-2 bg-primary-50 sm:p-3">
             <button 
               onClick={() => handleVote(1)}
-              className={clsx('p-1 rounded hover:bg-primary-100 transition-colors', post.userVote === 1 ? 'text-primary-600' : 'text-gray-400')}
+              className={clsx('p-1 rounded hover:bg-primary-100 transition-colors', post.userVote === 1 ? 'text-primary-700' : 'text-gray-400')}
               aria-label="Upvote"
             >
               <ArrowUp size={24} />
             </button>
             <span className={clsx(
               'text-body font-bold my-1',
-              post.userVote === 1 ? 'text-primary-600' : post.userVote === -1 ? 'text-red-500' : 'text-gray-600'
+              post.userVote === 1 ? 'text-primary-700' : post.userVote === -1 ? 'text-red-600' : 'text-gray-600'
             )}>
               {formatScore(post.score)}
             </span>
@@ -140,7 +140,7 @@ export const PostPage: React.FC = () => {
             {/* Meta Info */}
             <div className="flex flex-wrap items-center gap-1 text-caption text-gray-500 mb-2">
               <span>Delt af</span>
-              <Link to={`/user/${post.author.username}`} className="hover:underline font-medium text-primary-600">
+              <Link to={`/user/${post.author.username}`} className="hover:underline font-medium text-primary-800 hover:text-primary-900">
                 {post.author.username}
               </Link>
               <span>•</span>
@@ -186,7 +186,7 @@ export const PostPage: React.FC = () => {
                   href={post.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-primary-600 hover:underline"
+                  className="text-primary-800 hover:text-primary-900 hover:underline"
                 >
                   {post.url}
                 </a>
@@ -216,7 +216,7 @@ export const PostPage: React.FC = () => {
             {/* Actions */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 text-body-small text-gray-500">
               <div className="flex items-center gap-1">
-                <MessageSquare size={16} className="text-primary-500" />
+                <MessageSquare size={16} className="text-primary-700" />
                 <span>{post.commentCount} {post.commentCount === 1 ? 'kommentar' : 'kommentarer'}</span>
               </div>
               
@@ -241,7 +241,7 @@ export const PostPage: React.FC = () => {
                     <>
                       <button
                         onClick={handleEdit}
-                        className="text-button flex items-center gap-1 px-2 py-1 hover:bg-primary-50 rounded text-primary-600"
+                        className="text-button flex items-center gap-1 px-2 py-1 hover:bg-primary-50 rounded text-primary-800 hover:text-primary-900"
                       >
                         <Edit2 size={14} />
                         Rediger

@@ -67,8 +67,8 @@ export const Layout: React.FC<LayoutProps> = ({
             {isSupported && permission === 'default' && (
               <div className="mb-4 bg-primary-50 border border-primary-200 rounded-lg p-4 flex items-center justify-between md:hidden">
                 <div className="flex items-center gap-3">
-                  <Bell className="text-primary-600" size={20} />
-                  <span className="text-sm text-primary-800">Få besked om nye svar</span>
+                  <Bell className="text-gray-700" size={20} />
+                  <span className="text-sm text-gray-900">Få besked om nye svar</span>
                 </div>
                 <button
                   onClick={subscribeToPush}
@@ -95,7 +95,7 @@ export const Layout: React.FC<LayoutProps> = ({
                 <p className="text-body-small text-gray-700 leading-relaxed mb-4">
                   Del dine projekter, find studiegrupper, få feedback på opgaver eller bare hyg dig med dine medstuderende.
                 </p>
-                <p className="text-button text-primary-600 mb-4">
+                <p className="text-button text-gray-800 mb-4">
                   Fordi studielivet er bedre sammen 🤝
                 </p>
                 <div className="pt-4 border-t border-gray-200">

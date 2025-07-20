@@ -164,13 +164,13 @@ export const Comment: React.FC<CommentProps> = ({
           <div className="flex items-center gap-1">
             <button 
               onClick={() => handleVote(1)}
-              className={clsx('p-1 rounded hover:bg-gray-100', comment.userVote === 1 ? 'text-primary-600' : 'text-gray-400')}
+              className={clsx('p-1 rounded hover:bg-gray-100', comment.userVote === 1 ? 'text-gray-800' : 'text-gray-400')}
             >
               <ArrowUp size={16} />
             </button>
             <span className={clsx(
               'text-caption font-medium',
-              comment.userVote === 1 ? 'text-primary-600' : comment.userVote === -1 ? 'text-red-500' : 'text-gray-600'
+              comment.userVote === 1 ? 'text-gray-800' : comment.userVote === -1 ? 'text-red-700' : 'text-gray-600'
             )}>
               {formatScore(comment.score)}
             </span>

@@ -28,7 +28,7 @@ export const brandConfig = {
       800: '#a63333',
       900: '#802929',
     },
-    // Neutrale farver
+    // Neutrale farver - mørkere for bedre læsbarhed
     gray: {
       50: '#f9fafb',
       100: '#f3f4f6',

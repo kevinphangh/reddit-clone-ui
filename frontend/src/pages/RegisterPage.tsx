@@ -202,7 +202,7 @@ export const RegisterPage: React.FC = () => {
 
         <div className="mt-6 text-center text-body-small text-gray-600">
           Har du allerede en konto?{' '}
-          <Link to="/login" className="text-primary-600 hover:underline">
+          <Link to="/login" className="text-primary-800 hover:text-primary-900 hover:underline">
             Log ind her
           </Link>
         </div>

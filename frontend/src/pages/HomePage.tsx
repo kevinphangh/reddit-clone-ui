@@ -30,7 +30,7 @@ export const HomePage: React.FC = () => {
         </div>
         <h2 className="text-heading-2 mb-2">Velkommen til fællesskabet! 🌟</h2>
         <p className="text-body text-gray-600 mb-4">Der er ikke nogen indlæg endnu, men det er din chance for at være den første til at dele noget spændende!</p>
-        <p className="text-body-small text-primary-600">Del dine tanker, stil spørgsmål, eller fortæl om dine oplevelser som pædagogstuderende ✨</p>
+        <p className="text-body-small text-gray-700">Del dine tanker, stil spørgsmål, eller fortæl om dine oplevelser som pædagogstuderende ✨</p>
       </div>
     );
   }
@@ -41,7 +41,7 @@ export const HomePage: React.FC = () => {
       <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 text-center">
         <h2 className="text-heading-2 mb-2">Velkommen til fællesskabet! 🌟</h2>
         <p className="text-body text-gray-600 mb-3">Her deler vi vores oplevelser, hjælper hinanden og skaber en stærkere fællesskab af pædagogstuderende.</p>
-        <p className="text-button text-primary-600">Sammen skaber vi de bedste pædagoger ✨</p>
+        <p className="text-button text-gray-800">Sammen skaber vi de bedste pædagoger ✨</p>
       </div>
       
       {/* Posts */}

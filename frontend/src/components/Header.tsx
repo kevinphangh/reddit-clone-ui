@@ -76,7 +76,7 @@ export const Header: React.FC = () => {
         <div className="flex items-center gap-1 sm:gap-2 md:gap-3">
           <Link 
             to="/submit" 
-            className="p-2 text-primary-600 hover:bg-primary-50 rounded transition-colors"
+            className="p-2 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
             aria-label="Opret indlæg"
           >
             <Plus size={20} />
