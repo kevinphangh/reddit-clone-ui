@@ -21,8 +21,18 @@ export const SubmitPage: React.FC = () => {
       return;
     }
     
+    if (title.length > 100) {
+      setError(`Titlen er for lang (${title.length}/100 tegn). Forkort venligst din titel.`);
+      return;
+    }
+    
     if (!content.trim()) {
       setError('Indtast venligst noget indhold');
+      return;
+    }
+    
+    if (content.length > 5000) {
+      setError(`Indholdet er for langt (${content.length}/5000 tegn). Forkort venligst dit indlæg.`);
       return;
     }
     
@@ -90,12 +100,17 @@ export const SubmitPage: React.FC = () => {
                 setError('');
               }}
               placeholder="Hvad handler dit indlæg om?"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primary-500 text-body"
-              maxLength={100}
+              className={`w-full px-3 py-2 border rounded-md focus:outline-none text-body ${
+                title.length > 100 
+                  ? 'border-red-500 focus:border-red-500' 
+                  : 'border-gray-300 focus:border-primary-500'
+              }`}
             />
-            <div className="text-caption text-gray-500 mt-1 text-right">
-              {title.length}/100
-            </div>
+            {title.length > 100 && (
+              <div className="text-caption text-red-600 mt-1">
+                Titlen er for lang ({title.length}/100 tegn)
+              </div>
+            )}
           </div>
 
           <div>
@@ -106,13 +121,18 @@ export const SubmitPage: React.FC = () => {
                 setError('');
               }}
               placeholder="Fortæl os mere... Hvad tænker du på? Har du en god historie, et spørgsmål, eller noget du gerne vil diskutere?"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primary-500 text-body min-h-[200px] resize-y"
+              className={`w-full px-3 py-2 border rounded-md focus:outline-none text-body min-h-[200px] resize-y ${
+                content.length > 5000 
+                  ? 'border-red-500 focus:border-red-500' 
+                  : 'border-gray-300 focus:border-primary-500'
+              }`}
               rows={8}
-              maxLength={5000}
             />
-            <div className="text-caption text-gray-500 mt-1 text-right">
-              {content.length}/5000
-            </div>
+            {content.length > 5000 && (
+              <div className="text-caption text-red-600 mt-1">
+                Indholdet er for langt ({content.length}/5000 tegn)
+              </div>
+            )}
           </div>
 
           <div className="flex gap-2 justify-end">

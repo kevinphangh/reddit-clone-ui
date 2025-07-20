@@ -15,5 +15,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY . .
 
-# Run migrations and start server
-CMD alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port ${PORT:-8080}
+# Make startup script executable
+RUN chmod +x start.sh
+
+# Run server directly for now
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]

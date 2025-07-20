@@ -11,16 +11,32 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 from app.db.database import Base
 from app.models import *  # Import all models
-from app.core.config import settings
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 
-# Set database URL from environment (convert async to sync for migrations)
-database_url = settings.DATABASE_URL
+# Get database URL from environment variable
+database_url = os.environ.get("DATABASE_URL")
+if not database_url:
+    # Try to load from settings if DATABASE_URL env var is not set
+    try:
+        from app.core.config import settings
+        database_url = settings.DATABASE_URL
+    except Exception:
+        # Fallback to SQLite for local development
+        database_url = "sqlite:///./app.db"
+
+# Convert async URLs to sync for Alembic migrations
 if database_url.startswith("sqlite+aiosqlite"):
     database_url = database_url.replace("sqlite+aiosqlite", "sqlite")
+elif database_url.startswith("postgresql+asyncpg"):
+    database_url = database_url.replace("postgresql+asyncpg", "postgresql")
+elif database_url.startswith("postgres://"):
+    # Handle old postgres:// URLs (Heroku style) - convert to postgresql://
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+
+# Set the SQLAlchemy URL in the alembic config
 config.set_main_option("sqlalchemy.url", database_url)
 
 # Interpret the config file for Python logging.

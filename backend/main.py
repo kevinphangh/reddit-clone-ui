@@ -3,8 +3,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
+from sqlalchemy import text
 from app.core.config import settings
 from app.api import auth, posts, comments, users
+from app.db.database import AsyncSessionLocal
 
 app = FastAPI(
     title="VIA Pædagoger API",
@@ -88,4 +90,23 @@ async def root():
 
 @app.get("/health")
 async def health_check():
-    return {"status": "healthy"}
+    """Health check endpoint that verifies database connectivity"""
+    try:
+        # Test database connection
+        async with AsyncSessionLocal() as session:
+            result = await session.execute(text("SELECT 1"))
+            result.scalar()
+        return {
+            "status": "healthy",
+            "database": "connected",
+            "environment": settings.ENVIRONMENT
+        }
+    except Exception as e:
+        return JSONResponse(
+            status_code=503,
+            content={
+                "status": "unhealthy",
+                "database": "disconnected",
+                "error": str(e)
+            }
+        )

@@ -17,7 +17,7 @@ export const Layout: React.FC<LayoutProps> = ({
     const fetchRealCount = async () => {
       try {
         const response = await api.getUserCount();
-        if (response && response.count) {
+        if (response && typeof response.count === 'number') {
           setUserCount(response.count);
           // Update localStorage with real count
           updateUserCount(response.count);
