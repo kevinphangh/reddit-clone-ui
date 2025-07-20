@@ -84,7 +84,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
                       }
                     }
                   }}
-                  className="text-button px-3 py-1 bg-primary-600 text-white rounded hover:bg-primary-700 disabled:opacity-50 flex items-center gap-1"
+                  className="text-button px-3 py-1 bg-primary-600 text-gray-900 rounded hover:bg-primary-700 disabled:opacity-50 flex items-center gap-1"
                   disabled={!commentText.trim() || isSubmitting || !canComment}
                 >
                   {isInCooldown && <Clock size={12} />}

@@ -72,7 +72,7 @@ export const Layout: React.FC<LayoutProps> = ({
                 </div>
                 <button
                   onClick={subscribeToPush}
-                  className="text-sm bg-primary-600 text-white px-3 py-1 rounded"
+                  className="text-sm bg-primary-600 text-gray-900 px-3 py-1 rounded"
                 >
                   Tillad
                 </button>

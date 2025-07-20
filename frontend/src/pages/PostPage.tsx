@@ -226,7 +226,7 @@ export const PostPage: React.FC = () => {
                     <>
                       <button
                         onClick={handleSaveEdit}
-                        className="text-button px-3 py-1 bg-primary-600 text-white rounded hover:bg-primary-700"
+                        className="text-button px-3 py-1 bg-primary-600 text-gray-900 rounded hover:bg-primary-700"
                       >
                         Gem
                       </button>

@@ -77,7 +77,7 @@ export const LoginPage: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-primary-600 text-white text-button py-2 rounded-md hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-primary-600 text-gray-900 text-button py-2 rounded-md hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Logger ind...' : 'Log ind'}
           </button>

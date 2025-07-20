@@ -119,7 +119,7 @@ export const Header: React.FC = () => {
                   className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded"
                   aria-label="Brugermenu"
                 >
-                  <div className="w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-button">
+                  <div className="w-8 h-8 bg-primary-600 text-gray-900 rounded-full flex items-center justify-center text-button">
                     {user?.username.charAt(0).toUpperCase()}
                   </div>
                   <ChevronDown size={16} className="text-gray-600" />
@@ -147,7 +147,7 @@ export const Header: React.FC = () => {
             </>
           ) : (
             <>
-              <Link to="/register" className="px-3 py-2 bg-primary-600 text-white rounded hover:bg-primary-700 text-button md:px-4">
+              <Link to="/register" className="px-3 py-2 bg-primary-600 text-gray-900 rounded hover:bg-primary-700 text-button md:px-4">
                 Tilmeld
               </Link>
               <Link to="/login" className="px-3 py-2 border border-gray-300 rounded hover:border-gray-400 text-button md:px-4">

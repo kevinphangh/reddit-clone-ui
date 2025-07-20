@@ -61,7 +61,7 @@ export const SubmitPage: React.FC = () => {
           <div className="space-y-3">
             <a
               href="/login?from=/submit"
-              className="block w-full bg-primary-600 text-white text-button py-2 rounded hover:bg-primary-700 transition-colors"
+              className="block w-full bg-primary-600 text-gray-900 text-button py-2 rounded hover:bg-primary-700 transition-colors"
             >
               Log ind
             </a>
@@ -146,7 +146,7 @@ export const SubmitPage: React.FC = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-4 py-2 bg-primary-600 text-white rounded hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-button"
+              className="px-4 py-2 bg-primary-600 text-gray-900 rounded hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-button"
             >
               {isSubmitting ? 'Deler med fællesskabet...' : 'Del med fællesskabet ✨'}
             </button>

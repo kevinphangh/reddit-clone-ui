@@ -137,7 +137,7 @@ export const Comment: React.FC<CommentProps> = ({
             <div className="flex gap-2 mt-2">
               <button
                 onClick={handleSaveEdit}
-                className="text-button px-3 py-1 bg-primary-600 text-white rounded hover:bg-primary-700"
+                className="text-button px-3 py-1 bg-primary-600 text-gray-900 rounded hover:bg-primary-700"
               >
                 Gem
               </button>
@@ -248,7 +248,7 @@ export const Comment: React.FC<CommentProps> = ({
                   }
                 }}
                 disabled={!replyText.trim() || isSubmitting || !canComment}
-                className="text-button px-3 py-1 bg-primary-600 text-white rounded hover:bg-primary-700 disabled:opacity-50 flex items-center gap-1"
+                className="text-button px-3 py-1 bg-primary-600 text-gray-900 rounded hover:bg-primary-700 disabled:opacity-50 flex items-center gap-1"
               >
                 {isInCooldown && <Clock size={12} />}
                 {isSubmitting ? 'Sender...' : isInCooldown ? `Vent ${remainingTime}s` : 'Send'}

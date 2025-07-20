@@ -27,7 +27,7 @@ export const BackendError: React.FC = () => {
           </div>
           <button
             onClick={handleReload}
-            className="w-full bg-primary-600 text-white py-2 px-4 rounded hover:bg-primary-700 transition-colors flex items-center justify-center gap-2"
+            className="w-full bg-primary-600 text-gray-900 py-2 px-4 rounded hover:bg-primary-700 transition-colors flex items-center justify-center gap-2"
           >
             <RefreshCw size={16} />
             Prøv igen
