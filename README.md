@@ -21,12 +21,15 @@ Dette forum er designet til at hjælpe nuværende pædagogstuderende med at:
 - **Brugerprofiler**: Se brugeres indlæg og kommentarer
 - **Søgefunktion**: Find indhold hurtigt og nemt
 - **Dynamisk medlemstal**: Live visning af antal registrerede brugere
+- **Karakterbegrænsninger**: 100 tegn for titler, 5000 tegn for indhold
+- **Brugerverifikation**: Bekræftelse efter registrering for sikker adgang
 
 ### 🎨 Minimalistisk Design
 - **Centreret layout**: Indhold er perfekt centreret på siden
 - **Dansk minimalistik**: Ren, skandinavisk æstetik med hvid, grå og blå
 - **Responsive**: Fungerer perfekt på alle enheder
 - **Tilgængeligt**: Tydelig navigation og brugervenligt interface
+- **Konsekvent typografi**: Ensartet font og størrelser gennem hele interfacet
 
 ### 🔧 Production-Ready
 - **Type-sikker**: 100% TypeScript med fuld type coverage
@@ -77,11 +80,12 @@ forum/
 ### Backend
 - **FastAPI** - Moderne, hurtig Python web framework
 - **SQLAlchemy** - ORM med async support
-- **PostgreSQL** - Production database (med SQLite til udvikling)
+- **PostgreSQL** - Production database på Fly.io (med SQLite til udvikling)
 - **Alembic** - Database migrations
 - **JWT** - Sikker autentificering
 - **Pydantic** - Data validation og serialization
 - **Uvicorn** - ASGI server
+- **psycopg2-binary** - PostgreSQL adapter
 
 ## 📦 Installation & Setup
 
@@ -143,7 +147,7 @@ cd frontend
 npm run dev          # Start udviklingsserver
 npm run build        # Byg til produktion
 npm run preview      # Preview produktionsbuild
-npm run typecheck    # TypeScript type-tjek
+npm run type-check   # TypeScript type-tjek
 npm run lint         # Lint checking
 ```
 
@@ -222,12 +226,14 @@ For detaljerede deployment instruktioner, se `CLAUDE.md`.
 - 📱 **Responsive**: Mobile-first design
 - 🎯 **SEO-klar**: Semantisk HTML struktur
 - 🔄 **Optimistic Updates**: Hurtig brugeroplevelse
+- 💾 **LocalStorage Fallback**: Medlemstal gemmes lokalt når API er utilgængelig
 
 ### Sikkerhed
 - 🔐 **JWT Authentication**: Sikre tokens med expiration
 - 🛡️ **Input Validation**: Pydantic schemas validerer alle inputs
-- 🔒 **CORS Protection**: Konfigureret til specifikke domæner
+- 🔒 **CORS Protection**: Konfigureret til specifikke domæner (via-paedagoger.vercel.app)
 - 🚫 **SQL Injection Protection**: SQLAlchemy ORM forebygger attacks
+- 📏 **Karakterbegrænsninger**: Forebygger spam med validering på både frontend og backend
 
 ## 🧪 Testing
 

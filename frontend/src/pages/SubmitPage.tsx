@@ -91,10 +91,10 @@ export const SubmitPage: React.FC = () => {
               }}
               placeholder="Hvad handler dit indlæg om?"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primary-500 text-body"
-              maxLength={300}
+              maxLength={100}
             />
             <div className="text-caption text-gray-500 mt-1 text-right">
-              {title.length}/300
+              {title.length}/100
             </div>
           </div>
 
@@ -108,7 +108,11 @@ export const SubmitPage: React.FC = () => {
               placeholder="Fortæl os mere... Hvad tænker du på? Har du en god historie, et spørgsmål, eller noget du gerne vil diskutere?"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primary-500 text-body min-h-[200px] resize-y"
               rows={8}
+              maxLength={5000}
             />
+            <div className="text-caption text-gray-500 mt-1 text-right">
+              {content.length}/5000
+            </div>
           </div>
 
           <div className="flex gap-2 justify-end">

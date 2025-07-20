@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { HomePage } from './pages/HomePage';
@@ -13,6 +14,8 @@ import { AuthProvider } from './contexts/AuthContext';
 import { DataProvider } from './contexts/DataContext';
 import { NotificationProvider } from './contexts/NotificationContext';
 import { CommentCooldownProvider } from './contexts/CommentCooldownContext';
+import { BackendError } from './components/BackendError';
+import { api } from './lib/api';
 
 function AppContent() {
   return (
@@ -69,6 +72,52 @@ function AppContent() {
 }
 
 function App() {
+  const [backendAvailable, setBackendAvailable] = useState<boolean | null>(null);
+  const [isChecking, setIsChecking] = useState(true);
+
+  useEffect(() => {
+    const checkBackend = async () => {
+      try {
+        // Check if backend is available by calling a simple endpoint
+        await api.getUserCount();
+        setBackendAvailable(true);
+      } catch (error) {
+        console.error('Backend is not available:', error);
+        setBackendAvailable(false);
+      } finally {
+        setIsChecking(false);
+      }
+    };
+
+    checkBackend();
+    
+    // Recheck every 30 seconds if backend is down
+    const interval = setInterval(() => {
+      if (!backendAvailable) {
+        checkBackend();
+      }
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [backendAvailable]);
+
+  // Show loading while checking
+  if (isChecking) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Opretter forbindelse til serveren...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error if backend is not available
+  if (!backendAvailable) {
+    return <BackendError />;
+  }
+
   return (
     <AuthProvider>
       <DataProvider>

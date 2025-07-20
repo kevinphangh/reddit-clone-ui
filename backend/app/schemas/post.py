@@ -1,18 +1,18 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Optional
 from app.schemas.user import User
 
 class PostBase(BaseModel):
-    title: str
-    content: Optional[str] = None
+    title: str = Field(..., min_length=1, max_length=100)
+    content: Optional[str] = Field(None, max_length=5000)
 
 class PostCreate(PostBase):
     pass
 
 class PostUpdate(BaseModel):
-    title: Optional[str] = None
-    content: Optional[str] = None
+    title: Optional[str] = Field(None, min_length=1, max_length=100)
+    content: Optional[str] = Field(None, max_length=5000)
 
 class Post(PostBase):
     id: int
@@ -31,4 +31,3 @@ class Post(PostBase):
     
     class Config:
         from_attributes = True
-
