@@ -10,30 +10,30 @@ export default {
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
-        // Rosa farver - Rediger i src/config/branding.ts
+        // Beige-rosa farver - Rediger i src/config/branding.ts
         primary: {
-          50: '#fdf2f8',
-          100: '#fce7f3',
-          200: '#fbcfe8',
-          300: '#f9a8d4',
-          400: '#f472b6',
-          500: '#ec4899', // Rosa - hovedfarve
-          600: '#db2777',
-          700: '#be185d',
-          800: '#9d174d',
-          900: '#831843',
+          50: '#fffaf8',
+          100: '#fff5f0',
+          200: '#ffebe5',
+          300: '#ffe3d8', // Din ønskede farve
+          400: '#ffd0b8',
+          500: '#ffb69e', // Beige-rosa hovedfarve
+          600: '#ff9b7a',
+          700: '#e87c5a',
+          800: '#c2654a',
+          900: '#9c4f3b',
         },
         secondary: {
-          50: '#fef3f2',
-          100: '#fee5e2',
-          200: '#fecaca',
-          300: '#fca5a5',
-          400: '#f87171',
-          500: '#ef4444', // Koral/rød
-          600: '#dc2626',
-          700: '#b91c1c',
-          800: '#991b1b',
-          900: '#7f1d1d',
+          50: '#fef6f5',
+          100: '#fdecea',
+          200: '#fbd8d5',
+          300: '#f8c4bf',
+          400: '#f4a09a',
+          500: '#f07c75', // Blød koral
+          600: '#e65850',
+          700: '#cc3c3c',
+          800: '#a63333',
+          900: '#802929',
         },
         gray: {
           50: '#f9fafb',
@@ -47,10 +47,10 @@ export default {
           800: '#1f2937',
           900: '#111827',
         },
-        success: '#10b981',
-        warning: '#f59e0b',
-        error: '#ef4444',
-        info: '#8b5cf6',
+        success: '#a8c09a',
+        warning: '#f5c99b',
+        error: '#e88b84',
+        info: '#c4a4d9',
       }
     },
   },
