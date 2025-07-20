@@ -51,7 +51,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
                 rows={4}
                 autoFocus
               />
-              <div className="flex justify-end gap-2 mt-2">
+              <div className="flex flex-wrap justify-end gap-2 mt-2">
                 {isInCooldown && (
                   <div className="flex items-center gap-1 text-caption text-gray-500 mr-auto">
                     <Clock size={12} />

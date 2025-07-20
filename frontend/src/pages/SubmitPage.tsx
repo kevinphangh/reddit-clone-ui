@@ -50,7 +50,7 @@ export const SubmitPage: React.FC = () => {
   if (!isLoggedIn) {
     return (
       <div className="max-w-md mx-auto">
-        <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
+        <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 md:p-8 text-center">
           <LogIn className="mx-auto mb-4 text-primary-500" size={48} />
           <h2 className="text-heading-2 text-gray-900 mb-2">
             Hej der! 👋
@@ -79,12 +79,12 @@ export const SubmitPage: React.FC = () => {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6">
+      <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6">
         <h1 className="text-heading-2 mb-2">Del dine tanker med fællesskabet 💭</h1>
         <p className="text-body-small text-gray-600 mb-6">Hvad beskæftiger dig som pædagogstuderende? Del dine oplevelser, spørgsmål eller inspiration!</p>
         
         {error && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md flex items-center gap-2 text-body-small text-red-700">
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md flex items-start gap-2 text-body-small text-red-700">
             <AlertCircle size={16} />
             {error}
           </div>
@@ -135,7 +135,7 @@ export const SubmitPage: React.FC = () => {
             )}
           </div>
 
-          <div className="flex gap-2 justify-end">
+          <div className="flex flex-col-reverse sm:flex-row gap-2 justify-end">
             <button
               type="button"
               onClick={() => navigate(-1)}

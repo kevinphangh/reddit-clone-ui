@@ -1,5 +1,6 @@
 import React from 'react';
-import { AlertTriangle, RefreshCw } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
+import { Mascot } from './Mascot';
 
 export const BackendError: React.FC = () => {
   const handleReload = () => {
@@ -9,9 +10,11 @@ export const BackendError: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white border border-red-200 rounded-lg p-8 text-center shadow-lg">
-        <AlertTriangle className="mx-auto mb-4 text-red-500" size={64} />
+        <div className="flex justify-center mb-4">
+          <Mascot mood="thinking" size="large" />
+        </div>
         <h1 className="text-2xl font-bold text-gray-900 mb-2">
-          Systemfejl
+          Åh nej! Tekniske udfordringer
         </h1>
         <p className="text-gray-600 mb-6">
           Vi kan ikke oprette forbindelse til serveren. Forummet er midlertidigt utilgængeligt.

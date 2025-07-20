@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json.schemastore.org/web-manifest-combined.json",
+  "_comment": "Farver og branding kan justeres i src/config/branding.ts",
+  "name": "VIA Pædagoger Forum",
+  "short_name": "VIA Forum",
+  "description": "Forum for pædagogstuderende på VIA University College",
+  "theme_color": "#0080ff",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "social"],
+  "lang": "da-DK"
+}

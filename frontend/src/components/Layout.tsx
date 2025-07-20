@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from './Header';
+import { Mascot } from './Mascot';
 import { getUserCount, setUserCount as updateUserCount } from '../utils/userCount';
 import { api } from '../lib/api';
+import { Bell } from 'lucide-react';
+import { usePushNotifications } from '../hooks/usePushNotifications';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -50,14 +53,31 @@ export const Layout: React.FC<LayoutProps> = ({
       clearInterval(interval);
     };
   }, []);
+  const { isSupported, permission, subscribeToPush } = usePushNotifications();
+
   return (
-    <div className="min-h-screen bg-orange-50">
+    <div className="min-h-screen bg-gray-50">
       <Header />
       
-      <div className="px-4 py-4 md:py-6 lg:py-8">
+      <div className="px-2 sm:px-4 py-2 sm:py-4 md:py-6 lg:py-8">
         <div className="relative max-w-screen-2xl mx-auto">
-          {/* Main Content - Always centered */}
+          {/* Main Content - Mobile optimized */}
           <main className="max-w-3xl mx-auto">
+            {/* Mobile notification prompt */}
+            {isSupported && permission === 'default' && (
+              <div className="mb-4 bg-primary-50 border border-primary-200 rounded-lg p-4 flex items-center justify-between md:hidden">
+                <div className="flex items-center gap-3">
+                  <Bell className="text-primary-600" size={20} />
+                  <span className="text-sm text-primary-800">Få besked om nye svar</span>
+                </div>
+                <button
+                  onClick={subscribeToPush}
+                  className="text-sm bg-primary-600 text-white px-3 py-1 rounded"
+                >
+                  Tillad
+                </button>
+              </div>
+            )}
             {children}
           </main>
           
@@ -66,9 +86,7 @@ export const Layout: React.FC<LayoutProps> = ({
             <div className="sticky top-20">
               <div className="bg-white border border-gray-200 rounded-lg p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center">
-                    <div className="w-6 h-6 border-2 border-white rounded-full"></div>
-                  </div>
+                  <Mascot mood="happy" size="small" />
                   <h2 className="text-heading-3 text-gray-900">Vores fællesskab</h2>
                 </div>
                 <p className="text-body-small text-gray-700 leading-relaxed mb-4">

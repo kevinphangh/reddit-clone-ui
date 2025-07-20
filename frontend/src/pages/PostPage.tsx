@@ -62,7 +62,7 @@ export const PostPage: React.FC = () => {
   
   if (!post) {
     return (
-      <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
+      <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 md:p-8 text-center">
         <h1 className="text-heading-2 mb-2">Hmm, vi kan ikke finde dette indlæg 🤔</h1>
         <p className="text-body text-gray-600 mb-4">Det indlæg du leder efter eksisterer ikke eller er blevet slettet.</p>
         <p className="text-body-small text-primary-600">Gå tilbage til <Link to="/" className="underline">forsiden</Link> og find andre spændende indlæg!</p>
@@ -109,10 +109,10 @@ export const PostPage: React.FC = () => {
   return (
     <div>
       {/* Post Content */}
-      <div className="bg-white border border-gray-200 rounded-lg mb-4">
+      <div className="bg-white border border-gray-200 rounded-lg mb-4 overflow-hidden">
         <div className="flex">
           {/* Vote Section */}
-          <div className="flex flex-col items-center p-2 bg-primary-50">
+          <div className="flex flex-col items-center p-2 bg-primary-50 sm:p-3">
             <button 
               onClick={() => handleVote(1)}
               className={clsx('p-1 rounded hover:bg-primary-100 transition-colors', post.userVote === 1 ? 'text-primary-600' : 'text-gray-400')}
@@ -136,9 +136,9 @@ export const PostPage: React.FC = () => {
           </div>
 
           {/* Content */}
-          <div className="flex-1 p-3">
+          <div className="flex-1 p-3 sm:p-4 md:p-5">
             {/* Meta Info */}
-            <div className="flex items-center gap-1 text-caption text-gray-500 mb-2">
+            <div className="flex flex-wrap items-center gap-1 text-caption text-gray-500 mb-2">
               <span>Delt af</span>
               <Link to={`/user/${post.author.username}`} className="hover:underline font-medium text-primary-600">
                 {post.author.username}
@@ -214,14 +214,14 @@ export const PostPage: React.FC = () => {
             )}
 
             {/* Actions */}
-            <div className="flex items-center justify-between text-body-small text-gray-500">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 text-body-small text-gray-500">
               <div className="flex items-center gap-1">
                 <MessageSquare size={16} className="text-primary-500" />
                 <span>{post.commentCount} {post.commentCount === 1 ? 'kommentar' : 'kommentarer'}</span>
               </div>
               
               {isOwner && (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 justify-end">
                   {isEditing ? (
                     <>
                       <button
