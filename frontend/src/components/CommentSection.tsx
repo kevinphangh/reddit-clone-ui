@@ -96,31 +96,31 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
         </div>
       )}
 
-      {/* Comments Header */}
-      <div className="mb-4">
-        <h3 className="text-body-small font-medium text-gray-700">
-          {commentCount === 0 ? 'Ingen har kommenteret endnu - vær den første! 💬' : `${commentCount} ${commentCount === 1 ? 'kommentar' : 'kommentarer'}`}
-        </h3>
-      </div>
-
       {/* Comments List */}
       <div className="space-y-3">
         {isLoading ? (
           <div className="text-center py-4">
             <p className="text-body text-gray-500">Indlæser kommentarer...</p>
           </div>
-        ) : comments.length === 0 ? (
-          <div className="text-center py-4">
-            <p className="text-body text-gray-500">Ingen kommentarer endnu. Vær den første til at kommentere!</p>
-          </div>
         ) : (
-          comments.map(comment => (
-            <Comment 
-              key={comment.id} 
-              comment={comment}
-              depth={0}
-            />
-          ))
+          <>
+            {/* Comments Header */}
+            <div className="mb-4">
+              <h3 className="text-body-small font-medium text-gray-700">
+                {commentCount === 0 ? 'Ingen har kommenteret endnu - vær den første! 💬' : `${commentCount} ${commentCount === 1 ? 'kommentar' : 'kommentarer'}`}
+              </h3>
+            </div>
+            
+            {comments.length > 0 ? (
+              comments.map(comment => (
+                <Comment 
+                  key={comment.id} 
+                  comment={comment}
+                  depth={0}
+                />
+              ))
+            ) : null}
+          </>
         )}
       </div>
     </div>

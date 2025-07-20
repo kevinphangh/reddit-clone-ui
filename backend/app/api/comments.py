@@ -147,7 +147,7 @@ async def create_comment(
     db_vote = Vote(
         user_id=current_user.id,
         target_id=db_comment.id,
-        target_type=VoteType.COMMENT,
+        target_type=VoteType.COMMENT.value,
         value=1
     )
     db.add(db_vote)
@@ -158,7 +158,7 @@ async def create_comment(
     
     db_comment.user_vote = 1
     db_comment.saved = False
-    db_comment.replies = []
+    # Don't set replies - it will be empty by default for new comments
     
     return db_comment
 
@@ -194,7 +194,7 @@ async def update_comment(
     await db.refresh(comment)
     
     await get_comment_with_user_data(comment, current_user, db)
-    comment.replies = []
+    # Don't set replies - it's not needed for update response
     
     return comment
 

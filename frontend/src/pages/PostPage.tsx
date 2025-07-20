@@ -47,10 +47,18 @@ export const PostPage: React.FC = () => {
     
     loadComments();
     
+    // Fallback timeout to ensure loading state is cleared
+    const timeout = setTimeout(() => {
+      if (isMounted) {
+        setCommentsLoading(false);
+      }
+    }, 3000);
+    
     return () => {
       isMounted = false;
+      clearTimeout(timeout);
     };
-  }, [postId, refreshComments]);
+  }, [postId]);
   
   if (!post) {
     return (
