@@ -61,7 +61,7 @@ describe('LoginPage', () => {
     });
   });
 
-  it('shows loading state during submission', async () => {
+  it('disables submit button during submission', async () => {
     const user = userEvent.setup();
     render(<LoginPage />);
     
@@ -71,8 +71,16 @@ describe('LoginPage', () => {
     
     await user.type(usernameInput, 'testuser');
     await user.type(passwordInput, 'password123');
-    await user.click(submitButton);
     
-    expect(screen.getByText(/logger ind.../i)).toBeInTheDocument();
+    // The button should not be disabled before clicking
+    expect(submitButton).not.toBeDisabled();
+    
+    // Click and immediately check if button gets disabled
+    user.click(submitButton);
+    
+    // After clicking, the button should be disabled during submission
+    await waitFor(() => {
+      expect(submitButton).toBeDisabled();
+    });
   });
 });

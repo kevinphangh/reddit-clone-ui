@@ -186,23 +186,19 @@ npm run test:coverage                # With coverage report
 ```bash
 cd backend
 
-# Recommended: Use Docker (Python 3.11)
-./test.sh
+# Activate virtual environment and run tests
+source venv/bin/activate
+python -m pytest tests/ -v
 
-# Or manually with Docker:
-docker compose -f docker-compose.test.yml build
-docker compose -f docker-compose.test.yml run --rm test
-docker compose -f docker-compose.test.yml down
-
-# Local (requires Python 3.11/3.12):
-pip install -r requirements-test.txt
-pytest -v
+# Or use Docker (if available):
+docker compose -f docker-compose.test.yml up --build --abort-on-container-exit
 ```
 
 **Test Structure:**
 - Async tests with pytest-asyncio
 - Test fixtures in `tests/conftest.py`
 - SQLite in-memory database for testing
+- 20 tests covering auth, posts, and users endpoints
 
 ### CI/CD Pipeline
 Tests run automatically on GitHub Actions when you push to `main` or `develop`.

@@ -9,8 +9,13 @@ import { vi } from 'vitest';
 // Mock NotificationContext  
 vi.mock('../contexts/NotificationContext', () => ({
   NotificationProvider: ({ children }: { children: React.ReactNode }) => children,
-  useNotification: () => ({
-    showNotification: vi.fn(),
+  useNotifications: () => ({
+    notifications: [],
+    unreadCount: 0,
+    addNotification: vi.fn(),
+    markAsRead: vi.fn(),
+    markAllAsRead: vi.fn(),
+    clearNotifications: vi.fn(),
   }),
 }));
 

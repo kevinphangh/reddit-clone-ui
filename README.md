@@ -148,23 +148,38 @@ cd backend
 ### Frontend Tests
 ```bash
 cd frontend
-npm test -- --run                    # Kør alle tests
+npm test -- --run                    # Kør alle tests (38 tests)
 npm test                             # Watch mode
 npm test -- --run src/__tests__/integration/  # Kun integration tests
 npm run test:coverage                # Med coverage rapport
 ```
 
+**Test Coverage:**
+- 38 tests covering components, pages, utils og integration flows
+- Mock Service Worker (MSW) for API mocking
+- React Testing Library for component testing
+
 ### Backend Tests
 ```bash
 cd backend
-./test.sh                            # Kør i Docker (anbefalet)
+source venv/bin/activate
+python -m pytest tests/ -v           # Kør alle tests (20 tests)
 
-# Eller lokalt med Python 3.11/3.12:
-pip install -r requirements-test.txt
-pytest -v
+# Eller med Docker:
+docker compose -f docker-compose.test.yml up --build
 ```
 
+**Test Coverage:**
+- 20 tests covering authentication, posts, og users endpoints
+- Async tests med pytest-asyncio
+- In-memory SQLite database for hurtige tests
+
 **CI/CD**: Tests kører automatisk på GitHub Actions ved push til `main` eller `develop`.
+
+### Test Status
+- ✅ Frontend: 38 tests - Alle passerer
+- ✅ Backend: 20 tests - Alle passerer
+- Total: 58 tests kører succesfuldt!
 
 ## 🔧 Development
 

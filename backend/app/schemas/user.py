@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 from datetime import datetime
 from typing import Optional
 
@@ -17,5 +17,4 @@ class User(UserBase):
     
     points: dict = {"post": 0, "comment": 0}
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

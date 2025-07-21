@@ -10,7 +10,7 @@ from app.core.security import verify_password, get_password_hash, create_access_
 from app.core.deps import get_current_active_user
 from app.services.email import email_service
 import secrets
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 router = APIRouter()
 
@@ -43,7 +43,7 @@ async def register(
         hashed_password=get_password_hash(user_data.password),
         is_verified=False,
         verification_token=verification_token,
-        verification_token_expires=datetime.utcnow() + timedelta(hours=24)
+        verification_token_expires=datetime.now(timezone.utc) + timedelta(hours=24)
     )
     db.add(db_user)
     await db.commit()
@@ -99,7 +99,7 @@ async def verify_email(
     result = await db.execute(
         select(User).where(
             User.verification_token == token,
-            User.verification_token_expires > datetime.utcnow()
+            User.verification_token_expires > datetime.now(timezone.utc)
         )
     )
     user = result.scalar_one_or_none()

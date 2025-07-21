@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 from typing import Optional, List, ForwardRef
 from app.schemas.user import User
@@ -31,7 +31,6 @@ class Comment(CommentBase):
     saved: bool = False
     is_deleted: bool
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 Comment.model_rebuild()

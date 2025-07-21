@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, ForeignKey, DateTime, Enum, UniqueConstraint
 from sqlalchemy.orm import relationship
-from datetime import datetime
+from datetime import datetime, timezone
 import enum
 from app.db.database import Base
 
@@ -17,7 +17,7 @@ class Vote(Base):
     target_type = Column(Enum(VoteType), nullable=False)
     value = Column(Integer, nullable=False)
     
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
     
     user = relationship("User", back_populates="votes")
     __table_args__ = (

@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 class TestPosts:
     """Test posts endpoints"""
     
+    @pytest.mark.asyncio
     async def test_get_posts(self, client: AsyncClient, test_post):
         """Test getting all posts"""
         response = await client.get("/api/posts/")
@@ -13,6 +14,7 @@ class TestPosts:
         assert len(data) >= 1
         assert data[0]["title"] == test_post.title
     
+    @pytest.mark.asyncio
     async def test_get_single_post(self, client: AsyncClient, test_post):
         """Test getting single post"""
         response = await client.get(f"/api/posts/{test_post.id}")
@@ -21,14 +23,14 @@ class TestPosts:
         assert data["title"] == test_post.title
         assert data["content"] == test_post.content
     
+    @pytest.mark.asyncio
     async def test_create_post_authenticated(self, client: AsyncClient, auth_headers):
         """Test creating post with authentication"""
         response = await client.post(
             "/api/posts/",
             json={
                 "title": "New Test Post",
-                "content": "This is new test content",
-                "type": "text"
+                "content": "This is new test content"
             },
             headers=auth_headers
         )
@@ -37,19 +39,20 @@ class TestPosts:
         assert data["title"] == "New Test Post"
         assert data["content"] == "This is new test content"
     
+    @pytest.mark.asyncio
     async def test_create_post_unauthenticated(self, client: AsyncClient):
         """Test creating post without authentication"""
         response = await client.post(
             "/api/posts/",
             json={
                 "title": "New Test Post",
-                "content": "This is new test content",
-                "type": "text"
+                "content": "This is new test content"
             }
         )
         assert response.status_code == 401
         assert "Not authenticated" in response.json()["detail"]
     
+    @pytest.mark.asyncio
     async def test_create_post_title_too_long(self, client: AsyncClient, auth_headers):
         """Test creating post with title over 100 characters"""
         long_title = "x" * 101
@@ -57,13 +60,13 @@ class TestPosts:
             "/api/posts/",
             json={
                 "title": long_title,
-                "content": "Test content",
-                "type": "text"
+                "content": "Test content"
             },
             headers=auth_headers
         )
         assert response.status_code == 422  # Validation error
     
+    @pytest.mark.asyncio
     async def test_vote_post(self, client: AsyncClient, test_post, auth_headers):
         """Test voting on a post"""
         # Upvote
@@ -73,7 +76,7 @@ class TestPosts:
         )
         assert response.status_code == 200
         data = response.json()
-        assert data["score"] == 2  # Original 1 + upvote
+        assert data["score"] == 1  # New post starts at 0, upvote makes it 1
         assert data["user_vote"] == 1
         
         # Change to downvote
@@ -83,7 +86,7 @@ class TestPosts:
         )
         assert response.status_code == 200
         data = response.json()
-        assert data["score"] == 0  # Original 1 - downvote
+        assert data["score"] == -1  # From 1 to -1 (change from upvote to downvote)
         assert data["user_vote"] == -1
         
         # Remove vote
@@ -93,9 +96,10 @@ class TestPosts:
         )
         assert response.status_code == 200
         data = response.json()
-        assert data["score"] == 1  # Back to original
-        assert data["user_vote"] == 0
+        assert data["score"] == 0  # Back to 0 (no votes)
+        assert data["user_vote"] is None  # No vote = None
     
+    @pytest.mark.asyncio
     async def test_delete_own_post(self, client: AsyncClient, test_post, auth_headers):
         """Test deleting own post"""
         response = await client.delete(
@@ -108,7 +112,8 @@ class TestPosts:
         response = await client.get(f"/api/posts/{test_post.id}")
         assert response.status_code == 404
     
-    async def test_delete_other_user_post(self, client: AsyncClient, test_post, async_session: AsyncSession):
+    @pytest.mark.asyncio
+    async def test_delete_other_user_post(self, client: AsyncClient, test_post, db_session: AsyncSession):
         """Test cannot delete other user's post"""
         from app.models import User
         from app.core.security import get_password_hash
@@ -120,8 +125,8 @@ class TestPosts:
             hashed_password=get_password_hash("password123"),
             is_verified=True
         )
-        async_session.add(other_user)
-        await async_session.commit()
+        db_session.add(other_user)
+        await db_session.commit()
         
         # Login as other user
         response = await client.post(

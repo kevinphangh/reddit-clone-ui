@@ -67,7 +67,14 @@ export const handlers = [
     ]);
   }),
 
-  http.post('https://via-forum-api.fly.dev/api/posts/:id/vote', ({ params }) => {
+  http.post('https://via-forum-api.fly.dev/api/posts/:id/vote', ({ request, params }) => {
+    const auth = request.headers.get('Authorization');
+    if (!auth || auth !== 'Bearer mock-token') {
+      return HttpResponse.json(
+        { detail: 'Not authenticated' },
+        { status: 401 }
+      );
+    }
     return HttpResponse.json({
       score: 6,
       user_vote: 1

@@ -1,65 +1,68 @@
+import os
 import pytest
-import asyncio
+import pytest_asyncio
 from typing import AsyncGenerator
-from httpx import AsyncClient
+from httpx import AsyncClient, ASGITransport
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
-from sqlalchemy.pool import NullPool
-
-import sys
-from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent.parent))
+from sqlalchemy.pool import StaticPool
 
 from main import app
 from app.db.database import Base, get_db
 from app.core.security import get_password_hash
-from app.models import User, Post
+from app.core.config import settings
+# Import all models to ensure they're registered with SQLAlchemy
+from app.models import User, Post, Comment, Vote, SavedItem
 
-# Test database URL
+# Use in-memory SQLite for tests - proper solution
 TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
 
-@pytest.fixture(scope="session")
-def event_loop():
-    """Create event loop for async tests"""
-    policy = asyncio.get_event_loop_policy()
-    loop = policy.new_event_loop()
-    yield loop
-    loop.close()
-
-@pytest.fixture(scope="function")
-async def async_session() -> AsyncGenerator[AsyncSession, None]:
-    """Create async session for testing"""
+@pytest_asyncio.fixture(scope="function")
+async def engine():
+    """Create test database engine"""
+    # For SQLite in-memory database, we need to use StaticPool to keep the same connection
     engine = create_async_engine(
         TEST_DATABASE_URL,
-        poolclass=NullPool,
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+        echo=False
     )
     
+    # Create all tables
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     
+    yield engine
+    
+    await engine.dispose()
+
+@pytest_asyncio.fixture(scope="function")
+async def db_session(engine) -> AsyncGenerator[AsyncSession, None]:
+    """Create database session for testing"""
     async_session_maker = async_sessionmaker(
-        engine, class_=AsyncSession, expire_on_commit=False
+        engine,
+        class_=AsyncSession,
+        expire_on_commit=False
     )
     
     async with async_session_maker() as session:
         yield session
-        
-    await engine.dispose()
 
-@pytest.fixture(scope="function")
-async def client(async_session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
+@pytest_asyncio.fixture(scope="function")
+async def client(db_session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
     """Create test client with database override"""
     async def override_get_db():
-        yield async_session
+        yield db_session
     
     app.dependency_overrides[get_db] = override_get_db
     
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as ac:
         yield ac
     
     app.dependency_overrides.clear()
 
-@pytest.fixture
-async def test_user(async_session: AsyncSession) -> User:
+@pytest_asyncio.fixture
+async def test_user(db_session: AsyncSession) -> User:
     """Create test user"""
     user = User(
         username="testuser",
@@ -67,12 +70,12 @@ async def test_user(async_session: AsyncSession) -> User:
         hashed_password=get_password_hash("testpass123"),
         is_verified=True
     )
-    async_session.add(user)
-    await async_session.commit()
-    await async_session.refresh(user)
+    db_session.add(user)
+    await db_session.commit()
+    await db_session.refresh(user)
     return user
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def auth_headers(client: AsyncClient, test_user: User) -> dict:
     """Get auth headers for test user"""
     response = await client.post(
@@ -83,16 +86,15 @@ async def auth_headers(client: AsyncClient, test_user: User) -> dict:
     token = response.json()["access_token"]
     return {"Authorization": f"Bearer {token}"}
 
-@pytest.fixture
-async def test_post(async_session: AsyncSession, test_user: User) -> Post:
+@pytest_asyncio.fixture
+async def test_post(db_session: AsyncSession, test_user: User) -> Post:
     """Create test post"""
     post = Post(
         title="Test Post",
         content="This is test content",
-        author_id=test_user.id,
-        type="text"
+        author_id=test_user.id
     )
-    async_session.add(post)
-    await async_session.commit()
-    await async_session.refresh(post)
+    db_session.add(post)
+    await db_session.commit()
+    await db_session.refresh(post)
     return post

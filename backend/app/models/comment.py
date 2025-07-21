@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, Text, ForeignKey, DateTime, Boolean
 from sqlalchemy.orm import relationship
-from datetime import datetime
+from datetime import datetime, timezone
 from app.db.database import Base
 
 class Comment(Base):
@@ -13,8 +13,8 @@ class Comment(Base):
     post_id = Column(Integer, ForeignKey("posts.id"), nullable=False, index=True)
     parent_id = Column(Integer, ForeignKey("comments.id"), nullable=True, index=True)
     
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
+    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
     edited_at = Column(DateTime, nullable=True)
     
     score = Column(Integer, default=0)

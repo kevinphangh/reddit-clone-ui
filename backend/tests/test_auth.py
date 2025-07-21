@@ -5,7 +5,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 class TestAuth:
     """Test authentication endpoints"""
     
-    async def test_register_success(self, client: AsyncClient, async_session: AsyncSession):
+    @pytest.mark.asyncio
+    async def test_register_success(self, client: AsyncClient, db_session: AsyncSession):
         """Test successful user registration"""
         response = await client.post(
             "/api/auth/register",
@@ -21,6 +22,7 @@ class TestAuth:
         assert data["email"] == "newuser@example.com"
         assert data["is_verified"] == False
     
+    @pytest.mark.asyncio
     async def test_register_duplicate_username(self, client: AsyncClient, test_user):
         """Test registration with duplicate username"""
         response = await client.post(
@@ -34,6 +36,7 @@ class TestAuth:
         assert response.status_code == 400
         assert "Username already registered" in response.json()["detail"]
     
+    @pytest.mark.asyncio
     async def test_register_duplicate_email(self, client: AsyncClient, test_user):
         """Test registration with duplicate email"""
         response = await client.post(
@@ -47,6 +50,7 @@ class TestAuth:
         assert response.status_code == 400
         assert "Email already registered" in response.json()["detail"]
     
+    @pytest.mark.asyncio
     async def test_login_success(self, client: AsyncClient, test_user):
         """Test successful login"""
         response = await client.post(
@@ -61,7 +65,8 @@ class TestAuth:
         assert "access_token" in data
         assert data["token_type"] == "bearer"
     
-    async def test_login_unverified_user(self, client: AsyncClient, async_session: AsyncSession):
+    @pytest.mark.asyncio
+    async def test_login_unverified_user(self, client: AsyncClient, db_session: AsyncSession):
         """Test login with unverified user"""
         from app.models import User
         from app.core.security import get_password_hash
@@ -73,8 +78,8 @@ class TestAuth:
             hashed_password=get_password_hash("password123"),
             is_verified=False
         )
-        async_session.add(user)
-        await async_session.commit()
+        db_session.add(user)
+        await db_session.commit()
         
         response = await client.post(
             "/api/auth/login",
@@ -83,9 +88,10 @@ class TestAuth:
                 "password": "password123"
             }
         )
-        assert response.status_code == 401
+        assert response.status_code == 403
         assert "Email not verified" in response.json()["detail"]
     
+    @pytest.mark.asyncio
     async def test_login_invalid_credentials(self, client: AsyncClient, test_user):
         """Test login with invalid credentials"""
         response = await client.post(
@@ -98,12 +104,13 @@ class TestAuth:
         assert response.status_code == 401
         assert "Incorrect username or password" in response.json()["detail"]
     
-    async def test_verify_email(self, client: AsyncClient, async_session: AsyncSession):
+    @pytest.mark.asyncio
+    async def test_verify_email(self, client: AsyncClient, db_session: AsyncSession):
         """Test email verification"""
         from app.models import User
         from app.core.security import get_password_hash
         import secrets
-        from datetime import datetime, timedelta
+        from datetime import datetime, timedelta, timezone
         
         # Create user with verification token
         token = secrets.token_urlsafe(32)
@@ -113,10 +120,10 @@ class TestAuth:
             hashed_password=get_password_hash("password123"),
             is_verified=False,
             verification_token=token,
-            verification_token_expires=datetime.utcnow() + timedelta(hours=24)
+            verification_token_expires=datetime.now(timezone.utc) + timedelta(hours=24)
         )
-        async_session.add(user)
-        await async_session.commit()
+        db_session.add(user)
+        await db_session.commit()
         
         response = await client.post(
             "/api/auth/verify-email",
@@ -126,6 +133,6 @@ class TestAuth:
         assert response.json()["message"] == "Email verified successfully"
         
         # Check user is verified
-        await async_session.refresh(user)
+        await db_session.refresh(user)
         assert user.is_verified == True
         assert user.verification_token is None

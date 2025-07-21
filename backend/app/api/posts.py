@@ -1,5 +1,5 @@
 from typing import List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, and_
@@ -52,7 +52,7 @@ async def get_post_with_user_data(
 async def get_posts(
     skip: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=100),
-    sort: str = Query("new", regex="^(new|top|hot)$"),
+    sort: str = Query("new", pattern="^(new|top|hot)$"),
     db: AsyncSession = Depends(get_db),
     current_user: Optional[User] = Depends(get_current_user_optional)
 ):
@@ -160,7 +160,7 @@ async def update_post(
     if update_data:
         for field, value in update_data.items():
             setattr(post, field, value)
-        post.edited_at = datetime.utcnow()
+        post.edited_at = datetime.now(timezone.utc)
     
     await db.commit()
     await db.refresh(post)

@@ -1,5 +1,5 @@
 from typing import List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, and_
@@ -223,7 +223,7 @@ async def update_comment(
     
     # Update comment
     comment.body = comment_update.body
-    comment.edited_at = datetime.utcnow()
+    comment.edited_at = datetime.now(timezone.utc)
     
     await db.commit()
     await db.refresh(comment)

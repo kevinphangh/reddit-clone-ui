@@ -48,7 +48,7 @@ describe('PostCard', () => {
   });
 
   it('shows active vote state', () => {
-    const postWithUpvote = { ...mockPost, user_vote: 1 };
+    const postWithUpvote = { ...mockPost, userVote: 1 };
     render(<PostCard post={postWithUpvote} />);
     
     const upvoteButton = screen.getByLabelText('Stem op');
