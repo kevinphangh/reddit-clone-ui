@@ -44,23 +44,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-        cache: 'pip'
-        cache-dependency-path: backend/requirements*.txt
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
     
-    - name: Install dependencies
+    - name: Run tests in Docker
       working-directory: backend
       run: |
-        pip install -r requirements.txt
-        pip install -r requirements-test.txt
-    
-    - name: Run tests
-      working-directory: backend
-      run: |
-        pytest -v --cov=app --cov-report=term-missing
+        docker-compose -f docker-compose.test.yml build
+        docker-compose -f docker-compose.test.yml run --rm test
+        docker-compose -f docker-compose.test.yml down
     
     - name: Check code with mypy (optional)
       working-directory: backend

@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    environment:
+      - DATABASE_URL=sqlite+aiosqlite:///:memory:
+      - SECRET_KEY=test-secret-key
+      - SMTP_HOST=smtp.test.com
+      - SMTP_PORT=587
+      - SMTP_USERNAME=test
+      - SMTP_PASSWORD=test
+      - SMTP_FROM=test@test.com
+      - FRONTEND_URL=http://localhost:3000
+    volumes:
+      - .:/app
+    command: pytest -v --cov=app --cov-report=term-missing --cov-report=html

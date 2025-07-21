@@ -1,5 +1,7 @@
 # Testing Guide
 
+**Updated**: Nu med integration tests og Docker support!
+
 Dette dokument beskriver hvordan du kører og skriver tests for VIA Forum projektet.
 
 ## 🧪 Frontend Testing
@@ -14,6 +16,9 @@ cd frontend
 # Kør alle tests én gang
 npm test -- --run
 
+# Kør integration tests
+npm test -- --run src/__tests__/integration/
+
 # Kør tests i watch mode
 npm test
 
@@ -22,6 +27,19 @@ npm run test:ui
 
 # Kør tests med coverage
 npm run test:coverage
+```
+
+### Integration Tests (NYT!)
+
+Vi bruger nu **MSW (Mock Service Worker)** til at mocke API calls:
+
+```typescript
+// src/__tests__/integration/LoginFlow.test.tsx
+describe('Login Flow Integration', () => {
+  it('successfully logs in with valid credentials', async () => {
+    // Tester hele login flowet med rigtige komponenter
+  });
+});
 ```
 
 ### Test Struktur
@@ -56,6 +74,22 @@ Backend bruger **pytest** og **pytest-asyncio**.
 
 ### Kør Tests
 
+#### Med Docker (ANBEFALET - NYT!)
+
+```bash
+cd backend
+
+# Kør tests i Docker container med Python 3.11
+./test.sh
+
+# Eller manuelt:
+docker-compose -f docker-compose.test.yml build
+docker-compose -f docker-compose.test.yml run --rm test
+docker-compose -f docker-compose.test.yml down
+```
+
+#### Lokalt (kræver Python 3.11 eller 3.12)
+
 ```bash
 cd backend
 
@@ -70,12 +104,6 @@ pytest -v
 
 # Kør tests med coverage
 pytest --cov=app --cov-report=html
-
-# Kør specifik test fil
-pytest tests/test_auth.py
-
-# Kør specifik test
-pytest tests/test_auth.py::TestAuth::test_login_success
 ```
 
 ### Test Struktur
