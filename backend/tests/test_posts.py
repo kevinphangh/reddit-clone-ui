@@ -30,7 +30,8 @@ class TestPosts:
             "/api/posts/",
             json={
                 "title": "New Test Post",
-                "content": "This is new test content"
+                "content": "This is new test content",
+                "type": "text"
             },
             headers=auth_headers
         )
@@ -46,7 +47,8 @@ class TestPosts:
             "/api/posts/",
             json={
                 "title": "New Test Post",
-                "content": "This is new test content"
+                "content": "This is new test content",
+                "type": "text"
             }
         )
         assert response.status_code == 401
@@ -60,7 +62,8 @@ class TestPosts:
             "/api/posts/",
             json={
                 "title": long_title,
-                "content": "Test content"
+                "content": "Test content",
+                "type": "text"
             },
             headers=auth_headers
         )

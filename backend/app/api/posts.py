@@ -106,9 +106,10 @@ async def create_post(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_active_user)
 ):
-    # Create new post
+    # Create new post (exclude type field which is not in DB)
+    post_dict = post_data.model_dump(exclude={"type"})
     db_post = Post(
-        **post_data.model_dump(),
+        **post_dict,
         author_id=current_user.id,
         score=1  # Start with 1 (author's implicit upvote)
     )
