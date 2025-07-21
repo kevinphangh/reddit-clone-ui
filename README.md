@@ -143,6 +143,29 @@ cd backend
 - `GET /api/users/{username}` - Bruger profil
 - `GET /api/users/count` - Antal brugere
 
+## 🧪 Testing
+
+### Frontend Tests
+```bash
+cd frontend
+npm test -- --run                    # Kør alle tests
+npm test                             # Watch mode
+npm test -- --run src/__tests__/integration/  # Kun integration tests
+npm run test:coverage                # Med coverage rapport
+```
+
+### Backend Tests
+```bash
+cd backend
+./test.sh                            # Kør i Docker (anbefalet)
+
+# Eller lokalt med Python 3.11/3.12:
+pip install -r requirements-test.txt
+pytest -v
+```
+
+**CI/CD**: Tests kører automatisk på GitHub Actions ved push til `main` eller `develop`.
+
 ## 🔧 Development
 
 ### Frontend Commands

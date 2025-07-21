@@ -166,6 +166,47 @@ To change design elements:
 5. Test voting functionality
 6. Check responsive design on mobile
 
+## Testing
+
+### Frontend Tests
+```bash
+cd frontend
+npm test -- --run                    # Run all tests once
+npm test                             # Watch mode
+npm test -- --run src/__tests__/integration/  # Integration tests only
+npm run test:coverage                # With coverage report
+```
+
+**Test Structure:**
+- Integration tests with MSW (Mock Service Worker) for API mocking
+- Located in `src/__tests__/integration/`
+- Uses real React components with mocked API responses
+
+### Backend Tests
+```bash
+cd backend
+
+# Recommended: Use Docker (Python 3.11)
+./test.sh
+
+# Or manually with Docker:
+docker compose -f docker-compose.test.yml build
+docker compose -f docker-compose.test.yml run --rm test
+docker compose -f docker-compose.test.yml down
+
+# Local (requires Python 3.11/3.12):
+pip install -r requirements-test.txt
+pytest -v
+```
+
+**Test Structure:**
+- Async tests with pytest-asyncio
+- Test fixtures in `tests/conftest.py`
+- SQLite in-memory database for testing
+
+### CI/CD Pipeline
+Tests run automatically on GitHub Actions when you push to `main` or `develop`.
+
 ## Development Commands
 
 ### Frontend
