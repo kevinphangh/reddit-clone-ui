@@ -44,7 +44,7 @@ export const ChangeUsernameModal: React.FC<ChangeUsernameModalProps> = ({
 
     setIsSubmitting(true);
     try {
-      await api.request('/api/auth/change-username', {
+      await (api as any).request('/api/auth/change-username', {
         method: 'PUT',
         body: JSON.stringify({ new_username: newUsername })
       });

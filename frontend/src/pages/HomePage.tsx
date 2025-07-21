@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { PostCard } from '../components/PostCard';
 import { useData } from '../contexts/DataContext';
-import { UnitySymbol } from '../components/UnitySymbol';
 import { AnonymityInfo } from '../components/AnonymityInfo';
 import { EmptyForum } from '../components/EmptyForum';
 
