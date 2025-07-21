@@ -2,9 +2,15 @@
 
 This guide contains deployment instructions for both frontend and backend of the VIA Forum project.
 
-## Frontend Deployment (Vercel)
+## Project Overview
 
-The frontend is deployed to Vercel at: https://via-paedagoger.vercel.app
+VIA Pædagoger Forum - A community platform for pedagogy students at VIA University College.
+
+**Live URLs:**
+- Frontend: https://via-paedagoger.vercel.app (also https://via-forum.vercel.app)
+- Backend API: https://via-forum-api.fly.dev
+
+## Frontend Deployment (Vercel)
 
 ### Prerequisites
 - npm installed
@@ -27,32 +33,17 @@ The frontend is deployed to Vercel at: https://via-paedagoger.vercel.app
    vercel --prod
    ```
 
-4. **Update the alias to use the correct domain:**
-   ```bash
-   vercel alias set [deployment-url] via-paedagoger.vercel.app
-   ```
-   Replace `[deployment-url]` with the URL from step 3.
-
 ### Important Notes
-- Always use `via-paedagoger.vercel.app` as the production URL
-- The deployment will automatically use environment variables from `vercel.json`
+- The deployment automatically uses environment variables from production
 - Build output is in the `dist/` directory
+- Domain names configured: via-paedagoger.vercel.app and via-forum.vercel.app
 
 ## Backend Deployment (Fly.io)
 
-The backend API is deployed to Fly.io at: https://via-forum-api.fly.dev
-
 ### Prerequisites
-- Fly CLI installed at: `~/.fly/bin/fly`
+- Fly CLI installed at: `/home/keph/.fly/bin/flyctl`
 - Docker configuration in `Dockerfile`
-- PostgreSQL database attached (Fly.io Managed Postgres)
-
-### Database Setup
-
-The backend uses PostgreSQL hosted on Fly.io:
-- Database was created using: `~/.fly/bin/fly postgres create --name via-forum-db`
-- Database attached using: `~/.fly/bin/fly postgres attach via-forum-db --app via-forum-api`
-- Connection string is automatically set as `DATABASE_URL` secret
+- PostgreSQL database (managed by Fly.io)
 
 ### Deployment Steps
 
@@ -63,114 +54,154 @@ The backend uses PostgreSQL hosted on Fly.io:
 
 2. **Deploy to Fly.io:**
    ```bash
-   ~/.fly/bin/fly deploy
+   /home/keph/.fly/bin/flyctl deploy
    ```
 
-3. **Database migrations run automatically** during deployment via Dockerfile:
-   ```dockerfile
-   CMD alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port ${PORT:-8080}
-   ```
+### Email Configuration
 
-### Checking Deployment Status
+The backend uses Resend for email verification:
 
-- **View logs:**
-  ```bash
-  ~/.fly/bin/fly logs -a via-forum-api
-  ```
+```bash
+# Configure email settings
+/home/keph/.fly/bin/flyctl secrets set EMAIL_DEV_MODE=false
+/home/keph/.fly/bin/flyctl secrets set SMTP_PASSWORD=re_YOUR_API_KEY
+/home/keph/.fly/bin/flyctl secrets set FROM_EMAIL=onboarding@resend.dev
+```
 
-- **Check app status:**
-  ```bash
-  ~/.fly/bin/fly status -a via-forum-api
-  ```
-
-- **View secrets (including DATABASE_URL):**
-  ```bash
-  ~/.fly/bin/fly secrets list -a via-forum-api
-  ```
+Current Resend API key is configured in production.
 
 ### Database Management
 
-- **Connect to database:**
+- **Run migrations manually:**
   ```bash
-  ~/.fly/bin/fly postgres connect -a via-forum-db
+  /home/keph/.fly/bin/flyctl ssh console -a via-forum-api -C 'python -c "
+  import os
+  import asyncio
+  import asyncpg
+  
+  async def migrate():
+      db_url = os.getenv(\"DATABASE_URL\", \"\").replace(\"postgres://\", \"postgresql://\", 1)
+      conn = await asyncpg.connect(db_url)
+      # Your SQL here
+      await conn.close()
+  
+  asyncio.run(migrate())
+  "'
   ```
 
-- **Check users in database:**
-  ```sql
-  SELECT id, username, email, is_active FROM users;
+- **Check logs:**
+  ```bash
+  /home/keph/.fly/bin/flyctl logs -a via-forum-api
   ```
-
-### Testing Endpoints
-
-Test if backend is working:
-```bash
-curl https://via-forum-api.fly.dev/api/users/count
-```
 
 ## Quick Deploy Both
 
-To deploy both frontend and backend:
-
 ```bash
 # Deploy Backend
-cd /home/keph/projects/forum/backend && ~/.fly/bin/fly deploy
+cd /home/keph/projects/forum/backend && /home/keph/.fly/bin/flyctl deploy
 
-# Deploy Frontend
-cd /home/keph/projects/forum/frontend && npm run build && vercel --prod
-
-# Update alias (replace with actual deployment URL)
-vercel alias set [deployment-url] via-paedagoger.vercel.app
+# Deploy Frontend  
+cd /home/keph/projects/forum/frontend && vercel --prod
 ```
 
-## Environment Details
+## Design System
 
-- **Frontend Framework:** React + Vite + TypeScript + Tailwind CSS
-- **Backend Framework:** FastAPI + SQLAlchemy + Alembic
-- **Database:** PostgreSQL (Fly.io Managed Postgres)
-- **Authentication:** JWT tokens
-- **Frontend Host:** Vercel
-- **Backend Host:** Fly.io
-- **Frontend URL:** https://via-paedagoger.vercel.app
-- **Backend API URL:** https://via-forum-api.fly.dev
+### Current Design (Danish Minimalist)
+- **Primary Color:** Rose/beige (#ffb69e, #ffe3d8)
+- **Secondary Color:** Soft coral tones
+- **Typography:** Clean, no emojis
+- **Symbol:** Unity symbol (two overlapping circles) representing togetherness
+- **Border Radius:** Configurable in `src/config/branding.ts`
+
+### Key Design Files
+- `/frontend/src/config/branding.ts` - All colors and branding
+- `/frontend/src/components/UnitySymbol.tsx` - Simple unity symbol
+- `/frontend/tailwind.config.js` - Tailwind configuration
+
+To change design elements:
+1. Edit `branding.ts` for colors
+2. Update `tailwind.config.js` to match
+3. Adjust border radius values in both files
 
 ## Key Features Implemented
 
-1. **Typography System:** Consistent font sizes and styles throughout the interface
-2. **User Registration:** With verification modal to ensure users can log in
-3. **Dynamic Member Count:** Shows real registered users with localStorage fallback
-4. **Character Limits:** 
-   - Post titles: 100 characters
-   - Post content: 5000 characters
-5. **Proprietary License:** Changed from MIT to very private license
+1. **Email Verification System**
+   - New users must verify email before login
+   - Uses Resend.com for email delivery
+   - Prevents spam account creation
+
+2. **Design System**
+   - Centralized branding configuration
+   - Danish minimalist aesthetic
+   - Unity symbol instead of mascot
+   - Configurable rounded corners
+
+3. **User Features**
+   - Registration with email verification
+   - Login with JWT authentication
+   - Create posts and comments
+   - Upvote/downvote system
+   - User profiles
+
+4. **Technical Features**
+   - Responsive design
+   - Real-time user count
+   - Character limits (100 for titles, 5000 for content)
+   - CORS properly configured
+   - Database migrations
 
 ## Common Issues and Solutions
 
-1. **Fly CLI not found:** Use full path `~/.fly/bin/fly`
-2. **Vercel alias issues:** Always update to `via-paedagoger.vercel.app`
-3. **CORS errors:** Backend is configured to accept requests from the Vercel domain
-4. **ModuleNotFoundError psycopg2:** Added `psycopg2-binary==2.9.9` to requirements.txt
-5. **Database connection issues:** Ensure DATABASE_URL secret is set via postgres attach
+1. **Email not sending:** Check EMAIL_DEV_MODE is false and Resend API key is set
+2. **CORS errors:** Backend accepts requests from configured Vercel domains
+3. **Database issues:** Use asyncpg for async operations, not psycopg2
+4. **Fly CLI issues:** Always use full path `/home/keph/.fly/bin/flyctl`
 
 ## Testing After Deployment
 
 1. Visit https://via-paedagoger.vercel.app
-2. Check member count is loading from API
-3. Test user registration and login with verification
-4. Create a post and verify character limits work
-5. Verify posts and comments functionality
+2. Register a new account and verify email works
+3. Test login with verified account
+4. Create a post and comment
+5. Test voting functionality
+6. Check responsive design on mobile
 
 ## Development Commands
 
-### Linting and Type Checking
+### Frontend
 ```bash
-# Frontend
 cd frontend
-npm run lint
-npm run type-check
-
-# Backend
-cd backend
-# No linting commands set up yet
+npm run dev          # Development server
+npm run build        # Production build
+npm run lint         # Run ESLint
+npm run type-check   # TypeScript checking
 ```
 
-Last updated: 2025-07-20
+### Backend
+```bash
+cd backend
+uvicorn main:app --reload  # Development server
+alembic upgrade head       # Run migrations
+```
+
+## Environment Variables
+
+### Frontend (automatic in Vercel)
+- `VITE_API_URL`: https://via-forum-api.fly.dev
+
+### Backend (Fly.io secrets)
+- `DATABASE_URL`: PostgreSQL connection string
+- `SECRET_KEY`: JWT secret
+- `EMAIL_DEV_MODE`: false (production)
+- `SMTP_PASSWORD`: Resend API key
+- `FROM_EMAIL`: onboarding@resend.dev
+
+## Future Domain Setup
+
+When ready to use custom domain (e.g., viap.dk):
+1. Add domain in Vercel dashboard
+2. Configure DNS records
+3. Verify domain in Resend
+4. Update FROM_EMAIL in Fly.io
+
+Last updated: 2025-07-21
