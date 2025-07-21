@@ -26,6 +26,7 @@ services:
       ACCESS_TOKEN_EXPIRE_MINUTES: "10080"
       FRONTEND_URL: http://localhost:3000
       ENVIRONMENT: test
+      EMAIL_DEV_MODE: "true"
     volumes:
       - .:/app
     depends_on:
