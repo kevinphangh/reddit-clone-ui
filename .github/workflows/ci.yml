@@ -50,9 +50,9 @@ jobs:
     - name: Run tests in Docker
       working-directory: backend
       run: |
-        docker-compose -f docker-compose.test.yml build
-        docker-compose -f docker-compose.test.yml run --rm test
-        docker-compose -f docker-compose.test.yml down
+        docker compose -f docker-compose.test.yml build
+        docker compose -f docker-compose.test.yml run --rm test
+        docker compose -f docker-compose.test.yml down
     
     - name: Check code with mypy (optional)
       working-directory: backend
