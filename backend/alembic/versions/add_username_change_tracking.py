@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = 'add_username_change_tracking'
-down_revision = None
+down_revision = '622a59c98346'
 branch_labels = None
 depends_on = None
 
