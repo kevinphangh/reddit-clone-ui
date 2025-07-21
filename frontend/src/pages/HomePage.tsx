@@ -1,10 +1,33 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { PostCard } from '../components/PostCard';
 import { useData } from '../contexts/DataContext';
 import { UnitySymbol } from '../components/UnitySymbol';
 
 export const HomePage: React.FC = () => {
-  const { posts, loading, error } = useData();
+  const { posts, loading, error, hasMore, loadingMore, loadMorePosts } = useData();
+  const observerTarget = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loadingMore) {
+          loadMorePosts();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentTarget = observerTarget.current;
+    if (currentTarget) {
+      observer.observe(currentTarget);
+    }
+
+    return () => {
+      if (currentTarget) {
+        observer.unobserve(currentTarget);
+      }
+    };
+  }, [hasMore, loadingMore, loadMorePosts]);
   
   if (loading) {
     return (
@@ -48,6 +71,23 @@ export const HomePage: React.FC = () => {
       {posts.map(post => (
         <PostCard key={post.id} post={post} />
       ))}
+      
+      {/* Loading indicator */}
+      {loadingMore && (
+        <div className="bg-white border border-gray-200 rounded-lg p-4 text-center">
+          <p className="text-body text-gray-500">Indlæser flere indlæg...</p>
+        </div>
+      )}
+      
+      {/* Observer target */}
+      <div ref={observerTarget} className="h-10" />
+      
+      {/* No more posts message */}
+      {!hasMore && posts.length > 0 && (
+        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
+          <p className="text-body-small text-gray-600">Du har set alle indlæg</p>
+        </div>
+      )}
     </div>
   );
 };

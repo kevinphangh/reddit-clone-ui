@@ -11,6 +11,9 @@ from app.core.deps import get_current_active_user
 from app.services.email import email_service
 import secrets
 from datetime import datetime, timedelta, timezone
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -19,44 +22,60 @@ async def register(
     user_data: UserCreate,
     db: AsyncSession = Depends(get_db)
 ):
-    # Check if username already exists
-    result = await db.execute(select(User).where(User.username == user_data.username))
-    if result.scalar_one_or_none():
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Username already registered"
+    logger.info(f"Registration attempt for username: {user_data.username}, email: {user_data.email}")
+    
+    try:
+        # Check if username already exists
+        result = await db.execute(select(User).where(User.username == user_data.username))
+        if result.scalar_one_or_none():
+            logger.warning(f"Username already exists: {user_data.username}")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Username already registered"
+            )
+        
+        # Check if email already exists
+        result = await db.execute(select(User).where(User.email == user_data.email))
+        if result.scalar_one_or_none():
+            logger.warning(f"Email already exists: {user_data.email}")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Email already registered"
+            )
+        
+        # Create new user with verification token
+        verification_token = secrets.token_urlsafe(32)
+        logger.info(f"Creating user object for {user_data.username}")
+        db_user = User(
+            username=user_data.username,
+            email=user_data.email,
+            hashed_password=get_password_hash(user_data.password),
+            is_verified=email_service.dev_mode,  # Auto-verify in dev mode
+            verification_token=verification_token,
+            verification_token_expires=datetime.now(timezone.utc).replace(tzinfo=None) + timedelta(hours=24)
         )
-    
-    # Check if email already exists
-    result = await db.execute(select(User).where(User.email == user_data.email))
-    if result.scalar_one_or_none():
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Email already registered"
-        )
-    
-    # Create new user with verification token
-    verification_token = secrets.token_urlsafe(32)
-    db_user = User(
-        username=user_data.username,
-        email=user_data.email,
-        hashed_password=get_password_hash(user_data.password),
-        is_verified=False,
-        verification_token=verification_token,
-        verification_token_expires=datetime.now(timezone.utc) + timedelta(hours=24)
-    )
-    db.add(db_user)
-    await db.commit()
-    await db.refresh(db_user)
-    
-    # Send verification email
-    await email_service.send_verification_email(
-        to_email=user_data.email,
-        username=user_data.username,
-        token=verification_token
-    )
-    
-    return db_user
+        db.add(db_user)
+        await db.commit()
+        await db.refresh(db_user)
+        logger.info(f"User created in database: {db_user.username}")
+        
+        # Send verification email
+        try:
+            logger.info(f"Attempting to send verification email to {user_data.email}")
+            email_sent = await email_service.send_verification_email(
+                to_email=user_data.email,
+                username=user_data.username,
+                token=verification_token
+            )
+            logger.info(f"Email sent status: {email_sent}")
+        except Exception as email_error:
+            logger.error(f"Failed to send verification email: {type(email_error).__name__}: {str(email_error)}")
+            # Don't fail registration if email fails - user is already created
+            
+        return db_user
+    except Exception as e:
+        logger.error(f"Registration failed: {type(e).__name__}: {str(e)}")
+        raise
 
 @router.post("/login", response_model=Token)
 async def login(
@@ -74,8 +93,8 @@ async def login(
             headers={"WWW-Authenticate": "Bearer"},
         )
     
-    # Check if user is verified
-    if not user.is_verified:
+    # Check if user is verified (skip in dev mode)
+    if not user.is_verified and not email_service.dev_mode:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Email not verified. Please check your email for verification link."

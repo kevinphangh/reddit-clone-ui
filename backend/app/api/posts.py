@@ -11,6 +11,9 @@ from app.models.saved_item import ItemType
 from app.schemas.post import Post as PostSchema, PostCreate, PostUpdate
 from app.core.deps import get_current_active_user, get_current_user_optional
 from app.core.voting import handle_vote
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -106,16 +109,27 @@ async def create_post(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_active_user)
 ):
-    # Create new post (exclude type field which is not in DB)
-    post_dict = post_data.model_dump(exclude={"type"})
-    db_post = Post(
-        **post_dict,
-        author_id=current_user.id,
-        score=1  # Start with 1 (author's implicit upvote)
-    )
-    db.add(db_post)
-    await db.commit()
-    await db.refresh(db_post)
+    logger.info(f"Creating post for user {current_user.username}")
+    logger.info(f"Post data: {post_data.model_dump()}")
+    
+    try:
+        # Create new post (exclude type field which is not in DB)
+        post_dict = post_data.model_dump(exclude={"type"})
+        logger.info(f"Post dict after excluding type: {post_dict}")
+        
+        db_post = Post(
+            **post_dict,
+            author_id=current_user.id,
+            score=1  # Start with 1 (author's implicit upvote)
+        )
+        db.add(db_post)
+        await db.commit()
+        await db.refresh(db_post)
+        logger.info(f"Post created successfully with ID: {db_post.id}")
+    except Exception as e:
+        logger.error(f"Error creating post: {type(e).__name__}: {str(e)}")
+        logger.error(f"Post data that caused error: {post_dict}")
+        raise
     
     # Add author's upvote (after post has ID)
     db_vote = Vote(

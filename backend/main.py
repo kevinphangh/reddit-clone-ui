@@ -7,6 +7,19 @@ from sqlalchemy import text
 from app.core.config import settings
 from app.api import auth, posts, comments, users
 from app.db.database import AsyncSessionLocal
+import logging
+import sys
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout),
+        logging.FileHandler('/tmp/app.log')
+    ]
+)
+logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="VIA Pædagoger API",
@@ -55,9 +68,16 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 @app.exception_handler(Exception)
 async def general_exception_handler(request: Request, exc: Exception):
-    # Log the error for debugging
+    # Log the error with full details
     import traceback
-    traceback.print_exc()
+    error_detail = traceback.format_exc()
+    logger.error(f"Unhandled exception on {request.method} {request.url.path}")
+    logger.error(f"Exception type: {type(exc).__name__}")
+    logger.error(f"Exception message: {str(exc)}")
+    logger.error(f"Full traceback:\n{error_detail}")
+    
+    # Also log request details for debugging
+    logger.error(f"Request headers: {dict(request.headers)}")
     
     return JSONResponse(
         status_code=500,

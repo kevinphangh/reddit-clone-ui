@@ -7,6 +7,8 @@ interface DataContextType {
   comments: Comment[];
   loading: boolean;
   error: string | null;
+  hasMore: boolean;
+  loadingMore: boolean;
   
   // Post actions
   createPost: (title: string, content: string, subredditName?: string) => Promise<Post>;
@@ -29,6 +31,7 @@ interface DataContextType {
   // Refresh data
   refreshPosts: () => Promise<void>;
   refreshComments: (postId: string) => Promise<void>;
+  loadMorePosts: () => Promise<void>;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -38,6 +41,9 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(0);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   // Load posts on mount
   useEffect(() => {
@@ -48,8 +54,10 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       setLoading(true);
       setError(null);
+      setPage(0);
+      setHasMore(true);
       
-      const data = await api.getPosts({ limit: 50 });
+      const data = await api.getPosts({ limit: 10, skip: 0 });
       
       // Transform API data to match frontend format
       const transformedPosts: Post[] = data.map(post => ({
@@ -85,6 +93,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }));
       
       setPosts(transformedPosts);
+      setHasMore(data.length === 10);
+      setPage(1);
     } catch (err: any) {
       if (err.status === 0) {
         setError('Netværksfejl - kunne ikke oprette forbindelse til serveren');
@@ -94,6 +104,57 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Error loading posts
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadMorePosts = async () => {
+    if (loadingMore || !hasMore) return;
+    
+    try {
+      setLoadingMore(true);
+      
+      const data = await api.getPosts({ limit: 10, skip: page * 10 });
+      
+      // Transform API data to match frontend format
+      const transformedPosts: Post[] = data.map(post => ({
+        id: post.id.toString(),
+        title: post.title,
+        content: post.content,
+        type: 'text' as const,
+        author: {
+          ...post.author,
+          id: post.author.id.toString(),
+          cakeDay: new Date(post.author.created_at),
+          points: post.author.points || { post: 0, comment: 0 }
+        },
+        subreddit: {
+          id: '1',
+          name: 'viapædagoger',
+          displayName: 'VIA Pædagoger',
+          description: '',
+          members: 1,
+          activeUsers: 1,
+          createdAt: new Date(),
+          rules: []
+        },
+        createdAt: new Date(post.created_at),
+        updatedAt: new Date(post.updated_at),
+        editedAt: post.edited_at ? new Date(post.edited_at) : undefined,
+        score: post.score,
+        commentCount: post.comment_count,
+        isLocked: post.is_locked,
+        upvoteRatio: 1,
+        userVote: post.user_vote || 0,
+        saved: post.saved || false,
+      }));
+      
+      setPosts(prev => [...prev, ...transformedPosts]);
+      setHasMore(data.length === 10);
+      setPage(prev => prev + 1);
+    } catch (err: any) {
+      // Silent fail for load more
+    } finally {
+      setLoadingMore(false);
     }
   };
 
@@ -569,6 +630,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       comments,
       loading,
       error,
+      hasMore,
+      loadingMore,
       createPost,
       updatePost,
       deletePost,
@@ -583,6 +646,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       getUserComments,
       refreshPosts,
       refreshComments,
+      loadMorePosts,
     }}>
       {children}
     </DataContext.Provider>

@@ -16,7 +16,7 @@ class SavedItem(Base):
     item_id = Column(Integer, nullable=False, index=True)
     item_type = Column(Enum(ItemType), nullable=False)
     
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc).replace(tzinfo=None), nullable=False)
     
     # Relationships
     user = relationship("User", back_populates="saved_items")

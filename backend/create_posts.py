@@ -5,19 +5,19 @@ import random
 
 API_URL = "https://via-forum-api.fly.dev/api"
 
-# Demo users (without display_name which doesn't exist in schema)
+# Login credentials for users
 users = [
-    {"username": "sofie_a", "email": "sofie@demo.dk", "password": "Demo123!"},
-    {"username": "mikkel_h", "email": "mikkel@demo.dk", "password": "Demo123!"}, 
-    {"username": "emma_n", "email": "emma@demo.dk", "password": "Demo123!"},
-    {"username": "jonas_p", "email": "jonas@demo.dk", "password": "Demo123!"},
-    {"username": "katrine_j", "email": "katrine@demo.dk", "password": "Demo123!"},
-    {"username": "frederik_l", "email": "frederik@demo.dk", "password": "Demo123!"},
-    {"username": "maria_s", "email": "maria@demo.dk", "password": "Demo123!"},
-    {"username": "kasper_m", "email": "kasper@demo.dk", "password": "Demo123!"}
+    {"username": "sofie_a", "password": "Demo123!"},
+    {"username": "mikkel_h", "password": "Demo123!"}, 
+    {"username": "emma_n", "password": "Demo123!"},
+    {"username": "jonas_p", "password": "Demo123!"},
+    {"username": "katrine_j", "password": "Demo123!"},
+    {"username": "frederik_l", "password": "Demo123!"},
+    {"username": "maria_s", "password": "Demo123!"},
+    {"username": "kasper_m", "password": "Demo123!"}
 ]
 
-# Posts with realistic content
+# Posts to create
 posts = [
     {
         "author": "sofie_a",
@@ -156,32 +156,30 @@ Oplever andre det samme?""",
     }
 ]
 
-async def create_content():
+async def create_posts_and_comments():
     async with aiohttp.ClientSession() as session:
-        # Create users
-        print("📝 Opretter demo brugere...")
+        # First login all users and get tokens
+        print("🔐 Logger ind som alle brugere...")
         user_tokens = {}
         
         for user in users:
+            # Login using form data
+            form_data = aiohttp.FormData()
+            form_data.add_field('username', user['username'])
+            form_data.add_field('password', user['password'])
+            
             try:
-                # Register
-                async with session.post(f"{API_URL}/auth/register", json=user) as resp:
-                    if resp.status == 200:
-                        print(f"✅ Oprettet bruger: {user['username']}")
-                    else:
-                        print(f"❌ Kunne ikke oprette {user['username']}: {await resp.text()}")
-                        continue
-                
-                # Login 
-                login_data = {"username": user["username"], "password": user["password"]}
-                async with session.post(f"{API_URL}/auth/login", data=login_data) as resp:
+                async with session.post(f"{API_URL}/auth/login", data=form_data) as resp:
                     if resp.status == 200:
                         data = await resp.json()
                         user_tokens[user["username"]] = data["access_token"]
+                        print(f"✅ Logget ind: {user['username']}")
+                    else:
+                        print(f"❌ Login fejlede for {user['username']}: {await resp.text()}")
             except Exception as e:
-                print(f"❌ Fejl med {user['username']}: {e}")
+                print(f"❌ Fejl ved login {user['username']}: {e}")
         
-        print(f"\n✅ Oprettet {len(user_tokens)} brugere!")
+        print(f"\n✅ Logget ind som {len(user_tokens)} brugere")
         
         # Create posts
         print("\n📝 Opretter opslag...")
@@ -203,32 +201,40 @@ async def create_content():
                             post_ids[i] = data["id"]
                             print(f"✅ Oprettet: {post['title'][:50]}...")
                             
-                            # Add upvotes
+                            # Add some random upvotes
                             upvoters = random.sample([u for u in user_tokens.keys() if u != post["author"]], 
                                                    min(len(user_tokens)-1, random.randint(3, 7)))
                             for upvoter in upvoters:
                                 vote_headers = {"Authorization": f"Bearer {user_tokens[upvoter]}"}
                                 await session.post(f"{API_URL}/posts/{data['id']}/vote?vote_value=1", 
                                                  headers=vote_headers)
+                        else:
+                            print(f"❌ Fejl ved opslag: {await resp.text()}")
                 except Exception as e:
-                    print(f"❌ Fejl ved opslag: {e}")
+                    print(f"❌ Fejl: {e}")
                 
                 await asyncio.sleep(0.5)
         
         # Create comments
-        print("\n📝 Tilføjer kommentarer...")
+        print("\n💬 Tilføjer kommentarer...")
         for i, post in enumerate(posts):
             if i in post_ids and "comments" in post:
                 for comment in post["comments"]:
                     if comment["author"] in user_tokens:
                         headers = {"Authorization": f"Bearer {user_tokens[comment['author']]}"}
-                        comment_data = {"content": comment["content"]}
+                        # Note: backend expects 'body' not 'content' for comments
+                        comment_data = {"body": comment["content"]}
                         
                         try:
-                            async with session.post(f"{API_URL}/comments/post/{post_ids[i]}", 
-                                                  json=comment_data, headers=headers) as resp:
+                            async with session.post(
+                                f"{API_URL}/comments/post/{post_ids[i]}", 
+                                json=comment_data, 
+                                headers=headers
+                            ) as resp:
                                 if resp.status == 200:
                                     data = await resp.json()
+                                    print(f"✅ Kommentar fra {comment['author']}")
+                                    
                                     # Add some upvotes to comments
                                     upvoters = random.sample([u for u in user_tokens.keys() if u != comment["author"]], 
                                                            min(len(user_tokens)-1, random.randint(1, 3)))
@@ -236,16 +242,18 @@ async def create_content():
                                         vote_headers = {"Authorization": f"Bearer {user_tokens[upvoter]}"}
                                         await session.post(f"{API_URL}/comments/{data['id']}/vote?vote_value=1", 
                                                          headers=vote_headers)
+                                else:
+                                    print(f"❌ Fejl ved kommentar: {await resp.text()}")
                         except Exception as e:
-                            print(f"❌ Fejl ved kommentar: {e}")
+                            print(f"❌ Fejl: {e}")
                         
                         await asyncio.sleep(0.3)
         
-        print("\n🎉 Færdig! Forummet ser nu aktivt ud med:")
-        print(f"   - {len(user_tokens)} brugere")
+        print("\n🎉 Færdig! Forummet er nu fyldt med:")
+        print(f"   - {len(user_tokens)} aktive brugere")
         print(f"   - {len(post_ids)} opslag")
-        print("   - Mange kommentarer og votes")
+        print("   - Masser af kommentarer og votes")
         print("\n🌐 Besøg: https://via-paedagoger.vercel.app")
 
 if __name__ == "__main__":
-    asyncio.run(create_content())
+    asyncio.run(create_posts_and_comments())

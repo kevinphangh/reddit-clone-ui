@@ -21,6 +21,20 @@ class TestAuth:
         assert data["username"] == "newuser"
         assert data["email"] == "newuser@example.com"
         assert data["is_verified"] == False
+        
+    @pytest.mark.asyncio
+    async def test_register_with_invalid_field(self, client: AsyncClient, db_session: AsyncSession):
+        """Test registration fails with extra fields not in schema"""
+        response = await client.post(
+            "/api/auth/register",
+            json={
+                "username": "newuser2",
+                "email": "newuser2@example.com",
+                "password": "password123",
+                "display_name": "Should Fail"  # This field doesn't exist
+            }
+        )
+        assert response.status_code == 422  # Validation error
     
     @pytest.mark.asyncio
     async def test_register_duplicate_username(self, client: AsyncClient, test_user):

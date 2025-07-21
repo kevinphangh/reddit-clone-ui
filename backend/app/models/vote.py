@@ -17,7 +17,7 @@ class Vote(Base):
     target_type = Column(Enum(VoteType), nullable=False)
     value = Column(Integer, nullable=False)
     
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc).replace(tzinfo=None), nullable=False)
     
     user = relationship("User", back_populates="votes")
     __table_args__ = (
