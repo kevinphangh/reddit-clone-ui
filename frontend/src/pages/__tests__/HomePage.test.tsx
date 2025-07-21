@@ -23,15 +23,24 @@ describe('HomePage', () => {
       posts: [],
       loading: true,
       error: null,
+      hasMore: false,
+      loadingMore: false,
       refreshPosts: vi.fn(),
       createPost: vi.fn(),
       updatePost: vi.fn(),
       deletePost: vi.fn(),
       votePost: vi.fn(),
+      loadMorePosts: vi.fn(),
       comments: [],
       createComment: vi.fn(),
+      updateComment: vi.fn(),
       voteComment: vi.fn(),
       deleteComment: vi.fn(),
+      refreshComments: vi.fn(),
+      getPost: vi.fn(),
+      getPostComments: vi.fn(),
+      getUserPosts: vi.fn(),
+      getUserComments: vi.fn(),
     });
 
     render(<HomePage />);
@@ -44,15 +53,24 @@ describe('HomePage', () => {
       posts: [],
       loading: false,
       error: 'Network error',
+      hasMore: false,
+      loadingMore: false,
       refreshPosts: vi.fn(),
       createPost: vi.fn(),
       updatePost: vi.fn(),
       deletePost: vi.fn(),
       votePost: vi.fn(),
+      loadMorePosts: vi.fn(),
       comments: [],
       createComment: vi.fn(),
+      updateComment: vi.fn(),
       voteComment: vi.fn(),
       deleteComment: vi.fn(),
+      refreshComments: vi.fn(),
+      getPost: vi.fn(),
+      getPostComments: vi.fn(),
+      getUserPosts: vi.fn(),
+      getUserComments: vi.fn(),
     });
 
     render(<HomePage />);
@@ -65,20 +83,29 @@ describe('HomePage', () => {
       posts: [],
       loading: false,
       error: null,
+      hasMore: false,
+      loadingMore: false,
       refreshPosts: vi.fn(),
       createPost: vi.fn(),
       updatePost: vi.fn(),
       deletePost: vi.fn(),
       votePost: vi.fn(),
+      loadMorePosts: vi.fn(),
       comments: [],
       createComment: vi.fn(),
+      updateComment: vi.fn(),
       voteComment: vi.fn(),
       deleteComment: vi.fn(),
+      refreshComments: vi.fn(),
+      getPost: vi.fn(),
+      getPostComments: vi.fn(),
+      getUserPosts: vi.fn(),
+      getUserComments: vi.fn(),
     });
 
     render(<HomePage />);
-    expect(screen.getByText(/Velkommen til fællesskabet/)).toBeInTheDocument();
-    expect(screen.getByText(/Der er ikke nogen indlæg endnu/)).toBeInTheDocument();
+    expect(screen.getByText(/Velkommen til VIA Pædagoger!/)).toBeInTheDocument();
+    expect(screen.getByText(/Et helt nyt forum for pædagogstuderende/)).toBeInTheDocument();
   });
 
   it('renders posts when available', async () => {
@@ -105,7 +132,16 @@ describe('HomePage', () => {
       type: 'text' as const,
       userVote: null,
       saved: false,
-      subreddit: 'general',
+      subreddit: {
+        id: '1',
+        name: 'viapædagoger',
+        displayName: 'VIA Pædagoger',
+        description: '',
+        members: 1,
+        activeUsers: 1,
+        createdAt: new Date(),
+        rules: []
+      },
       upvoteRatio: 0.8
     }];
 
@@ -114,15 +150,24 @@ describe('HomePage', () => {
       posts: mockPosts,
       loading: false,
       error: null,
+      hasMore: false,
+      loadingMore: false,
       refreshPosts: vi.fn(),
       createPost: vi.fn(),
       updatePost: vi.fn(),
       deletePost: vi.fn(),
       votePost: vi.fn(),
+      loadMorePosts: vi.fn(),
       comments: [],
       createComment: vi.fn(),
+      updateComment: vi.fn(),
       voteComment: vi.fn(),
       deleteComment: vi.fn(),
+      refreshComments: vi.fn(),
+      getPost: vi.fn(),
+      getPostComments: vi.fn(),
+      getUserPosts: vi.fn(),
+      getUserComments: vi.fn(),
     });
 
     render(<HomePage />);
