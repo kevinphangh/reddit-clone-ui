@@ -85,8 +85,7 @@ async def get_posts(
         return posts
     except Exception as e:
         logger.error(f"Error in get_posts: {type(e).__name__}: {str(e)}")
-        # Return empty array for now to show empty forum state
-        return []
+        raise
 
 @router.get("/{post_id}", response_model=PostSchema)
 async def get_post(
