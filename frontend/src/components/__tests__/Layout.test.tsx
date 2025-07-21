@@ -8,7 +8,9 @@ describe('Layout', () => {
   it('renders header with logo', () => {
     render(
       <BrowserRouter>
-        <Layout />
+        <Layout>
+          <div>Test content</div>
+        </Layout>
       </BrowserRouter>
     );
     
@@ -19,7 +21,9 @@ describe('Layout', () => {
   it('renders navigation links', () => {
     render(
       <BrowserRouter>
-        <Layout />
+        <Layout>
+          <div>Test content</div>
+        </Layout>
       </BrowserRouter>
     );
     

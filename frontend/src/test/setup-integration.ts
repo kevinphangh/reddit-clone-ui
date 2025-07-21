@@ -1,6 +1,9 @@
-import { afterAll, afterEach, beforeAll } from 'vitest';
+import { afterAll, afterEach, beforeAll, vi } from 'vitest';
 import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
+
+// Mock window.confirm globally
+global.confirm = vi.fn(() => true);
 
 // Mock user for testing
 export const mockUser = {

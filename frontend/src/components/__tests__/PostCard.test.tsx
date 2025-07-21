@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { PostCard } from '../PostCard';
@@ -56,7 +56,6 @@ describe('PostCard', () => {
   });
 
   it('navigates to post page on click', async () => {
-    const user = userEvent.setup();
     render(<PostCard post={mockPost} />);
     
     const postLink = screen.getByText(mockPost.title);
