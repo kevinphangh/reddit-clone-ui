@@ -16,7 +16,7 @@ vi.mock('../contexts/NotificationContext', () => ({
 // Don't mock contexts globally - let them work with test data
 
 // Mock window.confirm for tests
-global.confirm = vi.fn(() => true);
+(window as any).confirm = vi.fn(() => true);
 
 // Mock user for testing
 export const mockUser = {

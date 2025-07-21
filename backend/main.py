@@ -5,7 +5,7 @@ from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from sqlalchemy import text
 from app.core.config import settings
-from app.api import auth, posts, comments, users, debug
+from app.api import auth, posts, comments, users
 from app.db.database import AsyncSessionLocal
 
 app = FastAPI(
@@ -21,17 +21,7 @@ app.add_middleware(
         settings.FRONTEND_URL,
         "https://via-paedagoger.vercel.app",
         "https://via-forum.vercel.app",
-        "https://via-forum-2bjux99jd-kevins-projects-aa4b90de.vercel.app",
-        "https://via-forum-842nw4l1g-kevins-projects-aa4b90de.vercel.app",
-        "https://via-forum-ajg5xlvui-kevins-projects-aa4b90de.vercel.app",
-        "https://via-forum-r1k7ex80x-kevins-projects-aa4b90de.vercel.app",
-        "https://via-forum-6ms4atdw1-kevins-projects-aa4b90de.vercel.app",
-        "https://via-forum-m5uc8v0w0-kevins-projects-aa4b90de.vercel.app",
-        "https://via-forum-kz0u7b1bu-kevins-projects-aa4b90de.vercel.app",
-        "https://via-forum-ov48gw630-kevins-projects-aa4b90de.vercel.app",
         "http://localhost:3000",
-        "http://localhost:3001", 
-        "http://localhost:3002",
         "http://localhost:5173"
     ],
     allow_credentials=True,
@@ -84,10 +74,6 @@ app.include_router(posts.router, prefix="/api/posts", tags=["posts"])
 app.include_router(comments.router, prefix="/api/comments", tags=["comments"])
 app.include_router(users.router, prefix="/api/users", tags=["users"])
 
-# Debug endpoints (only in development)
-import os
-if os.getenv("ENVIRONMENT", "development") == "development":
-    app.include_router(debug.router, prefix="/api/debug", tags=["debug"])
 
 @app.get("/")
 async def root():
