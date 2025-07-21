@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Plus, LogOut, ChevronDown, Bell } from 'lucide-react';
+import { Search, Plus, LogOut, ChevronDown, Bell, Settings } from 'lucide-react';
 import { SearchDropdown } from './SearchDropdown';
 import { useClickOutside } from '../hooks/useClickOutside';
 import { useAuth } from '../contexts/AuthContext';
@@ -131,6 +131,14 @@ export const Header: React.FC = () => {
                       <p className="text-body-small font-medium text-gray-900">{user?.username}</p>
                       <p className="text-caption text-gray-500">{user?.email}</p>
                     </div>
+                    <Link
+                      to="/settings"
+                      className="w-full px-4 py-2 text-left text-body-small hover:bg-gray-50 flex items-center gap-2 text-gray-700 border-b border-gray-100"
+                      onClick={() => setShowUserMenu(false)}
+                    >
+                      <Settings size={14} />
+                      Indstillinger
+                    </Link>
                     <button
                       onClick={() => {
                         logout();

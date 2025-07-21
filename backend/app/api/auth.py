@@ -12,6 +12,8 @@ from app.services.email import email_service
 import secrets
 from datetime import datetime, timedelta, timezone
 import logging
+from pydantic import BaseModel, validator
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -137,3 +139,49 @@ async def verify_email(
     await db.commit()
     
     return {"message": "Email verified successfully"}
+
+class UsernameChange(BaseModel):
+    new_username: str
+    
+    @validator('new_username')
+    def validate_username(cls, v):
+        if not v:
+            raise ValueError('Brugernavn er påkrævet')
+        if len(v) < 3 or len(v) > 20:
+            raise ValueError('Brugernavn skal være mellem 3 og 20 tegn')
+        if not re.match(r'^[a-zA-Z0-9_æøåÆØÅ]+$', v):
+            raise ValueError('Brugernavn må kun indeholde bogstaver, tal og underscore')
+        return v
+
+@router.put("/change-username", response_model=UserSchema)
+async def change_username(
+    username_data: UsernameChange,
+    current_user: User = Depends(get_current_active_user),
+    db: AsyncSession = Depends(get_db)
+):
+    # Check if username has been changed in the last 24 hours
+    if current_user.last_username_change:
+        time_since_change = datetime.now(timezone.utc).replace(tzinfo=None) - current_user.last_username_change
+        if time_since_change < timedelta(days=1):
+            hours_left = 24 - (time_since_change.total_seconds() / 3600)
+            raise HTTPException(
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                detail=f"Du kan kun ændre brugernavn én gang om dagen. Prøv igen om {int(hours_left)} timer."
+            )
+    
+    # Check if new username is already taken
+    result = await db.execute(select(User).where(User.username == username_data.new_username))
+    if result.scalar_one_or_none():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Dette brugernavn er allerede taget"
+        )
+    
+    # Update username
+    current_user.username = username_data.new_username
+    current_user.last_username_change = datetime.now(timezone.utc).replace(tzinfo=None)
+    
+    await db.commit()
+    await db.refresh(current_user)
+    
+    return current_user

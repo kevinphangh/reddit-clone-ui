@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { PostCard } from '../components/PostCard';
 import { useData } from '../contexts/DataContext';
 import { UnitySymbol } from '../components/UnitySymbol';
+import { AnonymityInfo } from '../components/AnonymityInfo';
 
 export const HomePage: React.FC = () => {
   const { posts, loading, error, hasMore, loadingMore, loadMorePosts } = useData();
@@ -66,6 +67,11 @@ export const HomePage: React.FC = () => {
         <p className="text-body text-gray-600 mb-3">Her deler vi vores oplevelser, hjælper hinanden og skaber en stærkere fællesskab af pædagogstuderende.</p>
         <p className="text-button text-gray-800">Sammen skaber vi de bedste pædagoger</p>
       </div>
+      
+      {/* Anonymity info - show only occasionally */}
+      {posts.length > 0 && posts.length < 5 && (
+        <AnonymityInfo />
+      )}
       
       {/* Posts */}
       {posts.map(post => (

@@ -11,6 +11,7 @@ import { PopularPage } from './pages/PopularPage';
 import { AllPage } from './pages/AllPage';
 import { StaticPage } from './pages/StaticPage';
 import { VerifyEmailPage } from './pages/VerifyEmailPage';
+import { SettingsPage } from './pages/SettingsPage';
 import { AuthProvider } from './contexts/AuthContext';
 import { DataProvider } from './contexts/DataContext';
 import { NotificationProvider } from './contexts/NotificationContext';
@@ -55,6 +56,11 @@ function AppContent() {
         <Route path="/verify-email" element={
           <Layout>
             <VerifyEmailPage />
+          </Layout>
+        } />
+        <Route path="/settings" element={
+          <Layout>
+            <SettingsPage />
           </Layout>
         } />
         <Route path="/r/popular" element={
