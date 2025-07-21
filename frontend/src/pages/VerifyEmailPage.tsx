@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { api } from '../lib/api';
 import { CheckCircle, XCircle, Loader } from 'lucide-react';
-import { Mascot } from '../components/Mascot';
+import { UnitySymbol } from '../components/UnitySymbol';
 
 export const VerifyEmailPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -55,10 +55,10 @@ export const VerifyEmailPage: React.FC = () => {
         {status === 'success' && (
           <>
             <div className="flex justify-center mb-4">
-              <Mascot mood="celebrating" size="large" />
+              <UnitySymbol size="large" />
             </div>
             <CheckCircle className="mx-auto mb-4 text-green-600" size={48} />
-            <h1 className="text-heading-1 mb-2">Email verificeret! 🎉</h1>
+            <h1 className="text-heading-1 mb-2">Email verificeret!</h1>
             <p className="text-body text-gray-600 mb-4">
               Din email er nu bekræftet. Du kan nu logge ind og blive en del af fællesskabet.
             </p>
@@ -77,7 +77,7 @@ export const VerifyEmailPage: React.FC = () => {
         {status === 'error' && (
           <>
             <div className="flex justify-center mb-4">
-              <Mascot mood="thinking" size="large" />
+              <UnitySymbol size="large" />
             </div>
             <XCircle className="mx-auto mb-4 text-red-600" size={48} />
             <h1 className="text-heading-1 mb-2">Verifikation fejlede</h1>

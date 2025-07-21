@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from './Header';
-import { Mascot } from './Mascot';
+import { UnitySymbol } from './UnitySymbol';
 import { getUserCount, setUserCount as updateUserCount } from '../utils/userCount';
 import { api } from '../lib/api';
 import { Bell } from 'lucide-react';
@@ -86,7 +86,7 @@ export const Layout: React.FC<LayoutProps> = ({
             <div className="sticky top-20">
               <div className="bg-white border border-gray-200 rounded-lg p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <Mascot mood="happy" size="small" />
+                  <UnitySymbol size="small" />
                   <h2 className="text-heading-3 text-gray-900">Vores fællesskab</h2>
                 </div>
                 <p className="text-body-small text-gray-700 leading-relaxed mb-4">
@@ -96,7 +96,7 @@ export const Layout: React.FC<LayoutProps> = ({
                   Del dine projekter, find studiegrupper, få feedback på opgaver eller bare hyg dig med dine medstuderende.
                 </p>
                 <p className="text-button text-gray-800 mb-4">
-                  Fordi studielivet er bedre sammen 🤝
+                  Fordi studielivet er bedre sammen
                 </p>
                 <div className="pt-4 border-t border-gray-200">
                   <div className="flex justify-between text-body-small">

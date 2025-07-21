@@ -1,6 +1,6 @@
 import React from 'react';
 import { Mail, X } from 'lucide-react';
-import { Mascot } from './Mascot';
+import { UnitySymbol } from './UnitySymbol';
 
 interface EmailVerificationModalProps {
   email: string;
@@ -24,7 +24,7 @@ export const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({
         )}
         
         <div className="flex justify-center mb-4">
-          <Mascot mood="happy" size="large" />
+          <UnitySymbol size="large" />
         </div>
         
         <div className="text-center">

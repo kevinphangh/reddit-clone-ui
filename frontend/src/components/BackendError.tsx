@@ -1,6 +1,6 @@
 import React from 'react';
 import { RefreshCw } from 'lucide-react';
-import { Mascot } from './Mascot';
+import { UnitySymbol } from './UnitySymbol';
 
 export const BackendError: React.FC = () => {
   const handleReload = () => {
@@ -11,7 +11,7 @@ export const BackendError: React.FC = () => {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white border border-red-200 rounded-lg p-8 text-center shadow-lg">
         <div className="flex justify-center mb-4">
-          <Mascot mood="thinking" size="large" />
+          <UnitySymbol size="large" />
         </div>
         <h1 className="text-2xl font-bold text-gray-900 mb-2">
           Åh nej! Tekniske udfordringer
