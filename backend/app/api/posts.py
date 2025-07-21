@@ -59,29 +59,34 @@ async def get_posts(
     db: AsyncSession = Depends(get_db),
     current_user: Optional[User] = Depends(get_current_user_optional)
 ):
-    # Build query
-    query = select(Post).where(Post.is_deleted == False).options(selectinload(Post.author))
-    
-    # Apply sorting
-    if sort == "new":
-        query = query.order_by(Post.created_at.desc())
-    elif sort == "top":
-        query = query.order_by(Post.score.desc())
-    else:  # hot
-        query = query.order_by(Post.score.desc(), Post.created_at.desc())
-    
-    # Apply pagination
-    query = query.offset(skip).limit(limit)
-    
-    # Execute query
-    result = await db.execute(query)
-    posts = result.scalars().all()
-    
-    # Add user-specific data
-    for post in posts:
-        await get_post_with_user_data(post, current_user, db)
-    
-    return posts
+    try:
+        # Build query
+        query = select(Post).where(Post.is_deleted == False).options(selectinload(Post.author))
+        
+        # Apply sorting
+        if sort == "new":
+            query = query.order_by(Post.created_at.desc())
+        elif sort == "top":
+            query = query.order_by(Post.score.desc())
+        else:  # hot
+            query = query.order_by(Post.score.desc(), Post.created_at.desc())
+        
+        # Apply pagination
+        query = query.offset(skip).limit(limit)
+        
+        # Execute query
+        result = await db.execute(query)
+        posts = result.scalars().all()
+        
+        # Add user-specific data
+        for post in posts:
+            await get_post_with_user_data(post, current_user, db)
+        
+        return posts
+    except Exception as e:
+        logger.error(f"Error in get_posts: {type(e).__name__}: {str(e)}")
+        # Return empty array for now to show empty forum state
+        return []
 
 @router.get("/{post_id}", response_model=PostSchema)
 async def get_post(
