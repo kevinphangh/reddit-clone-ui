@@ -202,7 +202,7 @@ class ApiClient {
   async createPost(title: string, content: string) {
     return this.request<ApiPost>('/api/posts/', {
       method: 'POST',
-      body: JSON.stringify({ title, content }),
+      body: JSON.stringify({ title, content, type: 'text' }),
     });
   }
 

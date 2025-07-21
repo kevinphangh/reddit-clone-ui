@@ -8,7 +8,7 @@ class PostBase(BaseModel):
     content: Optional[str] = Field(None, max_length=5000)
 
 class PostCreate(PostBase):
-    pass
+    type: str = Field(default="text", pattern="^(text|link|image)$")
 
 class PostUpdate(BaseModel):
     title: Optional[str] = Field(None, min_length=1, max_length=100)
