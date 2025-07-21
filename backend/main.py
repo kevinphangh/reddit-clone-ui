@@ -5,7 +5,7 @@ from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from sqlalchemy import text
 from app.core.config import settings
-from app.api import auth, posts, comments, users
+from app.api import auth, posts, comments, users, debug
 from app.db.database import AsyncSessionLocal
 
 app = FastAPI(
@@ -83,6 +83,11 @@ app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(posts.router, prefix="/api/posts", tags=["posts"])
 app.include_router(comments.router, prefix="/api/comments", tags=["comments"])
 app.include_router(users.router, prefix="/api/users", tags=["users"])
+
+# Debug endpoints (only in development)
+import os
+if os.getenv("ENVIRONMENT", "development") == "development":
+    app.include_router(debug.router, prefix="/api/debug", tags=["debug"])
 
 @app.get("/")
 async def root():

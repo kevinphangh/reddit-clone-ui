@@ -11,12 +11,12 @@ class EmailService:
     def __init__(self):
         # For development - just log emails instead of sending
         self.dev_mode = os.getenv("EMAIL_DEV_MODE", "true").lower() == "true"
-        self.smtp_host = os.getenv("SMTP_HOST", "smtp.gmail.com")
-        self.smtp_port = int(os.getenv("SMTP_PORT", "587"))
-        self.smtp_username = os.getenv("SMTP_USERNAME", "")
+        self.smtp_host = os.getenv("SMTP_HOST", "smtp.resend.com")
+        self.smtp_port = int(os.getenv("SMTP_PORT", "465"))
+        self.smtp_username = os.getenv("SMTP_USERNAME", "resend")
         self.smtp_password = os.getenv("SMTP_PASSWORD", "")
         self.from_email = os.getenv("FROM_EMAIL", "noreply@via-forum.dk")
-        self.frontend_url = os.getenv("FRONTEND_URL", "https://via-paedagoger.vercel.app")
+        self.frontend_url = os.getenv("FRONTEND_URL", "https://via-forum.vercel.app")
     
     async def send_verification_email(self, to_email: str, username: str, token: str) -> bool:
         """Send verification email to user"""
@@ -111,11 +111,19 @@ class EmailService:
             msg.attach(html_part)
             
             # Send email
-            with smtplib.SMTP(self.smtp_host, self.smtp_port) as server:
-                server.starttls()
-                if self.smtp_username and self.smtp_password:
-                    server.login(self.smtp_username, self.smtp_password)
-                server.send_message(msg)
+            if self.smtp_port == 465:
+                # Use SMTP_SSL for port 465 (Resend uses this)
+                with smtplib.SMTP_SSL(self.smtp_host, self.smtp_port) as server:
+                    if self.smtp_username and self.smtp_password:
+                        server.login(self.smtp_username, self.smtp_password)
+                    server.send_message(msg)
+            else:
+                # Use SMTP with STARTTLS for other ports
+                with smtplib.SMTP(self.smtp_host, self.smtp_port) as server:
+                    server.starttls()
+                    if self.smtp_username and self.smtp_password:
+                        server.login(self.smtp_username, self.smtp_password)
+                    server.send_message(msg)
             
             logger.info(f"Verification email sent to {to_email}")
             return True
