@@ -9,10 +9,6 @@ export const HomePage: React.FC = () => {
   const { posts, loading, error, hasMore, loadingMore, loadMorePosts } = useData();
   const observerTarget = useRef<HTMLDivElement>(null);
   
-  // Temporarily hide old posts to show empty forum
-  const HIDE_OLD_POSTS = true;
-  const visiblePosts = HIDE_OLD_POSTS ? [] : posts;
-  
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -51,7 +47,7 @@ export const HomePage: React.FC = () => {
     );
   }
   
-  if (visiblePosts.length === 0 && !loading) {
+  if (posts.length === 0 && !loading) {
     return <EmptyForum />;
   }
   
@@ -65,12 +61,12 @@ export const HomePage: React.FC = () => {
       </div>
       
       {/* Anonymity info - show only occasionally */}
-      {visiblePosts.length > 0 && visiblePosts.length < 5 && (
+      {posts.length > 0 && posts.length < 5 && (
         <AnonymityInfo />
       )}
       
       {/* Posts */}
-      {visiblePosts.map(post => (
+      {posts.map(post => (
         <PostCard key={post.id} post={post} />
       ))}
       
@@ -85,7 +81,7 @@ export const HomePage: React.FC = () => {
       <div ref={observerTarget} className="h-10" />
       
       {/* No more posts message */}
-      {!hasMore && visiblePosts.length > 0 && (
+      {!hasMore && posts.length > 0 && (
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
           <p className="text-body-small text-gray-600">Du har set alle indlæg</p>
         </div>
