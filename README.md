@@ -94,16 +94,26 @@ Gå til `http://localhost:3000`
 
 ## 📧 Email Opsætning
 
-Bruger Resend.com til email verifikation:
+Bruger Resend.com til email verifikation med nem on/off toggle:
 
-1. Opret konto på [resend.com](https://resend.com)
-2. Få API key
-3. Konfigurer i Fly.io:
+### Quick Toggle (Anbefalet)
 ```bash
-fly secrets set EMAIL_DEV_MODE=false
-fly secrets set SMTP_PASSWORD=re_DIN_API_KEY
-fly secrets set FROM_EMAIL=onboarding@resend.dev
+cd backend
+./toggle_email_verification.sh
 ```
+
+### Manuel Konfiguration
+```bash
+# Slå email verifikation FRA (nem tilmelding)
+fly secrets set EMAIL_DEV_MODE=true
+
+# Slå email verifikation TIL (sikkerhed)
+fly secrets set EMAIL_DEV_MODE=false
+```
+
+**Status:** Email verifikation er pt. **SLÅET FRA** for at gøre det nemt at tilmelde sig.
+
+**Anbefaling:** Hold det slået fra de første par dage, derefter slå til for at undgå spam.
 
 ## 🚀 Deployment
 

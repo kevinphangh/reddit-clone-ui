@@ -59,16 +59,33 @@ VIA Pædagoger Forum - A community platform for pedagogy students at VIA Univers
 
 ### Email Configuration
 
-The backend uses Resend for email verification:
+The backend uses Resend for email verification with an easy toggle system:
+
+#### Toggle Email Verification On/Off
 
 ```bash
-# Configure email settings
+# Quick toggle script (recommended)
+cd /home/keph/projects/forum/backend
+./toggle_email_verification.sh
+```
+
+#### Manual Configuration
+
+```bash
+# Disable email verification (for easy onboarding)
+/home/keph/.fly/bin/flyctl secrets set EMAIL_DEV_MODE=true
+
+# Enable email verification (for production security)
 /home/keph/.fly/bin/flyctl secrets set EMAIL_DEV_MODE=false
+
+# Other email settings (already configured)
 /home/keph/.fly/bin/flyctl secrets set SMTP_PASSWORD=re_YOUR_API_KEY
 /home/keph/.fly/bin/flyctl secrets set FROM_EMAIL=onboarding@resend.dev
 ```
 
-Current Resend API key is configured in production.
+**Current Status:** Email verification is **DISABLED** for initial launch phase.
+
+**Recommendation:** Keep email verification disabled for the first few days to encourage user signups, then enable it to prevent spam.
 
 ### Database Management
 
