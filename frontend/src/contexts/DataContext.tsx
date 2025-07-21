@@ -60,7 +60,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const data = await api.getPosts({ limit: 10, skip: 0 });
       
       // Filter out old posts - only show posts created after deployment
-      const cutoffDate = new Date('2024-01-21T12:00:00Z');
+      const cutoffDate = new Date('2025-01-21T12:00:00Z');
       const filteredData = data.filter(post => 
         new Date(post.created_at) > cutoffDate
       );
@@ -122,7 +122,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const data = await api.getPosts({ limit: 10, skip: page * 10 });
       
       // Filter out old posts
-      const cutoffDate = new Date('2024-01-21T12:00:00Z');
+      const cutoffDate = new Date('2025-01-21T12:00:00Z');
       const filteredData = data.filter(post => 
         new Date(post.created_at) > cutoffDate
       );
