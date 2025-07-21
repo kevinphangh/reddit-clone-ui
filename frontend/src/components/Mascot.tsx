@@ -8,65 +8,100 @@ interface MascotProps {
 
 export const Mascot: React.FC<MascotProps> = ({ mood = 'happy', size = 'medium' }) => {
   const sizeClasses = {
-    small: 'w-16 h-16',
-    medium: 'w-24 h-24',
-    large: 'w-32 h-32'
+    small: 'w-12 h-12',
+    medium: 'w-20 h-20',
+    large: 'w-28 h-28'
   };
 
+  // Minimalistisk dansk design - enkel og clean
   return (
     <div className={`${sizeClasses[size]} relative`}>
       <svg viewBox="0 0 100 100" className="w-full h-full">
-        {/* Body */}
-        <circle cx="50" cy="50" r="40" fill={brandConfig.mascot.bodyColor} />
+        {/* Minimalistisk cirkel base */}
+        <circle 
+          cx="50" 
+          cy="50" 
+          r="45" 
+          fill="none" 
+          stroke={brandConfig.mascot.bodyColor} 
+          strokeWidth="3"
+          opacity="0.8"
+        />
         
-        {/* Face */}
-        <circle cx="50" cy="50" r="35" fill={brandConfig.mascot.faceColor} />
+        {/* Simpel ansigt - dansk hygge stil */}
+        <g>
+          {/* Øjne - simple prikker */}
+          <circle cx="38" cy="45" r="2" fill={brandConfig.mascot.eyeColor} />
+          <circle cx="62" cy="45" r="2" fill={brandConfig.mascot.eyeColor} />
+          
+          {/* Minimalistisk mund */}
+          {mood === 'happy' && (
+            <path 
+              d="M 40 58 Q 50 62 60 58" 
+              stroke={brandConfig.mascot.eyeColor} 
+              strokeWidth="2" 
+              fill="none" 
+              strokeLinecap="round"
+            />
+          )}
+          {mood === 'thinking' && (
+            <line 
+              x1="45" y1="60" 
+              x2="55" y2="60" 
+              stroke={brandConfig.mascot.eyeColor} 
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          )}
+          {mood === 'celebrating' && (
+            <path 
+              d="M 38 56 Q 50 64 62 56" 
+              stroke={brandConfig.mascot.eyeColor} 
+              strokeWidth="2" 
+              fill="none"
+              strokeLinecap="round"
+            />
+          )}
+        </g>
         
-        {/* Eyes */}
-        <circle cx="40" cy="45" r="3" fill={brandConfig.mascot.eyeColor} />
-        <circle cx="60" cy="45" r="3" fill={brandConfig.mascot.eyeColor} />
+        {/* Minimalistisk pædagog symbol - bog */}
+        <g opacity="0.6">
+          <rect 
+            x="44" y="72" 
+            width="12" height="8" 
+            fill="none" 
+            stroke={brandConfig.mascot.capColor} 
+            strokeWidth="1.5"
+            rx="1"
+          />
+          <line 
+            x1="50" y1="72" 
+            x2="50" y2="80" 
+            stroke={brandConfig.mascot.capColor} 
+            strokeWidth="1"
+          />
+        </g>
         
-        {/* Smile */}
-        {mood === 'happy' && (
-          <path d="M 35 55 Q 50 65 65 55" stroke={brandConfig.mascot.eyeColor} strokeWidth="2" fill="none" />
-        )}
-        {mood === 'thinking' && (
-          <path d="M 35 60 L 65 60" stroke={brandConfig.mascot.eyeColor} strokeWidth="2" />
-        )}
-        {mood === 'celebrating' && (
-          <path d="M 30 55 Q 50 70 70 55" stroke={brandConfig.mascot.eyeColor} strokeWidth="2" fill="none" />
-        )}
-        
-        {/* Graduation cap */}
-        <rect x="30" y="15" width="40" height="25" fill={brandConfig.mascot.capColor} />
-        <polygon points="25,15 50,5 75,15" fill={brandConfig.mascot.capShadowColor} />
-        
-        {/* Arms */}
+        {/* Vink gestus - meget simpel */}
         {mood === 'waving' && (
-          <>
-            <ellipse cx="20" cy="50" rx="10" ry="5" fill={brandConfig.mascot.bodyColor} transform="rotate(-30 20 50)" />
-            <ellipse cx="80" cy="40" rx="10" ry="5" fill={brandConfig.mascot.bodyColor} transform="rotate(45 80 40)" />
-          </>
+          <path 
+            d="M 75 40 Q 85 35 82 45" 
+            stroke={brandConfig.mascot.bodyColor} 
+            strokeWidth="2.5" 
+            fill="none"
+            strokeLinecap="round"
+            opacity="0.7"
+          />
         )}
-        {mood !== 'waving' && (
-          <>
-            <ellipse cx="20" cy="60" rx="10" ry="5" fill={brandConfig.mascot.bodyColor} transform="rotate(-45 20 60)" />
-            <ellipse cx="80" cy="60" rx="10" ry="5" fill={brandConfig.mascot.bodyColor} transform="rotate(45 80 60)" />
-          </>
-        )}
-        
-        {/* Book (for pedagogue theme) */}
-        <rect x="42" y="65" width="16" height="12" fill={brandConfig.mascot.capColor} rx="1" />
-        <line x1="50" y1="65" x2="50" y2="77" stroke={brandConfig.mascot.capShadowColor} strokeWidth="1" />
       </svg>
       
-      {/* Sparkles for celebrating mood */}
+      {/* Danske stjerner for celebrating - mere subtilt */}
       {mood === 'celebrating' && (
-        <>
-          <span className="absolute top-0 left-0 text-yellow-400 animate-pulse">✨</span>
-          <span className="absolute top-0 right-0 text-yellow-400 animate-pulse" style={{ animationDelay: '0.3s' }}>✨</span>
-          <span className="absolute bottom-0 left-2 text-yellow-400 animate-pulse" style={{ animationDelay: '0.6s' }}>✨</span>
-        </>
+        <div className="absolute inset-0 pointer-events-none">
+          <span className="absolute top-1 left-1 text-primary-500 text-xs opacity-60 animate-pulse">•</span>
+          <span className="absolute top-1 right-1 text-primary-500 text-xs opacity-60 animate-pulse" style={{ animationDelay: '0.3s' }}>•</span>
+          <span className="absolute bottom-1 left-1/2 text-primary-500 text-xs opacity-60 animate-pulse" style={{ animationDelay: '0.6s' }}>•</span>
+        </div>
       )}
     </div>
   );

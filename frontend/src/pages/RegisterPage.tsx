@@ -195,7 +195,7 @@ export const RegisterPage: React.FC = () => {
             disabled={loading}
             className="w-full bg-primary-600 text-gray-900 text-button py-2 rounded-md hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Opretter din konto...' : 'Bliv medlem af fællesskabet ✨'}
+            {loading ? 'Opretter din konto...' : 'Bliv medlem af fællesskabet'}
           </button>
         </form>
 
@@ -208,7 +208,7 @@ export const RegisterPage: React.FC = () => {
       </div>
 
       <div className="mt-4 text-caption text-gray-500 text-center">
-        Ved at blive medlem accepterer du vores fællesskabsregler og hjælper med at skabe et trygt rum for alle 🤝
+        Ved at blive medlem accepterer du vores fællesskabsregler og hjælper med at skabe et trygt rum for alle
       </div>
       
       {showEmailVerification && (

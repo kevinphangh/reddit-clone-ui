@@ -10,30 +10,30 @@ export default {
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
-        // Beige-rosa farver - Rediger i src/config/branding.ts
+        // Dansk minimalistisk palette - Rediger i src/config/branding.ts
         primary: {
-          50: '#fffaf8',
-          100: '#fff5f0',
-          200: '#ffebe5',
-          300: '#ffe3d8', // Din ønskede farve
-          400: '#ffd0b8',
-          500: '#ffb69e', // Beige-rosa hovedfarve
-          600: '#ff9b7a',
-          700: '#e87c5a',
-          800: '#c2654a',
-          900: '#9c4f3b',
+          50: '#fdfcfb',   // Næsten hvid med varm tone
+          100: '#faf8f6',  // Meget lys beige
+          200: '#f5f0eb',  // Lys sand
+          300: '#ede5dd',  // Varm grå-beige
+          400: '#dfd3c6',  // Mellemsand
+          500: '#cbb5a0',  // Dansk sand/beige - hovedfarve
+          600: '#b39a84',  // Mørkere sand
+          700: '#8f7a65',  // Brun-beige
+          800: '#6b5c4e',  // Mørk brun
+          900: '#4a3f36',  // Meget mørk brun
         },
         secondary: {
-          50: '#fef6f5',
-          100: '#fdecea',
-          200: '#fbd8d5',
-          300: '#f8c4bf',
-          400: '#f4a09a',
-          500: '#f07c75', // Blød koral
-          600: '#e65850',
-          700: '#cc3c3c',
-          800: '#a63333',
-          900: '#802929',
+          50: '#f8fafb',   // Næsten hvid med kold tone
+          100: '#f1f5f7',  // Meget lys grå-blå
+          200: '#e3ebef',  // Lys nordisk grå
+          300: '#d0dce3',  // Dansk himmel grå
+          400: '#a8bcc8',  // Mellemgrå-blå
+          500: '#7a95a7',  // Nordisk blå-grå - accent
+          600: '#5e7a8c',  // Mørkere blå-grå
+          700: '#475e6f',  // Mørk blå-grå
+          800: '#364753',  // Meget mørk blå-grå
+          900: '#263038',  // Næsten sort blå
         },
         gray: {
           50: '#f9fafb',
@@ -47,10 +47,10 @@ export default {
           800: '#1f2937',
           900: '#111827',
         },
-        success: '#a8c09a',
-        warning: '#f5c99b',
-        error: '#e88b84',
-        info: '#c4a4d9',
+        success: '#8ca583',  // Dæmpet grøn
+        warning: '#d4a574',  // Varm gul-brun
+        error: '#c17b7b',    // Dæmpet rød
+        info: '#7a95a7',     // Nordisk blå-grå
       },
       // Border radius - Rediger i src/config/branding.ts
       borderRadius: {

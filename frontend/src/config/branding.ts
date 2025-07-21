@@ -2,31 +2,31 @@
 // Rediger denne fil for at ændre farver og branding i hele applikationen
 
 export const brandConfig = {
-  // Primære farver
+  // Primære farver - Dansk minimalistisk palette
   colors: {
     primary: {
-      50: '#fffaf8',
-      100: '#fff5f0',
-      200: '#ffebe5',
-      300: '#ffe3d8', // Din ønskede farve
-      400: '#ffd0b8',
-      500: '#ffb69e', // Beige-rosa hovedfarve
-      600: '#ff9b7a',
-      700: '#e87c5a',
-      800: '#c2654a',
-      900: '#9c4f3b',
+      50: '#fdfcfb',   // Næsten hvid med varm tone
+      100: '#faf8f6',  // Meget lys beige
+      200: '#f5f0eb',  // Lys sand
+      300: '#ede5dd',  // Varm grå-beige
+      400: '#dfd3c6',  // Mellemsand
+      500: '#cbb5a0',  // Dansk sand/beige - hovedfarve
+      600: '#b39a84',  // Mørkere sand
+      700: '#8f7a65',  // Brun-beige
+      800: '#6b5c4e',  // Mørk brun
+      900: '#4a3f36',  // Meget mørk brun
     },
     secondary: {
-      50: '#fef6f5',
-      100: '#fdecea',
-      200: '#fbd8d5',
-      300: '#f8c4bf',
-      400: '#f4a09a',
-      500: '#f07c75', // Blød koral
-      600: '#e65850',
-      700: '#cc3c3c',
-      800: '#a63333',
-      900: '#802929',
+      50: '#f8fafb',   // Næsten hvid med kold tone
+      100: '#f1f5f7',  // Meget lys grå-blå
+      200: '#e3ebef',  // Lys nordisk grå
+      300: '#d0dce3',  // Dansk himmel grå
+      400: '#a8bcc8',  // Mellemgrå-blå
+      500: '#7a95a7',  // Nordisk blå-grå - accent
+      600: '#5e7a8c',  // Mørkere blå-grå
+      700: '#475e6f',  // Mørk blå-grå
+      800: '#364753',  // Meget mørk blå-grå
+      900: '#263038',  // Næsten sort blå
     },
     // Neutrale farver - mørkere for bedre læsbarhed
     gray: {
@@ -41,11 +41,11 @@ export const brandConfig = {
       800: '#1f2937',
       900: '#111827',
     },
-    // Status farver
-    success: '#a8c09a',
-    warning: '#f5c99b',
-    error: '#e88b84',
-    info: '#c4a4d9',
+    // Status farver - Dæmpede danske toner
+    success: '#8ca583',  // Dæmpet grøn
+    warning: '#d4a574',  // Varm gul-brun
+    error: '#c17b7b',    // Dæmpet rød
+    info: '#7a95a7',     // Nordisk blå-grå
   },
   
   // Font størrelser
@@ -100,11 +100,11 @@ export const brandConfig = {
   
   // Mascot farver (bruger primary og secondary)
   mascot: {
-    bodyColor: '#ffb69e', // primary.500 - beige-rosa
-    faceColor: '#fffaf8', // primary.50 - meget lys beige
-    eyeColor: '#9c4f3b',  // primary.900 - mørk brun-rosa
-    capColor: '#ffd0b8',  // primary.400 - lys beige-rosa
-    capShadowColor: '#ff9b7a', // primary.600 - mellem beige-rosa
+    bodyColor: '#cbb5a0',    // primary.500 - dansk sand
+    faceColor: '#fdfcfb',    // primary.50 - næsten hvid
+    eyeColor: '#4a3f36',     // primary.900 - meget mørk brun
+    capColor: '#7a95a7',     // secondary.500 - nordisk blå-grå
+    capShadowColor: '#5e7a8c', // secondary.600 - mørkere blå-grå
   },
 };
 
