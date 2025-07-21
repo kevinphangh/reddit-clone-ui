@@ -1,9 +1,22 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider } from '../contexts/AuthContext';
-import { DataProvider } from '../contexts/DataContext';
 import { NotificationProvider } from '../contexts/NotificationContext';
+import { TestAuthProvider, TestDataProvider } from './TestProviders';
+import { vi } from 'vitest';
+
+// Mock NotificationContext  
+vi.mock('../contexts/NotificationContext', () => ({
+  NotificationProvider: ({ children }: { children: React.ReactNode }) => children,
+  useNotification: () => ({
+    showNotification: vi.fn(),
+  }),
+}));
+
+// Don't mock contexts globally - let them work with test data
+
+// Mock window.confirm for tests
+global.confirm = vi.fn(() => true);
 
 // Mock user for testing
 export const mockUser = {
@@ -45,13 +58,13 @@ export function renderWithProviders(
   function Wrapper({ children }: { children: React.ReactNode }) {
     return (
       <BrowserRouter>
-        <AuthProvider>
-          <DataProvider>
+        <TestAuthProvider>
+          <TestDataProvider>
             <NotificationProvider>
               {children}
             </NotificationProvider>
-          </DataProvider>
-        </AuthProvider>
+          </TestDataProvider>
+        </TestAuthProvider>
       </BrowserRouter>
     );
   }

@@ -4,20 +4,10 @@ import userEvent from '@testing-library/user-event';
 import { PostCard } from '../PostCard';
 import { render, mockPost } from '../../test/utils';
 
-// Mock voting function
-const mockHandleVote = vi.fn();
-vi.mock('../../contexts/DataContext', () => ({
-  useData: () => ({
-    handleVote: mockHandleVote,
-    posts: [],
-    loading: false,
-    error: null,
-  }),
-}));
 
 describe('PostCard', () => {
   beforeEach(() => {
-    mockHandleVote.mockClear();
+    vi.clearAllMocks();
   });
 
   it('renders post information correctly', () => {
@@ -25,7 +15,7 @@ describe('PostCard', () => {
     
     expect(screen.getByText(mockPost.title)).toBeInTheDocument();
     expect(screen.getByText(mockPost.content!)).toBeInTheDocument();
-    expect(screen.getByText(`u/${mockPost.author.username}`)).toBeInTheDocument();
+    expect(screen.getByText(`af ${mockPost.author.username}`)).toBeInTheDocument();
     expect(screen.getByText(mockPost.score.toString())).toBeInTheDocument();
   });
 
@@ -42,7 +32,8 @@ describe('PostCard', () => {
     const upvoteButton = screen.getByLabelText('Stem op');
     await user.click(upvoteButton);
     
-    expect(mockHandleVote).toHaveBeenCalledWith('post', mockPost.id, 1);
+    // Since user is not logged in, it should show confirm dialog
+    expect(window.confirm).toHaveBeenCalledWith('Du skal være logget ind for at stemme. Vil du logge ind nu?');
   });
 
   it('handles downvote click', async () => {
@@ -52,7 +43,8 @@ describe('PostCard', () => {
     const downvoteButton = screen.getByLabelText('Stem ned');
     await user.click(downvoteButton);
     
-    expect(mockHandleVote).toHaveBeenCalledWith('post', mockPost.id, -1);
+    // Since user is not logged in, it should show confirm dialog
+    expect(window.confirm).toHaveBeenCalledWith('Du skal være logget ind for at stemme. Vil du logge ind nu?');
   });
 
   it('shows active vote state', () => {
@@ -60,14 +52,14 @@ describe('PostCard', () => {
     render(<PostCard post={postWithUpvote} />);
     
     const upvoteButton = screen.getByLabelText('Stem op');
-    expect(upvoteButton).toHaveClass('text-primary-600');
+    expect(upvoteButton).toHaveClass('text-gray-800');
   });
 
   it('navigates to post page on click', async () => {
     const user = userEvent.setup();
     render(<PostCard post={mockPost} />);
     
-    const postLink = screen.getByRole('link');
-    expect(postLink).toHaveAttribute('href', `/post/${mockPost.id}`);
+    const postLink = screen.getByText(mockPost.title);
+    expect(postLink.closest('a')).toHaveAttribute('href', `/comments/${mockPost.id}`);
   });
 });

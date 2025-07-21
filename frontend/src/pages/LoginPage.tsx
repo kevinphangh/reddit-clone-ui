@@ -49,10 +49,11 @@ export const LoginPage: React.FC = () => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-body-small font-medium text-gray-700 mb-1">
+            <label htmlFor="username" className="block text-body-small font-medium text-gray-700 mb-1">
               Brugernavn
             </label>
             <input
+              id="username"
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
@@ -62,10 +63,11 @@ export const LoginPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-body-small font-medium text-gray-700 mb-1">
+            <label htmlFor="password" className="block text-body-small font-medium text-gray-700 mb-1">
               Adgangskode
             </label>
             <input
+              id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

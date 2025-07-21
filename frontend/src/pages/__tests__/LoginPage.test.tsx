@@ -4,15 +4,6 @@ import userEvent from '@testing-library/user-event';
 import { LoginPage } from '../LoginPage';
 import { render } from '../../test/utils';
 
-// Mock useAuth hook
-vi.mock('../../contexts/AuthContext', () => ({
-  useAuth: () => ({
-    login: vi.fn().mockResolvedValue(true),
-    isLoggedIn: false,
-    user: null,
-    loading: false,
-  }),
-}));
 
 // Mock useNavigate
 const mockNavigate = vi.fn();
@@ -82,6 +73,6 @@ describe('LoginPage', () => {
     await user.type(passwordInput, 'password123');
     await user.click(submitButton);
     
-    expect(screen.getByText(/logger ind/i)).toBeInTheDocument();
+    expect(screen.getByText(/logger ind.../i)).toBeInTheDocument();
   });
 });
