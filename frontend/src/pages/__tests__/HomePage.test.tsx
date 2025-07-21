@@ -104,8 +104,7 @@ describe('HomePage', () => {
     });
 
     render(<HomePage />);
-    expect(screen.getByText(/Velkommen til VIA Pædagoger!/)).toBeInTheDocument();
-    expect(screen.getByText(/Et helt nyt forum for pædagogstuderende/)).toBeInTheDocument();
+    expect(screen.getByText('Velkommen til fællesskabet')).toBeInTheDocument();
   });
 
   it('renders posts when available', async () => {

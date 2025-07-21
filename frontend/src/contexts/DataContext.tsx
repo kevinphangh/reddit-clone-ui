@@ -59,14 +59,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       const data = await api.getPosts({ limit: 10, skip: 0 });
       
-      // Filter out old posts - only show posts created after deployment
-      const cutoffDate = new Date('2025-01-21T12:00:00Z');
-      const filteredData = data.filter(post => 
-        new Date(post.created_at) > cutoffDate
-      );
-      
       // Transform API data to match frontend format
-      const transformedPosts: Post[] = filteredData.map(post => ({
+      const transformedPosts: Post[] = data.map(post => ({
         id: post.id.toString(),
         title: post.title,
         content: post.content,
@@ -99,7 +93,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }));
       
       setPosts(transformedPosts);
-      setHasMore(filteredData.length === 10);
+      setHasMore(data.length === 10);
       setPage(1);
     } catch (err: any) {
       if (err.status === 0) {
@@ -121,14 +115,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       const data = await api.getPosts({ limit: 10, skip: page * 10 });
       
-      // Filter out old posts
-      const cutoffDate = new Date('2025-01-21T12:00:00Z');
-      const filteredData = data.filter(post => 
-        new Date(post.created_at) > cutoffDate
-      );
-      
       // Transform API data to match frontend format
-      const transformedPosts: Post[] = filteredData.map(post => ({
+      const transformedPosts: Post[] = data.map(post => ({
         id: post.id.toString(),
         title: post.title,
         content: post.content,
@@ -161,7 +149,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }));
       
       setPosts(prev => [...prev, ...transformedPosts]);
-      setHasMore(filteredData.length === 10);
+      setHasMore(data.length === 10);
       setPage(prev => prev + 1);
     } catch (err: any) {
       // Silent fail for load more

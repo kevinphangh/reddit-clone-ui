@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { PostCard } from '../components/PostCard';
 import { useData } from '../contexts/DataContext';
 import { AnonymityInfo } from '../components/AnonymityInfo';
-import { EmptyForum } from '../components/EmptyForum';
 
 export const HomePage: React.FC = () => {
   const { posts, loading, error, hasMore, loadingMore, loadMorePosts } = useData();
@@ -46,9 +45,6 @@ export const HomePage: React.FC = () => {
     );
   }
   
-  if (posts.length === 0 && !loading) {
-    return <EmptyForum />;
-  }
   
   return (
     <div className="space-y-4">
