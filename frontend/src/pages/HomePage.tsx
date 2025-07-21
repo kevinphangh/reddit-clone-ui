@@ -1,12 +1,17 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { PostCard } from '../components/PostCard';
 import { useData } from '../contexts/DataContext';
 import { UnitySymbol } from '../components/UnitySymbol';
 import { AnonymityInfo } from '../components/AnonymityInfo';
+import { EmptyForum } from '../components/EmptyForum';
 
 export const HomePage: React.FC = () => {
   const { posts, loading, error, hasMore, loadingMore, loadMorePosts } = useData();
   const observerTarget = useRef<HTMLDivElement>(null);
+  
+  // Temporarily hide old posts to show empty forum
+  const HIDE_OLD_POSTS = true;
+  const visiblePosts = HIDE_OLD_POSTS ? [] : posts;
   
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -46,17 +51,8 @@ export const HomePage: React.FC = () => {
     );
   }
   
-  if (posts.length === 0) {
-    return (
-      <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 md:p-8 text-center">
-        <div className="flex justify-center mb-4">
-          <UnitySymbol size="large" />
-        </div>
-        <h2 className="text-heading-2 mb-2">Velkommen til fællesskabet</h2>
-        <p className="text-body text-gray-600 mb-4">Der er ikke nogen indlæg endnu, men det er din chance for at være den første til at dele noget spændende!</p>
-        <p className="text-body-small text-gray-700">Del dine tanker, stil spørgsmål, eller fortæl om dine oplevelser som pædagogstuderende</p>
-      </div>
-    );
+  if (visiblePosts.length === 0 && !loading) {
+    return <EmptyForum />;
   }
   
   return (
@@ -69,12 +65,12 @@ export const HomePage: React.FC = () => {
       </div>
       
       {/* Anonymity info - show only occasionally */}
-      {posts.length > 0 && posts.length < 5 && (
+      {visiblePosts.length > 0 && visiblePosts.length < 5 && (
         <AnonymityInfo />
       )}
       
       {/* Posts */}
-      {posts.map(post => (
+      {visiblePosts.map(post => (
         <PostCard key={post.id} post={post} />
       ))}
       
@@ -89,7 +85,7 @@ export const HomePage: React.FC = () => {
       <div ref={observerTarget} className="h-10" />
       
       {/* No more posts message */}
-      {!hasMore && posts.length > 0 && (
+      {!hasMore && visiblePosts.length > 0 && (
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
           <p className="text-body-small text-gray-600">Du har set alle indlæg</p>
         </div>
