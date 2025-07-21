@@ -72,15 +72,17 @@ export const brandConfig = {
     '2xl': '3rem',  // 48px
   },
   
-  // Border radius
+  // Border radius - Juster disse værdier for at ændre hvor runde hjørnerne er
+  // VIGTIGT: Hvis du ændrer disse værdier, skal du også opdatere tailwind.config.js
   borderRadius: {
     none: '0',
-    sm: '0.125rem',
-    base: '0.25rem',
-    md: '0.375rem',
-    lg: '0.5rem',
-    xl: '0.75rem',
-    full: '9999px',
+    sm: '0.25rem',    // 4px - små elementer
+    base: '0.5rem',   // 8px - standard elementer
+    md: '0.75rem',    // 12px - mellemstore elementer  
+    lg: '1rem',       // 16px - store elementer
+    xl: '1.25rem',    // 20px - ekstra store elementer
+    '2xl': '1.5rem',  // 24px - meget store elementer
+    full: '9999px',   // Helt rund
   },
   
   // Shadows
