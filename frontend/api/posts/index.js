@@ -52,21 +52,25 @@ module.exports = async function handler(req, res) {
       
       let orderBy = 'p.created_at DESC';
       if (sort === 'hot') {
-        orderBy = 'p.score DESC, p.created_at DESC';
+        orderBy = 'COALESCE(SUM(v.value), 0) DESC, p.created_at DESC';
       } else if (sort === 'top') {
-        orderBy = 'p.score DESC';
+        orderBy = 'COALESCE(SUM(v.value), 0) DESC';
       }
 
       const result = await client.query(`
         SELECT 
           p.id, p.title, p.content, p.created_at, p.updated_at, p.edited_at,
-          p.score, p.comment_count, p.is_locked, p.type,
+          COALESCE(SUM(v.value), 0) as score, p.comment_count, p.is_locked, p.type,
           u.id as author_id, u.username as author_username, u.email as author_email,
           u.is_admin as author_is_admin, u.is_verified as author_is_verified,
           u.created_at as author_created_at
         FROM posts p
         JOIN users u ON p.author_id = u.id
+        LEFT JOIN votes v ON v.votable_type = 'post' AND v.votable_id = p.id
         WHERE p.is_deleted = false
+        GROUP BY p.id, p.title, p.content, p.created_at, p.updated_at, p.edited_at,
+                 p.comment_count, p.is_locked, p.type, u.id, u.username, u.email,
+                 u.is_admin, u.is_verified, u.created_at
         ORDER BY ${orderBy}
         LIMIT $1 OFFSET $2
       `, [parseInt(limit), parseInt(skip)]);

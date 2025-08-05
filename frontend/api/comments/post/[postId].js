@@ -52,7 +52,7 @@ module.exports = async function handler(req, res) {
       const result = await client.query(`
         SELECT 
           c.id, c.body, c.parent_id, c.created_at, c.updated_at, c.edited_at,
-          c.score, c.depth, c.is_deleted,
+          COALESCE(SUM(v.value), 0) as score, c.depth, c.is_deleted,
           u.id as author_id, u.username as author_username, u.email as author_email,
           u.is_admin as author_is_admin, u.is_verified as author_is_verified,
           u.created_at as author_created_at,
@@ -60,7 +60,11 @@ module.exports = async function handler(req, res) {
         FROM comments c
         JOIN users u ON c.author_id = u.id
         JOIN posts p ON c.post_id = p.id
+        LEFT JOIN votes v ON v.votable_type = 'comment' AND v.votable_id = c.id
         WHERE c.post_id = $1
+        GROUP BY c.id, c.body, c.parent_id, c.created_at, c.updated_at, c.edited_at,
+                 c.depth, c.is_deleted, u.id, u.username, u.email, u.is_admin, 
+                 u.is_verified, u.created_at, p.id, p.title
         ORDER BY c.created_at ASC
       `, [parseInt(postId)]);
 
