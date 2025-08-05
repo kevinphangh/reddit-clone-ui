@@ -41,6 +41,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
     <div 
       className="bg-white border border-gray-200 rounded-lg p-3 sm:p-4 md:p-5 lg:p-6 hover:shadow-sm transition-shadow cursor-pointer"
       onClick={handleCardClick}
+      data-testid="post-card"
     >
       <div className="flex gap-2 sm:gap-3 md:gap-4">
         {/* Vote buttons */}
@@ -48,17 +49,19 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
           <button 
             onClick={(e) => handleVote(1, e)}
             className={`p-1 rounded hover:bg-gray-100 ${post.userVote === 1 ? 'text-gray-800' : 'text-gray-400'} ${!isLoggedIn ? 'cursor-help' : ''}`}
+            data-testid="upvote-button"
             aria-label="Stem op"
             title={!isLoggedIn ? 'Log ind for at stemme' : 'Stem op'}
           >
             <ArrowUp size={20} />
           </button>
-          <span className={`text-body-small font-medium ${post.userVote === 1 ? 'text-gray-800' : post.userVote === -1 ? 'text-red-700' : 'text-gray-600'}`}>
+          <span className={`text-body-small font-medium ${post.userVote === 1 ? 'text-gray-800' : post.userVote === -1 ? 'text-red-700' : 'text-gray-600'}`} data-testid="post-score">
             {formatScore(post.score)}
           </span>
           <button 
             onClick={(e) => handleVote(-1, e)}
             className={`p-1 rounded hover:bg-gray-100 ${post.userVote === -1 ? 'text-red-500' : 'text-gray-400'} ${!isLoggedIn ? 'cursor-help' : ''}`}
+            data-testid="downvote-button"
             aria-label="Stem ned"
             title={!isLoggedIn ? 'Log ind for at stemme' : 'Stem ned'}
           >
@@ -70,7 +73,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         <div className="flex-1">
           {/* Meta */}
           <div className="flex flex-wrap items-center gap-1 sm:gap-2 text-caption text-gray-500 mb-2">
-            <span>af {post.author.username}</span>
+            <span data-testid="post-author">af {post.author.username}</span>
             <span>•</span>
             <span>{formatTimeAgo(post.createdAt)}</span>
           </div>
@@ -80,6 +83,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
             <Link 
               to={`/comments/${post.id}`}
               className="text-heading-2 text-gray-900 hover:text-gray-700"
+              data-testid="post-title"
             >
               {post.title}
             </Link>

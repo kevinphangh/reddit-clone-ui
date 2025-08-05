@@ -40,7 +40,7 @@ export const Header: React.FC = () => {
     <header className="bg-white border-b border-gray-200 px-4 py-3">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         {/* Logo */}
-        <Link to="/" className="text-heading-1 text-gray-900">
+        <Link to="/" className="text-heading-1 text-gray-900" data-testid="site-logo">
           <span className="hidden sm:inline">VIA Pædagoger</span>
           <span className="sm:hidden">VIAP</span>
         </Link>
