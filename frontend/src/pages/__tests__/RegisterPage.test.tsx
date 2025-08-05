@@ -24,10 +24,11 @@ describe('RegisterPage', () => {
     expect(screen.getByRole('button', { name: /bliv medlem af fællesskabet/i })).toBeInTheDocument();
   });
 
-  it('has link to login page', () => {
+  it('has link to login page', async () => {
     render(<RegisterPage />);
     
-    const loginLink = screen.getByRole('link', { name: /log ind her/i });
+    // Wait for the component to fully render
+    const loginLink = await screen.findByRole('link', { name: /log ind her/i });
     expect(loginLink).toHaveAttribute('href', '/login');
   });
 });
