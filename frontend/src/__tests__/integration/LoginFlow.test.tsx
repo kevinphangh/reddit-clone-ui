@@ -79,7 +79,7 @@ describe('Login Flow Integration', () => {
     
     // Wait for error message
     await waitFor(() => {
-      expect(screen.getByText(/forkert brugernavn eller adgangskode/i)).toBeInTheDocument();
+      expect(screen.getByText(/forkert brugernavn\/email eller adgangskode/i)).toBeInTheDocument();
     });
   });
 });

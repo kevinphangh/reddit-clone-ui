@@ -25,7 +25,7 @@ export const LoginPage: React.FC = () => {
       if (success) {
         navigate(from);
       } else {
-        setError('Forkert brugernavn eller adgangskode');
+        setError('Forkert brugernavn/email eller adgangskode');
       }
     } catch (err) {
       setError('Der skete en fejl. Prøv igen.');
@@ -50,13 +50,14 @@ export const LoginPage: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="username" className="block text-body-small font-medium text-gray-700 mb-1">
-              Brugernavn
+              Brugernavn eller email
             </label>
             <input
               id="username"
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              placeholder="Dit brugernavn eller email"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primary-500"
               required
             />
@@ -94,7 +95,7 @@ export const LoginPage: React.FC = () => {
       </div>
 
       <div className="mt-4 text-caption text-gray-500 text-center">
-        Tip: Brug et hvilket som helst brugernavn og en adgangskode på mindst 6 tegn
+        Tip: Du kan logge ind med dit brugernavn eller din email
       </div>
     </div>
   );

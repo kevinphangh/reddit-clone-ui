@@ -1,21 +1,45 @@
-// Service Worker for VIA Forum
-const CACHE_NAME = 'via-forum-v1';
+// Service Worker for VIA Forum - Updated for Vercel
+const CACHE_NAME = 'via-forum-v2-vercel';
 const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json'
 ];
 
-// Install event
+// Install event - force update
 self.addEventListener('install', event => {
+  self.skipWaiting(); // Force immediate activation
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(urlsToCache))
   );
 });
 
-// Fetch event
+// Activate event - clear old caches
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+  return self.clients.claim(); // Take control immediately
+});
+
+// Fetch event - bypass cache for API requests
 self.addEventListener('fetch', event => {
+  // Never cache API requests
+  if (event.request.url.includes('/api/') || event.request.url.includes('fly.dev')) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+  
+  // Cache other requests
   event.respondWith(
     caches.match(event.request)
       .then(response => response || fetch(event.request))

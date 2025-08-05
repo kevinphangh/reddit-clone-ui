@@ -18,7 +18,7 @@ export const mockUser = {
 // Mock API handlers
 export const handlers = [
   // Auth endpoints
-  http.post('https://via-forum-api.fly.dev/api/auth/login', async ({ request }) => {
+  http.post('https://via-forum.vercel.app/api/auth/login', async ({ request }) => {
     const body = await request.formData();
     const username = body.get('username');
     const password = body.get('password');
@@ -37,7 +37,7 @@ export const handlers = [
     );
   }),
 
-  http.get('https://via-forum-api.fly.dev/api/auth/me', ({ request }) => {
+  http.get('https://via-forum.vercel.app/api/auth/me', ({ request }) => {
     const auth = request.headers.get('Authorization');
     if (auth === 'Bearer mock-token') {
       return HttpResponse.json(mockUser);
@@ -49,7 +49,7 @@ export const handlers = [
   }),
 
   // Posts endpoints
-  http.get('https://via-forum-api.fly.dev/api/posts/', () => {
+  http.get('https://via-forum.vercel.app/api/posts/', () => {
     return HttpResponse.json([
       {
         id: 1,
@@ -67,7 +67,7 @@ export const handlers = [
     ]);
   }),
 
-  http.post('https://via-forum-api.fly.dev/api/posts/:id/vote', ({ request, params }) => {
+  http.post('https://via-forum.vercel.app/api/posts/:id/vote', ({ request, params }) => {
     const auth = request.headers.get('Authorization');
     if (!auth || auth !== 'Bearer mock-token') {
       return HttpResponse.json(
@@ -82,7 +82,7 @@ export const handlers = [
   }),
 
   // Users endpoints
-  http.get('https://via-forum-api.fly.dev/api/users/count', () => {
+  http.get('https://via-forum.vercel.app/api/users/count', () => {
     return HttpResponse.json({ count: 42 });
   }),
 ];

@@ -6,4 +6,13 @@ export default defineConfig({
   server: {
     port: 3000,
   },
+  build: {
+    rollupOptions: {
+      output: {
+        entryFileNames: `[name]-[hash]-${Date.now()}.js`,
+        chunkFileNames: `[name]-[hash]-${Date.now()}.js`,
+        assetFileNames: `[name]-[hash]-${Date.now()}.[ext]`
+      }
+    }
+  }
 })

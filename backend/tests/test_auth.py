@@ -80,6 +80,21 @@ class TestAuth:
         assert data["token_type"] == "bearer"
     
     @pytest.mark.asyncio
+    async def test_login_with_email(self, client: AsyncClient, test_user):
+        """Test successful login with email instead of username"""
+        response = await client.post(
+            "/api/auth/login",
+            data={
+                "username": test_user.email,  # Using email in username field
+                "password": "testpass123"
+            }
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "access_token" in data
+        assert data["token_type"] == "bearer"
+    
+    @pytest.mark.asyncio
     async def test_login_unverified_user(self, client: AsyncClient, db_session: AsyncSession):
         """Test login with unverified user - only applies when EMAIL_DEV_MODE is False"""
         from app.models import User
@@ -121,7 +136,7 @@ class TestAuth:
             }
         )
         assert response.status_code == 401
-        assert "Incorrect username or password" in response.json()["detail"]
+        assert "Incorrect username/email or password" in response.json()["detail"]
     
     @pytest.mark.asyncio
     async def test_verify_email(self, client: AsyncClient, db_session: AsyncSession):

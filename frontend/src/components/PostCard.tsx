@@ -5,6 +5,7 @@ import { Post } from '../types';
 import { formatTimeAgo, formatScore } from '../utils/formatting';
 import { useData } from '../contexts/DataContext';
 import { useAuth } from '../contexts/AuthContext';
+import { AdminActions } from './AdminActions';
 
 interface PostCardProps {
   post: Post;
@@ -102,6 +103,12 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
               <span>{post.commentCount} {post.commentCount === 1 ? 'kommentar' : 'kommentarer'}</span>
             </Link>
           </div>
+          
+          <AdminActions 
+            item={post} 
+            type="post" 
+            onUpdate={() => window.location.reload()} 
+          />
         </div>
       </div>
     </div>

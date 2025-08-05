@@ -1,261 +1,228 @@
-# Claude Deployment Guide for VIA Forum
+# CLAUDE.md
 
-This guide contains deployment instructions for both frontend and backend of the VIA Forum project.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
 
-VIA Pædagoger Forum - A community platform for pedagogy students at VIA University College.
+VIA Pædagoger Forum - A Danish community platform for pedagogy students at VIA University College. Built with React 19 + TypeScript frontend and FastAPI Python backend.
 
 **Live URLs:**
 - Frontend: https://via-paedagoger.vercel.app (also https://via-forum.vercel.app)
-- Backend API: https://via-forum-api.fly.dev
+- Backend API: https://via-forum.vercel.app/api (migrated from Fly.io to Vercel Functions)
 
-## Frontend Deployment (Vercel)
+## Development Commands
 
-### Prerequisites
-- npm installed
-- Vercel CLI installed (already available in this environment)
-
-### Deployment Steps
-
-1. **Navigate to frontend directory:**
-   ```bash
-   cd /home/keph/projects/forum/frontend
-   ```
-
-2. **Build the frontend:**
-   ```bash
-   npm run build
-   ```
-
-3. **Deploy to Vercel production:**
-   ```bash
-   vercel --prod
-   ```
-
-### Important Notes
-- The deployment automatically uses environment variables from production
-- Build output is in the `dist/` directory
-- Domain names configured: via-paedagoger.vercel.app and via-forum.vercel.app
-
-## Backend Deployment (Fly.io)
-
-### Prerequisites
-- Fly CLI installed at: `/home/keph/.fly/bin/flyctl`
-- Docker configuration in `Dockerfile`
-- PostgreSQL database (managed by Fly.io)
-
-### Deployment Steps
-
-1. **Navigate to backend directory:**
-   ```bash
-   cd /home/keph/projects/forum/backend
-   ```
-
-2. **Deploy to Fly.io:**
-   ```bash
-   /home/keph/.fly/bin/flyctl deploy
-   ```
-
-### Email Configuration
-
-The backend uses Resend for email verification with an easy toggle system:
-
-#### Toggle Email Verification On/Off
-
+### Frontend Commands
 ```bash
-# Quick toggle script (recommended)
-cd /home/keph/projects/forum/backend
-./toggle_email_verification.sh
+cd frontend
+npm run dev          # Development server on port 3000
+npm run build        # Production build (runs TypeScript check + Vite build)
+npm run typecheck    # TypeScript checking only
+npm run lint         # TypeScript checking (same as typecheck)
+npm test             # Run tests in watch mode
+npm test -- --run    # Run all tests once
+npm run test:coverage # Run tests with coverage report
 ```
 
-#### Manual Configuration
-
+### Backend Commands
 ```bash
-# Disable email verification (for easy onboarding)
-/home/keph/.fly/bin/flyctl secrets set EMAIL_DEV_MODE=true
+cd backend
+source venv/bin/activate                 # Activate virtual environment
+uvicorn main:app --reload               # Development server
+python -m pytest tests/ -v              # Run all tests
+alembic upgrade head                     # Run database migrations
+./toggle_email_verification.sh          # Toggle email verification on/off
+```
 
-# Enable email verification (for production security)
-/home/keph/.fly/bin/flyctl secrets set EMAIL_DEV_MODE=false
+### Testing Commands
+- **Frontend:** 38 tests using Vitest + React Testing Library + MSW for API mocking
+- **Backend:** 20 tests using pytest-asyncio with in-memory SQLite
+- **Integration tests:** Located in `frontend/src/__tests__/integration/`
 
-# Other email settings (already configured)
-/home/keph/.fly/bin/flyctl secrets set SMTP_PASSWORD=re_YOUR_API_KEY
-/home/keph/.fly/bin/flyctl secrets set FROM_EMAIL=onboarding@resend.dev
+### Deployment Commands
+```bash
+# Deploy Frontend (Vercel)
+cd frontend && vercel --prod
+
+# Deploy Backend (Fly.io)
+cd backend && /home/keph/.fly/bin/flyctl deploy
+
+# Check Backend Logs
+/home/keph/.fly/bin/flyctl logs -a via-forum-api
+```
+
+## Architecture Overview
+
+### Backend Architecture (FastAPI + SQLAlchemy + PostgreSQL)
+
+**Core Structure:**
+- `main.py` - FastAPI app with CORS, error handlers, and route registration
+- `app/api/` - REST endpoints (auth, posts, comments, users)
+- `app/models/` - SQLAlchemy ORM models with relationships
+- `app/schemas/` - Pydantic schemas for request/response validation
+- `app/core/` - Security, JWT auth, and configuration
+- `app/services/` - Business logic (email service with Resend)
+
+**Key Features:**
+- Async SQLAlchemy with AsyncSession for all database operations
+- JWT authentication with configurable token expiration (default: 1 week)
+- Email verification system with toggle (`EMAIL_DEV_MODE` environment variable)
+- Comprehensive error handling with CORS-aware exception handlers
+- Database supports both PostgreSQL (production) and SQLite (development/testing)
+
+**Database Models:**
+- User: username, email, verification status, username change tracking
+- Post: title, content, voting score, comment count
+- Comment: nested comments with parent_id relationships
+- Vote: separate votes for posts and comments
+- SavedItem: user's saved posts/comments
+
+### Frontend Architecture (React 19 + TypeScript + Tailwind)
+
+**Core Structure:**
+- `src/App.tsx` - Main app with backend availability checking and provider hierarchy
+- `src/contexts/` - React contexts for auth, data, notifications, comment cooldowns
+- `src/pages/` - Route components (HomePage, PostPage, UserPage, etc.)
+- `src/components/` - Reusable UI components
+- `src/lib/api.ts` - Centralized API client with error handling and HTTPS enforcement
+
+**Key Features:**
+- Context-based state management (AuthContext, DataContext, NotificationContext)
+- Backend availability checking with automatic reconnection attempts
+- Centralized API client with proper error handling and token management
+- Danish UI text throughout the application
+- Real-time user count updates
+
+**Design System:**
+- **Configuration:** `src/config/branding.ts` - centralized colors, typography, spacing
+- **Colors:** Rose/beige primary palette (#ffb69e, #ffe3d8) with soft coral accents
+- **Typography:** Inter font family with Danish minimalist aesthetic
+- **Symbol:** Unity symbol (two overlapping circles) instead of mascot
+- **Responsive:** Mobile-first design with Tailwind CSS
+
+### Authentication Flow
+1. User registers with email verification (toggleable via `EMAIL_DEV_MODE`)
+2. JWT tokens stored in localStorage with automatic refresh
+3. Protected routes check authentication status via AuthContext
+4. Backend validates JWT tokens on protected endpoints
+
+### Data Flow
+1. **API Layer:** `src/lib/api.ts` handles all HTTP requests with error handling
+2. **Context Layer:** React contexts manage global state (auth, posts, users)
+3. **Component Layer:** Pages and components consume context data
+4. **Backend:** FastAPI endpoints with async database operations
+
+### Testing Architecture
+- **Frontend:** Vitest with jsdom environment, MSW for API mocking, React Testing Library
+- **Backend:** pytest-asyncio with test fixtures and in-memory SQLite
+- **CI/CD:** GitHub Actions runs tests on push to main/develop branches
+
+## Email System
+
+The backend uses Resend for email verification with an easy toggle:
+
+**Toggle Email Verification:**
+```bash
+cd backend
+./toggle_email_verification.sh  # Quick toggle script
+
+# Manual configuration:
+/home/keph/.fly/bin/flyctl secrets set EMAIL_DEV_MODE=true   # Disable verification
+/home/keph/.fly/bin/flyctl secrets set EMAIL_DEV_MODE=false  # Enable verification
 ```
 
 **Current Status:** Email verification is **DISABLED** for initial launch phase.
 
-**Recommendation:** Keep email verification disabled for the first few days to encourage user signups, then enable it to prevent spam.
+## Configuration Files
 
-### Database Management
+### Frontend Configuration
+- `package.json` - Dependencies: React 19, TypeScript 5, Vite 7, Vitest 3
+- `vite.config.ts` - Development server on port 3000
+- `vitest.config.ts` - Test configuration with jsdom environment
+- `tailwind.config.js` - Tailwind CSS with custom branding colors
+- `vercel.json` - Vercel deployment configuration
 
-- **Run migrations manually:**
-  ```bash
-  /home/keph/.fly/bin/flyctl ssh console -a via-forum-api -C 'python -c "
-  import os
-  import asyncio
-  import asyncpg
-  
-  async def migrate():
-      db_url = os.getenv(\"DATABASE_URL\", \"\").replace(\"postgres://\", \"postgresql://\", 1)
-      conn = await asyncpg.connect(db_url)
-      # Your SQL here
-      await conn.close()
-  
-  asyncio.run(migrate())
-  "'
-  ```
+### Backend Configuration
+- `requirements.txt` - FastAPI 0.109, SQLAlchemy 2.0, asyncpg, JWT, Alembic
+- `pytest.ini` - Test configuration with asyncio mode
+- `fly.toml` - Fly.io deployment configuration
+- `Dockerfile` - Container configuration for production
 
-- **Check logs:**
-  ```bash
-  /home/keph/.fly/bin/flyctl logs -a via-forum-api
-  ```
+## Key Development Patterns
 
-## Quick Deploy Both
-
-```bash
-# Deploy Backend
-cd /home/keph/projects/forum/backend && /home/keph/.fly/bin/flyctl deploy
-
-# Deploy Frontend  
-cd /home/keph/projects/forum/frontend && vercel --prod
+### Database Operations
+Always use async/await with AsyncSession:
+```python
+async def get_user(db: AsyncSession, user_id: int):
+    result = await db.execute(select(User).where(User.id == user_id))
+    return result.scalar_one_or_none()
 ```
 
-## Design System
-
-### Current Design (Danish Minimalist)
-- **Primary Color:** Rose/beige (#ffb69e, #ffe3d8)
-- **Secondary Color:** Soft coral tones
-- **Typography:** Clean, no emojis
-- **Symbol:** Unity symbol (two overlapping circles) representing togetherness
-- **Border Radius:** Configurable in `src/config/branding.ts`
-
-### Key Design Files
-- `/frontend/src/config/branding.ts` - All colors and branding
-- `/frontend/src/components/UnitySymbol.tsx` - Simple unity symbol
-- `/frontend/tailwind.config.js` - Tailwind configuration
-
-To change design elements:
-1. Edit `branding.ts` for colors
-2. Update `tailwind.config.js` to match
-3. Adjust border radius values in both files
-
-## Key Features Implemented
-
-1. **Email Verification System**
-   - New users must verify email before login
-   - Uses Resend.com for email delivery
-   - Prevents spam account creation
-
-2. **Design System**
-   - Centralized branding configuration
-   - Danish minimalist aesthetic
-   - Unity symbol instead of mascot
-   - Configurable rounded corners
-
-3. **User Features**
-   - Registration with email verification
-   - Login with JWT authentication
-   - Create posts and comments
-   - Upvote/downvote system
-   - User profiles
-
-4. **Technical Features**
-   - Responsive design
-   - Real-time user count
-   - Character limits (100 for titles, 5000 for content)
-   - CORS properly configured
-   - Database migrations
-
-## Common Issues and Solutions
-
-1. **Email not sending:** Check EMAIL_DEV_MODE is false and Resend API key is set
-2. **CORS errors:** Backend accepts requests from configured Vercel domains
-3. **Database issues:** Use asyncpg for async operations, not psycopg2
-4. **Fly CLI issues:** Always use full path `/home/keph/.fly/bin/flyctl`
-
-## Testing After Deployment
-
-1. Visit https://via-paedagoger.vercel.app
-2. Register a new account and verify email works
-3. Test login with verified account
-4. Create a post and comment
-5. Test voting functionality
-6. Check responsive design on mobile
-
-## Testing
-
-### Frontend Tests
-```bash
-cd frontend
-npm test -- --run                    # Run all tests once
-npm test                             # Watch mode
-npm test -- --run src/__tests__/integration/  # Integration tests only
-npm run test:coverage                # With coverage report
+### Frontend API Calls
+Use the centralized API client with proper error handling:
+```typescript
+try {
+  const posts = await api.getPosts();
+} catch (error) {
+  if (error instanceof ApiError) {
+    // Handle specific API errors
+  }
+}
 ```
 
-**Test Structure:**
-- Integration tests with MSW (Mock Service Worker) for API mocking
-- Located in `src/__tests__/integration/`
-- Uses real React components with mocked API responses
-
-### Backend Tests
-```bash
-cd backend
-
-# Activate virtual environment and run tests
-source venv/bin/activate
-python -m pytest tests/ -v
-
-# Or use Docker (if available):
-docker compose -f docker-compose.test.yml up --build --abort-on-container-exit
-```
-
-**Test Structure:**
-- Async tests with pytest-asyncio
-- Test fixtures in `tests/conftest.py`
-- SQLite in-memory database for testing
-- 20 tests covering auth, posts, and users endpoints
-
-### CI/CD Pipeline
-Tests run automatically on GitHub Actions when you push to `main` or `develop`.
-
-## Development Commands
-
-### Frontend
-```bash
-cd frontend
-npm run dev          # Development server
-npm run build        # Production build
-npm run lint         # Run ESLint
-npm run type-check   # TypeScript checking
-```
-
-### Backend
-```bash
-cd backend
-uvicorn main:app --reload  # Development server
-alembic upgrade head       # Run migrations
+### React Context Usage
+Consume contexts with custom hooks:
+```typescript
+const { user, login, logout } = useAuth();
+const { posts, loading, refreshPosts } = useData();
 ```
 
 ## Environment Variables
 
-### Frontend (automatic in Vercel)
-- `VITE_API_URL`: https://via-forum-api.fly.dev
-
 ### Backend (Fly.io secrets)
-- `DATABASE_URL`: PostgreSQL connection string
-- `SECRET_KEY`: JWT secret
-- `EMAIL_DEV_MODE`: false (production)
-- `SMTP_PASSWORD`: Resend API key
-- `FROM_EMAIL`: onboarding@resend.dev
+- `DATABASE_URL` - PostgreSQL connection string
+- `SECRET_KEY` - JWT signing secret
+- `EMAIL_DEV_MODE` - Toggle email verification (true/false)
+- `SMTP_PASSWORD` - Resend API key
+- `FROM_EMAIL` - Sender email address
+- `FRONTEND_URL` - Allowed CORS origin
 
-## Future Domain Setup
+### Frontend (Vercel environment)
+- `VITE_API_URL` - Backend API URL (defaults to production)
 
-When ready to use custom domain (e.g., viap.dk):
-1. Add domain in Vercel dashboard
-2. Configure DNS records
-3. Verify domain in Resend
-4. Update FROM_EMAIL in Fly.io
+## File Structure Insights
 
-Last updated: 2025-07-21
+**Backend modular structure:**
+- Models define database schema with relationships
+- Schemas handle request/response serialization
+- API modules group related endpoints (auth, posts, comments, users)
+- Core modules provide shared utilities (security, config, dependencies)
+
+**Frontend component hierarchy:**
+- Layout component wraps all pages with header and navigation
+- Pages handle route-specific logic and data fetching
+- Components are reusable UI elements with props interfaces
+- Contexts provide global state management across the component tree
+
+## Common Development Tasks
+
+### Adding New API Endpoint
+1. Define Pydantic schema in `app/schemas/`
+2. Add database model in `app/models/` if needed
+3. Create endpoint in appropriate `app/api/` file
+4. Add route to main.py router inclusion
+5. Update frontend API client in `src/lib/api.ts`
+
+### Database Schema Changes
+1. Create migration: `alembic revision --autogenerate -m "description"`
+2. Review generated migration in `alembic/versions/`
+3. Apply migration: `alembic upgrade head`
+4. Update model classes if needed
+
+### Frontend Component Development
+1. Follow existing component patterns in `src/components/`
+2. Use TypeScript interfaces for props
+3. Import colors from `src/config/branding.ts`
+4. Add tests in `__tests__/` subdirectories
+
+Last updated: 2025-07-25

@@ -1,5 +1,15 @@
-// FORCE HTTPS - Updated 2025-07-14 18:30
-const API_URL = import.meta.env.VITE_API_URL || 'https://via-forum-api.fly.dev';
+// FORCE CORRECT URL - Never use fly.dev
+let API_URL = import.meta.env.VITE_API_URL || 'https://via-forum.vercel.app';
+
+// AGGRESSIVE FIX: If environment variable contains fly.dev, force Vercel URL
+if (API_URL.includes('fly.dev')) {
+  console.warn('🚨 DETECTED FLY.DEV URL IN ENV, FORCING VERCEL URL');
+  API_URL = 'https://via-forum.vercel.app';
+}
+
+// DEBUG: Log what URL is being used
+console.log('🔍 FINAL API_URL:', API_URL);
+console.log('🔍 ENV VITE_API_URL:', import.meta.env.VITE_API_URL);
 
 // PERMANENT FIX: Always ensure HTTPS
 const ensureHttps = (url: string): string => {
@@ -88,8 +98,18 @@ class ApiClient {
     options: RequestInit = {}
   ): Promise<T> {
     // FORCE HTTPS - Remove any accidental HTTP
-    const baseUrl = ensureHttps(API_URL);
+    let baseUrl = ensureHttps(API_URL);
+    
+    // DOUBLE CHECK: Never allow fly.dev in requests
+    if (baseUrl.includes('fly.dev')) {
+      console.error('🚨 BLOCKED FLY.DEV REQUEST, REDIRECTING TO VERCEL');
+      baseUrl = 'https://via-forum.vercel.app';
+    }
+    
     const url = ensureHttps(`${baseUrl}${endpoint}`);
+    
+    // DEBUG: Log every request
+    console.log('🌐 API REQUEST:', { endpoint, baseUrl, url });
     
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
@@ -157,6 +177,7 @@ class ApiClient {
     // FORCE HTTPS - same as in request method
     const baseUrl = ensureHttps(API_URL);
     const url = ensureHttps(`${baseUrl}/api/auth/login`);
+    
     
     
     const response = await fetch(url, {

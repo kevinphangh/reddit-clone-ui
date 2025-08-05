@@ -12,6 +12,7 @@ import { clsx } from 'clsx';
 import { useData } from '../contexts/DataContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useCommentCooldown } from '../contexts/CommentCooldownContext';
+import { AdminActions } from './AdminActions';
 
 interface CommentProps {
   comment: CommentType;
@@ -212,6 +213,12 @@ export const Comment: React.FC<CommentProps> = ({
             </>
           )}
         </div>
+
+        <AdminActions 
+          item={comment} 
+          type="comment" 
+          onUpdate={() => window.location.reload()} 
+        />
 
         {/* Reply Form */}
         {showReplyForm && (

@@ -11,6 +11,7 @@ export interface User {
   cakeDay: Date;
   isPremium?: boolean;
   isVerified?: boolean;
+  is_admin?: boolean;
 }
 
 export interface Subreddit {
